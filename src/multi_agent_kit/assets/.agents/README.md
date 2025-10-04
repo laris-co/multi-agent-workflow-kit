@@ -14,7 +14,7 @@ This directory ships with everything required to spin up dedicated git worktrees
 gh repo clone laris-co/multi-agent-workflow-kit
 cd multi-agent-workflow-kit
 
-# Optional: run the uvx bootstrap (installs toolkit assets, setup + tmux launch)
+# Optional: run the uvx bootstrap (setup + tmux launch)
 uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git multi-agent-kit init
 
 # Customize agent registry

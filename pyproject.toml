@@ -20,6 +20,10 @@ multi-agent-kit = "multi_agent_kit.cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
+include-package-data = true
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+"multi_agent_kit" = ["assets/**"]
