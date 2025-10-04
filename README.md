@@ -75,3 +75,6 @@ Session names follow `ai-<repo-name>` by default. Provide `--prefix sprint` to s
 - Add health monitors (tmux resurrect, notifications) to alert when panes exit unexpectedly.
 
 Contributions welcome—open an issue/PR in this repo with enhancements that make multi-agent collaboration smoother.
+
+
+<img width="2202" height="1132" alt="image" src="https://github.com/user-attachments/assets/6c422b36-fdcf-46db-937d-f6ec8e995ec9" />
