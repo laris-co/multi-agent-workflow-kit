@@ -39,8 +39,12 @@ fi
 
 # Install plugins (reads from local .tmux.conf via TMUX_CONF env var)
 echo "📦 Installing tmux plugins (including tmux-power)..."
-TMUX_CONF="$REPO_ROOT/.tmux.conf" "$TPM_DIR/bin/install_plugins"
-echo "✅ Tmux plugins installed"
+# Start tmux server and set TMUX_PLUGIN_MANAGER_PATH globally
+tmux start-server 2>/dev/null || true
+tmux set-environment -g TMUX_PLUGIN_MANAGER_PATH "$HOME/.tmux/plugins/" 2>/dev/null || true
+tmux source-file "$REPO_ROOT/.tmux.conf" 2>/dev/null || true
+TMUX_CONF="$REPO_ROOT/.tmux.conf" "$TPM_DIR/bin/install_plugins" 2>/dev/null || echo "⚠️  Plugin installation skipped (will auto-install in tmux session)"
+echo "✅ Tmux plugins configured"
 echo ""
 
 # ========================================
