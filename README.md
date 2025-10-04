@@ -14,7 +14,7 @@ Reusable toolkit for running parallel AI agents with git worktrees and tmux. It 
 gh repo clone laris-co/multi-agent-workflow-kit
 cd multi-agent-workflow-kit
 
-# One-shot bootstrap (runs setup + tmux launch)
+# One-shot bootstrap (installs toolkit assets, setup, and tmux launch)
 uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git \
   multi-agent-kit init --prefix demo
 
@@ -40,7 +40,7 @@ uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git \
   multi-agent-kit init --prefix hackathon --detach
 ```
 
-Use `--setup-only` to prepare worktrees without starting tmux.
+Use `--setup-only` to prepare worktrees without starting tmux. The first run copies `.agents/` and `.tmux.conf` into the current repository; pass `--force-assets` to overwrite those files if you need to refresh them.
 
 ## Prerequisites
 | Tool | Purpose |

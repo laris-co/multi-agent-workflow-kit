@@ -1,0 +1,8 @@
+# Define each agent's branch and worktree location here.
+# Copy this file to match your team structure; run `.agents/setup.sh` afterward.
+agents:
+  example-agent:
+    branch: agents/example-agent
+    worktree_path: .agents/agents/example-agent
+    model: codex
+    description: Replace this with the agent's role or responsibilities

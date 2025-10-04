@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import argparse
-import os
 import shutil
 import subprocess
 import sys
 from pathlib import Path
+
+from .install import AssetInstaller, missing_assets
 
 REQUIRED_BINARIES = ("git", "tmux", "yq")
 
@@ -52,6 +53,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Run setup and exit without launching tmux.",
     )
+    init_parser.add_argument(
+        "--force-assets",
+        action="store_true",
+        help="Overwrite bundled toolkit files when installing into the target repo.",
+    )
 
     return parser.parse_args(argv)
 
@@ -65,13 +71,7 @@ def ensure_binaries() -> None:
 
 
 def repo_root() -> Path:
-    cwd = Path.cwd()
-    agents_dir = cwd / ".agents"
-    if not agents_dir.is_dir():
-        raise BootstrapError(
-            f"Expected to find .agents/ in {cwd}. Run multi-agent-kit from the repository root."
-        )
-    return cwd
+    return Path.cwd()
 
 
 def run_script(script: Path, *args: str) -> None:
@@ -91,8 +91,22 @@ def handle_init(args: argparse.Namespace) -> None:
     ensure_binaries()
     root = repo_root()
 
+    missing = list(missing_assets(root))
+    installer = AssetInstaller(root, force=args.force_assets)
+    if missing or args.force_assets:
+        written = installer.ensure_assets()
+        if written:
+            print("📦 Installed toolkit assets:" )
+            for path in written:
+                print(f"  {path.relative_to(root)}")
+        elif args.force_assets:
+            print("⚠️  No assets overwritten (files identical or missing in package)")
+
     setup_script = root / ".agents" / "setup.sh"
     start_script = root / ".agents" / "start-agents.sh"
+
+    if not setup_script.exists() or not start_script.exists():
+        raise BootstrapError("Toolkit assets missing; ensure .agents/ scripts are available.")
 
     if args.skip_setup and args.setup_only:
         raise BootstrapError("--setup-only already implies running setup; do not combine with --skip-setup")
