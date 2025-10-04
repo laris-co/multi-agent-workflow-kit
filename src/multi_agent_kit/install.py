@@ -9,7 +9,10 @@ from typing import Iterator
 
 ASSET_PACKAGE = "multi_agent_kit"
 ASSET_ROOT_NAME = "assets"
-TOP_LEVEL_ITEMS = (".agents", ".tmux.conf")
+ITEM_MAP = (
+    ("agents", ".agents"),
+    ("tmux.conf", ".tmux.conf"),
+)
 
 
 @dataclass(frozen=True)
@@ -25,9 +28,9 @@ class AssetInstaller:
 
     def ensure_assets(self) -> list[Path]:
         written: list[Path] = []
-        for name in TOP_LEVEL_ITEMS:
-            source = self._asset_root().joinpath(name)
-            destination = self.target / name
+        for source_name, dest_name in ITEM_MAP:
+            source = self._asset_root().joinpath(source_name)
+            destination = self.target / dest_name
             self._copy(source, destination, written)
         return written
 
@@ -51,6 +54,6 @@ class AssetInstaller:
 
 
 def missing_assets(target: Path) -> Iterator[str]:
-    for name in TOP_LEVEL_ITEMS:
-        if not (target / name).exists():
-            yield name
+    for _, dest_name in ITEM_MAP:
+        if not (target / dest_name).exists():
+            yield dest_name
