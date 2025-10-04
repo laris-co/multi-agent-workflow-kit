@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "multi-agent-kit"
+version = "0.1.0"
+description = "uvx entry point for bootstrapping the Multi-Agent Workflow Kit."
+readme = "README.md"
+authors = [{ name = "Multi-Agent Workflow Kit Maintainers" }]
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+multi-agent-kit = "multi_agent_kit.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
