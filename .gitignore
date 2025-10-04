@@ -4,3 +4,4 @@
 .tmux/resurrect/
 .tmux/plugins/
 .envrc
+.context/

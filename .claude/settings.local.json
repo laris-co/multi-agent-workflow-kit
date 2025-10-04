@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/nat/Code/github.com/laris-co/01-data-flow/.claude/commands/**)",
+      "Read(//Users/nat/Code/github.com/laris-co/01-data-flow/.specify/**)",
+      "Bash(gh issue list:*)",
+      "Bash(mkdir:*)",
+      "Bash(chmod:*)",
+      "Bash(tmux list-sessions:*)",
+      "Bash(.claude/commands/codex.sh:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
