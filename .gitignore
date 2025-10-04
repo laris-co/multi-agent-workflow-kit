@@ -1,0 +1,6 @@
+.agents/agents/*
+!.agents/agents/.gitkeep
+.agents/*.log
+.tmux/resurrect/
+.tmux/plugins/
+.envrc
