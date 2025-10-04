@@ -47,6 +47,10 @@ if [ ! -d "$AGENTS_DIR" ]; then
     exit 1
 fi
 
+if [ -f "$REPO_ROOT/.tmux.conf" ]; then
+    tmux source-file "$REPO_ROOT/.tmux.conf" 2>/dev/null || true
+fi
+
 AGENTS=$(cd "$AGENTS_DIR" && ls -d */ 2>/dev/null | sed 's#/##' | tr '\n' ' ')
 
 if [ -z "$AGENTS" ]; then
