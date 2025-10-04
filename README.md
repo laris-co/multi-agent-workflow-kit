@@ -41,7 +41,6 @@ uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git \
 ```
 
 Use `--setup-only` to prepare worktrees without starting tmux.
-```
 
 ## Prerequisites
 | Tool | Purpose |
