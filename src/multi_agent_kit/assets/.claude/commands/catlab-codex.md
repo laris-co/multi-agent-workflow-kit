@@ -26,5 +26,7 @@ Usage examples:
 - `/catlab-codex what are the performance implications?`
 
 Notes:
-- Requires tmux session to be running (use ./start.sh to create it).
+- Requires tmux session to be running (use .agents/start-agents.sh to create it).
 - Sends to pane 1, which should be the codex worktree pane in profile1 layout.
+- Automatically detects sessions with custom prefixes (e.g., ai-repo-suffix).
+- Set SESSION_PREFIX environment variable if using a non-default base prefix.
