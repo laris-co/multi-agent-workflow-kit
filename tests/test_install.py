@@ -9,10 +9,9 @@ from multi_agent_kit.install import AssetInstaller, missing_assets
 
 def test_installer_creates_assets(tmp_path: Path) -> None:
     installer = AssetInstaller(tmp_path)
-    assert list(missing_assets(tmp_path)) == [".agents", "agents", ".tmux.conf"]
+    assert list(missing_assets(tmp_path)) == ["agents", ".tmux.conf"]
 
     written = installer.ensure_assets()
-    assert (tmp_path / ".agents").is_dir()
     assert (tmp_path / "agents").is_dir()
     assert (tmp_path / "agents" / ".gitignore").is_file()
     assert (tmp_path / ".tmux.conf").is_file()

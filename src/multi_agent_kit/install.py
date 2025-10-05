@@ -10,8 +10,7 @@ from typing import Iterator
 ASSET_PACKAGE = "multi_agent_kit"
 ASSET_ROOT_NAME = "assets"
 ITEM_MAP = (
-    ("agents", ".agents"),
-    ("agents_root", "agents"),
+    ("agents", "agents"),
     ("tmux.conf", ".tmux.conf"),
 )
 

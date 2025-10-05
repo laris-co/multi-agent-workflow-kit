@@ -1,6 +1,6 @@
 #!/bin/bash
 # Setup script: Creates all agents and installs tmux plugins
-# Usage: .agents/setup.sh
+# Usage: agents/setup.sh
 
 set -e
 

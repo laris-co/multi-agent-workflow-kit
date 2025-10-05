@@ -1,5 +1,5 @@
 # Define each agent's branch and worktree location here.
-# Copy this file to match your team structure; run `.agents/setup.sh` afterward.
+# Copy this file to match your team structure; run `agents/setup.sh` afterward.
 agents:
   1-agent:
     branch: agents/1-agent

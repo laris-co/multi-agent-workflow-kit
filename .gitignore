@@ -1,7 +1,15 @@
-.agents/agents/*
-!.agents/agents/.gitkeep
-.agents/*.log
+# Agent worktrees are created under agents/ at repo root
+# The agents/ directory has its own .gitignore to manage itself
+
 .tmux/resurrect/
 .tmux/plugins/
 .envrc
 .context/
+
+# Python build artifacts
+build/
+dist/
+*.egg-info/
+__pycache__/
+*.pyc
+*.pyo

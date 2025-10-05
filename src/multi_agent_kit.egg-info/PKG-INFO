@@ -1,3 +1,14 @@
+Metadata-Version: 2.4
+Name: multi-agent-kit
+Version: 0.1.0
+Summary: uvx entry point for bootstrapping the Multi-Agent Workflow Kit.
+Author: Multi-Agent Workflow Kit Maintainers
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+
 # Multi-Agent Workflow Kit
 
 Reusable toolkit for running parallel AI agents with git worktrees and tmux. It packages scripts, profiles, and conventions that give every agent its own branch while keeping supervision in one tmux session.

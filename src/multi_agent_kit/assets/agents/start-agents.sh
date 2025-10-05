@@ -6,18 +6,9 @@ set -e
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 REPO_ROOT=$(cd "$SCRIPT_DIR/.." && pwd)
 PROFILES_DIR="$SCRIPT_DIR/profiles"
-DEFAULT_AGENTS_DIR="$REPO_ROOT/agents"
-LEGACY_AGENTS_DIR="$SCRIPT_DIR/agents"
+AGENTS_DIR="$REPO_ROOT/agents"
 
-if [ -d "$DEFAULT_AGENTS_DIR" ]; then
-    AGENTS_DIR="$DEFAULT_AGENTS_DIR"
-else
-    AGENTS_DIR="$LEGACY_AGENTS_DIR"
-fi
-
-if [ "$AGENTS_DIR" = "$DEFAULT_AGENTS_DIR" ]; then
-    mkdir -p "$AGENTS_DIR"
-fi
+mkdir -p "$AGENTS_DIR"
 
 CUSTOM_PREFIX=""
 PROFILE="profile1"
@@ -64,7 +55,7 @@ fi
 AGENTS=$(cd "$AGENTS_DIR" && ls -d */ 2>/dev/null | sed 's#/##' | tr '\n' ' ')
 if [ -z "$AGENTS" ]; then
     echo "⚠️  No agent worktrees detected in $AGENTS_DIR"
-    echo "Run .agents/setup.sh or .agents/agents.sh create <name> first."
+    echo "Run agents/setup.sh or agents/agents.sh create <name> first."
     exit 1
 fi
 

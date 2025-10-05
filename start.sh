@@ -7,22 +7,18 @@
 #   ./start.sh profile5 --detach
 #   ./start.sh profile1 -d
 
-# Check if any agents exist (supporting both legacy and new locations)
-ROOT_AGENTS_DIR="$(pwd)/agents"
-LEGACY_AGENTS_DIR="$(pwd)/.agents/agents"
+# Check if any agents exist
+AGENTS_DIR="$(pwd)/agents"
 
 have_agents=false
-for dir in "$ROOT_AGENTS_DIR" "$LEGACY_AGENTS_DIR"; do
-    if [ -d "$dir" ] && [ -n "$(find "$dir" -mindepth 1 -maxdepth 1 -type d -print -quit 2>/dev/null)" ]; then
-        have_agents=true
-        break
-    fi
-done
+if [ -d "$AGENTS_DIR" ] && [ -n "$(find "$AGENTS_DIR" -mindepth 1 -maxdepth 1 -type d -print -quit 2>/dev/null)" ]; then
+    have_agents=true
+fi
 
 if [ "$have_agents" = false ]; then
     echo "🔧 No agents found. Running setup..."
-    .agents/setup.sh
+    agents/setup.sh
     echo ""
 fi
 
-.agents/start-agents.sh "$@"
+agents/start-agents.sh "$@"
