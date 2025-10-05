@@ -26,4 +26,4 @@ include-package-data = true
 where = ["src"]
 
 [tool.setuptools.package-data]
-"multi_agent_kit" = ["assets/**"]
+"multi_agent_kit" = ["assets/**", "assets/.*", "assets/.agents/**"]

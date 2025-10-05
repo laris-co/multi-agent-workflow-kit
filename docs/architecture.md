@@ -22,13 +22,13 @@ Main repository (.git)
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
-| Worktree registry | `agents/agents.yaml` | Maps agent names to branches and worktree paths |
-| Worktree manager | `agents/agents.sh` | Creates/list/removes worktrees using the registry |
-| Bootstrapper | `agents/setup.sh` | Installs TPM, provisions worktrees from registry |
-| Tmux launcher | `agents/start-agents.sh` | Spins up layouts, naming sessions consistently |
-| Layout profiles | `agents/profiles/*.sh` | Parameterized pane geometries |
-| Broadcast helper | `agents/send-commands.sh` | Sends commands to each pane |
-| Cleanup utility | `agents/kill-all.sh` | Kills tmux sessions with shared prefix |
+| Worktree registry | `.agents/agents.yaml` | Maps agent names to branches and worktree paths |
+| Worktree manager | `.agents/agents.sh` | Creates/list/removes worktrees using the registry |
+| Bootstrapper | `.agents/setup.sh` | Installs TPM, provisions worktrees from registry |
+| Tmux launcher | `.agents/start-agents.sh` | Spins up layouts, naming sessions consistently |
+| Layout profiles | `.agents/profiles/*.sh` | Parameterized pane geometries |
+| Broadcast helper | `.agents/send-commands.sh` | Sends commands to each pane |
+| Cleanup utility | `.agents/kill-all.sh` | Kills tmux sessions with shared prefix |
 | Shared config | `.tmux.conf` | Mouse support, theming, plugin config |
 
 ## Workflow

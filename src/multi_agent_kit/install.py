@@ -10,7 +10,8 @@ from typing import Iterator
 ASSET_PACKAGE = "multi_agent_kit"
 ASSET_ROOT_NAME = "assets"
 ITEM_MAP = (
-    ("agents", "agents"),
+    (".agents", ".agents"),    # Toolkit files go to .agents/
+    ("agents", "agents"),      # Gitignore-only directory for worktrees
     ("tmux.conf", ".tmux.conf"),
 )
 
@@ -29,9 +30,19 @@ class AssetInstaller:
     def ensure_assets(self) -> list[Path]:
         written: list[Path] = []
         for source_name, dest_name in ITEM_MAP:
-            source = self._asset_root().joinpath(source_name)
-            destination = self.target / dest_name
-            self._copy(source, destination, written)
+            # Special handling for agents directory
+            if source_name == "agents" and dest_name == "agents":
+                # Create agents directory with minimal .gitignore
+                destination = self.target / dest_name
+                destination.mkdir(parents=True, exist_ok=True)
+                gitignore = destination / ".gitignore"
+                if not gitignore.exists() or self.force:
+                    gitignore.write_text("# Ignore all agent worktrees\n*\n!.gitignore\n")
+                    written.append(gitignore)
+            else:
+                source = self._asset_root().joinpath(source_name)
+                destination = self.target / dest_name
+                self._copy(source, destination, written)
         return written
 
     def _asset_root(self) -> Traversable:
@@ -40,8 +51,13 @@ class AssetInstaller:
     def _copy(self, source: Traversable, destination: Path, written: list[Path]) -> None:
         if source.is_dir():
             destination.mkdir(parents=True, exist_ok=True)
-            for child in source.iterdir():
-                self._copy(child, destination / child.name, written)
+            # Handle directory with children
+            try:
+                for child in source.iterdir():
+                    self._copy(child, destination / child.name, written)
+            except (AttributeError, NotImplementedError):
+                # Some Traversable implementations don't support iterdir on certain directories
+                pass
             return
 
         destination.parent.mkdir(parents=True, exist_ok=True)

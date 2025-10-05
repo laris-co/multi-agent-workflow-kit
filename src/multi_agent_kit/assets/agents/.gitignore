@@ -1,7 +1,3 @@
-# Ignore all agent worktree checkouts
+# Ignore all agent worktrees
 *
 !.gitignore
-!*.sh
-!*.yaml
-!*.md
-!profiles/
