@@ -14,6 +14,7 @@ ITEM_MAP = (
     ("agents", "agents"),      # Gitignore-only directory for worktrees
     (".claude", ".claude"),    # Claude commands and configuration
     ("tmux.conf", ".tmux.conf"),
+    ("start.sh", "start.sh"),  # Convenience wrapper for start-agents.sh
 )
 
 
