@@ -1,6 +1,6 @@
 #!/bin/bash
 # Setup script: Creates all agents and installs tmux plugins
-# Usage: agents/setup.sh
+# Usage: .agents/setup.sh
 
 set -e
 
@@ -45,6 +45,13 @@ tmux set-environment -g TMUX_PLUGIN_MANAGER_PATH "$HOME/.tmux/plugins/" 2>/dev/n
 tmux source-file "$REPO_ROOT/.tmux.conf" 2>/dev/null || true
 TMUX_CONF="$REPO_ROOT/.tmux.conf" "$TPM_DIR/bin/install_plugins" 2>/dev/null || echo "⚠️  Plugin installation skipped (will auto-install in tmux session)"
 echo "✅ Tmux plugins configured"
+echo ""
+
+# ========================================
+# Clean up stale worktrees
+# ========================================
+echo "🧹 Cleaning up stale worktrees..."
+git -C "$REPO_ROOT" worktree prune -v
 echo ""
 
 # ========================================

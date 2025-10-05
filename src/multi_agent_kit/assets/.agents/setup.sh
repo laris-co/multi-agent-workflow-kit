@@ -48,6 +48,13 @@ echo "✅ Tmux plugins configured"
 echo ""
 
 # ========================================
+# Clean up stale worktrees
+# ========================================
+echo "🧹 Cleaning up stale worktrees..."
+git -C "$REPO_ROOT" worktree prune -v
+echo ""
+
+# ========================================
 # Create agent worktrees
 # ========================================
 if [ ! -f "$AGENTS_YAML" ]; then

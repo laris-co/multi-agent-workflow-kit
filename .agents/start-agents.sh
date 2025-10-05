@@ -55,7 +55,7 @@ fi
 AGENTS=$(cd "$AGENTS_DIR" && ls -d */ 2>/dev/null | sed 's#/##' | tr '\n' ' ')
 if [ -z "$AGENTS" ]; then
     echo "⚠️  No agent worktrees detected in $AGENTS_DIR"
-    echo "Run agents/setup.sh or agents/agents.sh create <name> first."
+    echo "Run .agents/setup.sh or .agents/agents.sh create <name> first."
     exit 1
 fi
 
@@ -141,12 +141,12 @@ elif [ "$LAYOUT_TYPE" = "full-left" ]; then
         tmux split-window -v -t "$(pane_ref 1)" -p "$TOP_RIGHT_HEIGHT"
     fi
 
-    echo "Adding pane 4 (bottom-right)..."
-    if [ $TOTAL -ge 4 ]; then
-        tmux split-window -v -t "$(pane_ref 2)" -c "$AGENTS_DIR/${AGENTS_ARRAY[3]}" -p "${MIDDLE_RIGHT_HEIGHT:-50}"
-    else
-        tmux split-window -v -t "$(pane_ref 2)" -p "${MIDDLE_RIGHT_HEIGHT:-50}"
-    fi
+    #echo "Adding pane 4 (bottom-right)..."
+    #if [ $TOTAL -ge 4 ]; then
+    #    tmux split-window -v -t "$(pane_ref 2)" -c "$AGENTS_DIR/${AGENTS_ARRAY[3]}" -p "${MIDDLE_RIGHT_HEIGHT:-50}"
+    #else
+    #    tmux split-window -v -t "$(pane_ref 2)" -p "${MIDDLE_RIGHT_HEIGHT:-50}"
+    #fi
 elif [ "$LAYOUT_TYPE" = "six-pane" ]; then
     if [ $TOTAL -ge 1 ]; then
         echo "Adding pane 2 for ${AGENTS_ARRAY[0]}..."
