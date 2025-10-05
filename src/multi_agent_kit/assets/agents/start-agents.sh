@@ -59,17 +59,27 @@ fi
 
 BASE_PREFIX=${SESSION_PREFIX:-ai}
 DIR_NAME=$(basename "$REPO_ROOT")
+SESSION_EXISTS=false
 
 if [ -n "$CUSTOM_PREFIX" ]; then
     SESSION_NAME="${BASE_PREFIX}-${DIR_NAME}-${CUSTOM_PREFIX}"
 else
     SESSION_NAME="${BASE_PREFIX}-${DIR_NAME}"
     if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
-        echo "❌ Error: Session '$SESSION_NAME' already exists"
-        echo "💡 Use --prefix <name> to create a separate session"
-        echo "   Example: .agents/start-agents.sh profile1 --prefix work"
-        exit 1
+        SESSION_EXISTS=true
     fi
+fi
+
+if [ "$SESSION_EXISTS" = true ]; then
+    echo "ℹ️ Session '$SESSION_NAME' already running"
+    if [ "$DETACHED" = true ]; then
+        echo "📌 Running in detached mode"
+        echo "💡 Attach with: tmux attach-session -t $SESSION_NAME"
+    else
+        echo "📍 Attaching to existing session..."
+        tmux attach-session -t "$SESSION_NAME"
+    fi
+    exit 0
 fi
 
 tmux kill-session -t "$SESSION_NAME" 2>/dev/null || true
