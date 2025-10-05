@@ -36,7 +36,9 @@ EOF
     exit 1
   fi
 
-  git -C "$REPO_ROOT" branch "$branch" 2>/dev/null || true
+  if ! git -C "$REPO_ROOT" rev-parse --verify "$branch" >/dev/null 2>&1; then
+    git -C "$REPO_ROOT" branch "$branch"
+  fi
   mkdir -p "$(dirname "$abs_path")"
 
   if [ -d "$abs_path" ]; then
