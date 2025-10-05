@@ -10,7 +10,8 @@ from typing import Iterator
 ASSET_PACKAGE = "multi_agent_kit"
 ASSET_ROOT_NAME = "assets"
 ITEM_MAP = (
-    ("agents", "agents"),
+    (".agents", ".agents"),    # Toolkit files go to .agents/
+    ("agents", "agents"),      # Gitignore-only directory for worktrees
     ("tmux.conf", ".tmux.conf"),
 )
 

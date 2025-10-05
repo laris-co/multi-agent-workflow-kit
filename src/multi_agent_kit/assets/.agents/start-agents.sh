@@ -55,7 +55,7 @@ fi
 AGENTS=$(cd "$AGENTS_DIR" && ls -d */ 2>/dev/null | sed 's#/##' | tr '\n' ' ')
 if [ -z "$AGENTS" ]; then
     echo "⚠️  No agent worktrees detected in $AGENTS_DIR"
-    echo "Run agents/setup.sh or agents/agents.sh create <name> first."
+    echo "Run .agents/setup.sh or .agents/agents.sh create <name> first."
     exit 1
 fi
 

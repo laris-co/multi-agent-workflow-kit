@@ -17,8 +17,8 @@ fi
 
 if [ "$have_agents" = false ]; then
     echo "🔧 No agents found. Running setup..."
-    agents/setup.sh
+    .agents/setup.sh
     echo ""
 fi
 
-agents/start-agents.sh "$@"
+.agents/start-agents.sh "$@"

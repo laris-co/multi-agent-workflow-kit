@@ -36,7 +36,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     init_parser.add_argument(
         "--prefix",
         dest="prefix",
-        help="Optional session suffix passed to agents/start-agents.sh.",
+        help="Optional session suffix passed to .agents/start-agents.sh.",
     )
     init_parser.add_argument(
         "--detach",
@@ -46,7 +46,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     init_parser.add_argument(
         "--skip-setup",
         action="store_true",
-        help="Skip running agents/setup.sh (assumes agents already provisioned).",
+        help="Skip running .agents/setup.sh (assumes agents already provisioned).",
     )
     init_parser.add_argument(
         "--setup-only",
@@ -102,11 +102,11 @@ def handle_init(args: argparse.Namespace) -> None:
         elif args.force_assets:
             print("⚠️  No assets overwritten (files identical or missing in package)")
 
-    setup_script = root / "agents" / "setup.sh"
-    start_script = root / "agents" / "start-agents.sh"
+    setup_script = root / ".agents" / "setup.sh"
+    start_script = root / ".agents" / "start-agents.sh"
 
     if not setup_script.exists() or not start_script.exists():
-        raise BootstrapError("Toolkit assets missing; ensure agents/ scripts are available.")
+        raise BootstrapError("Toolkit assets missing; ensure .agents/ scripts are available.")
 
     if args.skip_setup and args.setup_only:
         raise BootstrapError("--setup-only already implies running setup; do not combine with --skip-setup")
