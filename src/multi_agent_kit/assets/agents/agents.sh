@@ -26,15 +26,30 @@ create() {
 
   abs_path="$REPO_ROOT/$path"
 
-  git -C "$REPO_ROOT" branch "$branch" 2>/dev/null || true
+  local branch_ref="refs/heads/$branch"
+  local has_head=1
+
+  if ! git -C "$REPO_ROOT" rev-parse --verify HEAD >/dev/null 2>&1; then
+    has_head=0
+  fi
+
   mkdir -p "$(dirname "$abs_path")"
 
   if [ -d "$abs_path" ]; then
     echo "ℹ️  Agent already exists at $path"
-  else
-    git -C "$REPO_ROOT" worktree add "$abs_path" "$branch"
-    echo "✅ Created $agent worktree at $path on branch $branch"
+    return
   fi
+
+  # Reuse existing branch, create from the current HEAD, or start an orphan branch for brand-new repos
+  if git -C "$REPO_ROOT" show-ref --quiet "$branch_ref"; then
+    git -C "$REPO_ROOT" worktree add "$abs_path" "$branch"
+  elif [ "$has_head" -eq 1 ]; then
+    git -C "$REPO_ROOT" worktree add -b "$branch" "$abs_path"
+  else
+    git -C "$REPO_ROOT" worktree add --orphan -b "$branch" "$abs_path"
+  fi
+
+  echo "✅ Created $agent worktree at $path on branch $branch"
 }
 
 list() {
