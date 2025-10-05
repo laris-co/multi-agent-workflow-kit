@@ -20,8 +20,8 @@ create() {
   path=$(read_yaml ".agents.$agent.worktree_path")
 
   case "$path" in
-    .agents/agents/*) : ;;
-    *) echo "Error: worktree_path '$path' must start with .agents/agents/" >&2; exit 1;;
+    agents/*|.agents/agents/*) : ;;
+    *) echo "Error: worktree_path '$path' must start with agents/ or .agents/agents/" >&2; exit 1;;
   esac
 
   abs_path="$REPO_ROOT/$path"
@@ -53,12 +53,24 @@ list() {
   echo "📋 Git worktrees:"
   git -C "$REPO_ROOT" worktree list
   echo ""
-  echo "📤 Agents under .agents/agents/:"
-  for d in "$SCRIPT_DIR"/agents/*; do
-    if [ -d "$d" ]; then
-      local branch
-      branch=$(git -C "$d" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "?")
-      printf "  %s [%s]\n" "${d#$REPO_ROOT/}" "$branch"
+  local bases=("$REPO_ROOT/agents" "$SCRIPT_DIR/agents")
+  for base in "${bases[@]}"; do
+    if [ -d "$base" ]; then
+      local label
+      if [[ "$base" == "$REPO_ROOT/agents" ]]; then
+        label="agents/"
+      else
+        label=".agents/agents/"
+      fi
+      echo "📤 Agents under $label"
+      for d in "$base"/*; do
+        if [ -d "$d" ]; then
+          local branch
+          branch=$(git -C "$d" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "?")
+          printf "  %s [%s]\n" "${d#$REPO_ROOT/}" "$branch"
+        fi
+      done
+      echo ""
     fi
   done
 }
