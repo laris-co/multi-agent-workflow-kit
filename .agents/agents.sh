@@ -44,6 +44,11 @@ EOF
   if [ -d "$abs_path" ]; then
     echo "ℹ️  Agent already exists at $path"
   else
+    # Check if worktree is stale and clean it up
+    if git -C "$REPO_ROOT" worktree list | grep -q "$abs_path"; then
+      echo "⚠️  Found stale worktree registration for $path, cleaning up..."
+      git -C "$REPO_ROOT" worktree prune -v
+    fi
     git -C "$REPO_ROOT" worktree add "$abs_path" "$branch"
     echo "✅ Created $agent worktree at $path on branch $branch"
   fi

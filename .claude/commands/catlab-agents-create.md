@@ -10,8 +10,8 @@ allowed-tools:
 Goal: Create/list agents by calling the local shell script. Uses git worktrees directly at `agents/<name>`.
 
 Usage examples:
-- `/agents create codex2 -m codex --branch agents/codex2`
-- `/agents list`
+- `/catlab-agents-create create codex2 -m codex --branch agents/codex2`
+- `/catlab-agents-create list`
 
 Behavior (MVP):
 - If `create <name>` and the agent is missing, propose a YAML patch like (for `.agents/agents.yaml`):

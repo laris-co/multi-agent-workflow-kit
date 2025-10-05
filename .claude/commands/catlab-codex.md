@@ -2,7 +2,7 @@
 description: Sends a prompt to codex running in tmux pane 1
 argument-hint: <prompt>
 allowed-tools:
-  - Bash(.claude/commands/codex.sh:*)
+  - Bash(.claude/commands/catlab-codex.sh:*)
 ---
 
 Goal: Send a prompt to codex agent running in tmux pane 1 (worktree pane).
@@ -17,14 +17,16 @@ Behavior:
 Shell template:
 
 ```bash
-.claude/commands/codex.sh "$*"
+.claude/commands/catlab-codex.sh "$*"
 ```
 
 Usage examples:
-- `/codex explain this function`
-- `/codex refactor the authentication logic`
-- `/codex what are the performance implications?`
+- `/catlab-codex explain this function`
+- `/catlab-codex refactor the authentication logic`
+- `/catlab-codex what are the performance implications?`
 
 Notes:
-- Requires tmux session to be running (use ./start.sh to create it).
+- Requires tmux session to be running (use .agents/start-agents.sh to create it).
 - Sends to pane 1, which should be the codex worktree pane in profile1 layout.
+- Automatically detects sessions with custom prefixes (e.g., ai-repo-suffix).
+- Set SESSION_PREFIX environment variable if using a non-default base prefix.

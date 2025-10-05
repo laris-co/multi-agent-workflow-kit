@@ -1,24 +1,18 @@
 #!/bin/bash
-# Wrapper script to start multi-agent tmux session
-# Usage: ./start.sh [profile] [--prefix name] [--detach|-d]
-# Examples:
-#   ./start.sh profile1
-#   ./start.sh profile2 --prefix work
-#   ./start.sh profile5 --detach
-#   ./start.sh profile1 -d
+set -euo pipefail
 
-# Check if any agents exist
-AGENTS_DIR="$(pwd)/agents"
+# Simple wrapper for .agents/start-agents.sh
+# Default to profile1 if no arguments provided
 
-have_agents=false
-if [ -d "$AGENTS_DIR" ] && [ -n "$(find "$AGENTS_DIR" -mindepth 1 -maxdepth 1 -type d -print -quit 2>/dev/null)" ]; then
-    have_agents=true
+# Check if .agents exists
+if [ ! -d ".agents" ]; then
+    echo "❌ Toolkit not installed. Run: uvx multi-agent-kit init"
+    exit 1
 fi
 
-if [ "$have_agents" = false ]; then
-    echo "🔧 No agents found. Running setup..."
-    .agents/setup.sh
-    echo ""
+# Default to profile1 if no arguments
+if [ $# -eq 0 ]; then
+    exec .agents/start-agents.sh profile1
+else
+    exec .agents/start-agents.sh "$@"
 fi
-
-.agents/start-agents.sh "$@"
