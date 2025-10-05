@@ -34,7 +34,7 @@ cp .agents/agents.yaml .agents/agents.local.yaml   # optional snapshot
 
 ## Common Commands
 ```bash
-.agents/agents.sh create 01-analyst      # create specific agent worktree
+.agents/agents.sh create 1-agent         # create specific agent worktree
 .agents/agents.sh list                   # list registered agents + branches
 .agents/start-agents.sh profile2         # launch tmux with alternate layout
 .agents/start-agents.sh profile1 --prefix work  # run a second session side-by-side
@@ -45,14 +45,14 @@ cp .agents/agents.yaml .agents/agents.local.yaml   # optional snapshot
 ## `agents.yaml` Format
 ```yaml
 agents:
-  01-analyst:
-    branch: agents/01-analyst
-    worktree_path: .agents/agents/01-analyst
-    model: claude
-    description: Primary research agent
+  1-agent:
+    branch: agents/1-agent
+    worktree_path: agents/1-agent
+    model: default
+    description: Primary agent workspace
 ```
 - `branch` will be created if it does not already exist.
-- `worktree_path` must live under `.agents/agents/` (guardrails enforced by the script).
+- `worktree_path` must live under `agents/` (legacy `.agents/agents/` is still accepted).
 - `model` and `description` are informational—use them to coordinate assignments.
 
 ## Layout Profiles
@@ -73,7 +73,7 @@ To add new layouts, copy an existing profile and adjust the environment variable
 ## Cleanup & Maintenance
 ```bash
 .agents/kill-all.sh                 # interactive kill for active sessions
-.agents/agents.sh remove 01-analyst # tear down a single worktree
+.agents/agents.sh remove 1-agent    # tear down a single worktree
 .git worktree prune                 # remove stale / deleted worktrees
 ```
 
@@ -92,7 +92,7 @@ To add new layouts, copy an existing profile and adjust the environment variable
 │   ├── profile3.sh
 │   ├── profile4.sh
 │   └── profile5.sh
-└── agents/                # actual worktrees (gitignored)
+agents/                    # actual worktrees (gitignored)
 ```
 
 ## Tips

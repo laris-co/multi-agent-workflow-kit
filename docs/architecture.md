@@ -7,14 +7,14 @@ The multi-agent workflow combines git worktrees with tmux so that each agent rec
 ```
 Main repository (.git)
     ├── source files
-    └── .agents/agents/
-          ├── 01-agent/ (worktree → branch agents/01-agent)
-          ├── 02-agent/ (worktree → branch agents/02-agent)
-          └── 03-agent/ (worktree → branch agents/03-agent)
+    └── agents/
+          ├── 1-agent/ (worktree → branch agents/1-agent)
+          ├── 2-agent/ (worktree → branch agents/2-agent)
+          └── 3-agent/ (worktree → branch agents/3-agent)
 
 .tmux session
-    ├── pane: agent 01 shell (cd .agents/agents/01-agent)
-    ├── pane: agent 02 shell (cd .agents/agents/02-agent)
+    ├── pane: agent 1 shell (cd agents/1-agent)
+    ├── pane: agent 2 shell (cd agents/2-agent)
     └── pane: shared tools / orchestration
 ```
 

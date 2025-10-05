@@ -71,14 +71,14 @@ Use `--setup-only` to prepare worktrees without starting tmux. The first run cop
 │   ├── profile3.sh        # top-full layout
 │   ├── profile4.sh        # three-pane layout
 │   └── profile5.sh        # six-pane dashboard
-└── agents/                # populated worktrees (gitignored)
+agents/                    # repo-root worktrees (gitignored via agents/.gitignore)
 
 .tmux.conf                 # curated tmux config with TPM + power theme
 docs/                      # deep dives and checklists
 ```
 
 ## Operating Model
-1. Define each agent in `.agents/agents.yaml` (branch + worktree path).
+1. Define each agent in `.agents/agents.yaml` (branch + worktree path pointing into `agents/`).
 2. Run `.agents/setup.sh` after edits to sync worktrees and ensure dependencies.
 3. Start the tmux session with `.agents/start-agents.sh <profile> [--prefix <suffix>]`.
 4. Use `.agents/send-commands.sh` to broadcast helpful commands (`git status`, `ls`).

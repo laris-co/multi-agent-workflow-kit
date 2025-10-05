@@ -6,7 +6,18 @@ set -e
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 REPO_ROOT=$(cd "$SCRIPT_DIR/.." && pwd)
 PROFILES_DIR="$SCRIPT_DIR/profiles"
-AGENTS_DIR="$SCRIPT_DIR/agents"
+DEFAULT_AGENTS_DIR="$REPO_ROOT/agents"
+LEGACY_AGENTS_DIR="$SCRIPT_DIR/agents"
+
+if [ -d "$DEFAULT_AGENTS_DIR" ]; then
+    AGENTS_DIR="$DEFAULT_AGENTS_DIR"
+else
+    AGENTS_DIR="$LEGACY_AGENTS_DIR"
+fi
+
+if [ "$AGENTS_DIR" = "$DEFAULT_AGENTS_DIR" ]; then
+    mkdir -p "$AGENTS_DIR"
+fi
 
 CUSTOM_PREFIX=""
 PROFILE="profile1"
