@@ -1,5 +1,5 @@
 #!/bin/bash
-# Start multiple AI agents in tmux panes
+# Start multiple AI agents in tmux panes (mouse-friendly + resizable)
 
 set -e
 
@@ -30,7 +30,6 @@ while [[ $# -gt 0 ]]; do
 done
 
 PROFILE_FILE="$PROFILES_DIR/${PROFILE}.sh"
-
 if [ -f "$PROFILE_FILE" ]; then
     # shellcheck disable=SC1090
     source "$PROFILE_FILE"
@@ -52,7 +51,6 @@ if [ -f "$REPO_ROOT/.tmux.conf" ]; then
 fi
 
 AGENTS=$(cd "$AGENTS_DIR" && ls -d */ 2>/dev/null | sed 's#/##' | tr '\n' ' ')
-
 if [ -z "$AGENTS" ]; then
     echo "⚠️  No agent worktrees detected in $AGENTS_DIR"
     echo "Run .agents/setup.sh or .agents/agents.sh create <name> first."
@@ -87,85 +85,94 @@ else
     tmux new-session -d -s "$SESSION_NAME" -c "$AGENTS_DIR/${AGENTS_ARRAY[0]}"
 fi
 
+WINDOW_INDEX=$(tmux list-windows -t "$SESSION_NAME" -F "#{window_index}" | head -1)
+PANE_BASE=$(tmux show-options -gv pane-base-index 2>/dev/null || echo 0)
+pane_ref() {
+    local offset=$1
+    local pane_index=$((PANE_BASE + offset))
+    printf '%s:%s.%s' "$SESSION_NAME" "$WINDOW_INDEX" "$pane_index"
+}
+tmux select-window -t "$SESSION_NAME":"$WINDOW_INDEX"
+
 if [ "$LAYOUT_TYPE" = "three-pane" ]; then
     if [ $TOTAL -ge 2 ]; then
         echo "Adding pane for ${AGENTS_ARRAY[1]}..."
-        tmux split-window -h -t "$SESSION_NAME" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "$RIGHT_WIDTH"
+        tmux split-window -h -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "$RIGHT_WIDTH"
     fi
     if [ $TOTAL -ge 3 ]; then
         echo "Adding pane for ${AGENTS_ARRAY[2]}..."
-        tmux select-pane -t "$SESSION_NAME":0.0
-        tmux split-window -v -t "$SESSION_NAME" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "${BOTTOM_HEIGHT:-30}"
+        tmux select-pane -t "$(pane_ref 0)"
+        tmux split-window -v -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "${BOTTOM_HEIGHT:-30}"
     fi
 elif [ "$LAYOUT_TYPE" = "top-full" ]; then
     if [ $TOTAL -ge 2 ]; then
         echo "Adding pane for ${AGENTS_ARRAY[1]}..."
-        tmux split-window -v -t "$SESSION_NAME" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "${BOTTOM_HEIGHT:-30}"
+        tmux split-window -v -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "${BOTTOM_HEIGHT:-30}"
     fi
     if [ $TOTAL -ge 3 ]; then
         echo "Adding pane for ${AGENTS_ARRAY[2]}..."
-        tmux split-window -h -t "$SESSION_NAME" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "${BOTTOM_RIGHT_WIDTH:-50}"
+        tmux split-window -h -t "$(pane_ref 1)" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "${BOTTOM_RIGHT_WIDTH:-50}"
     fi
 elif [ "$LAYOUT_TYPE" = "full-left" ]; then
     echo "Adding pane 2 (top-right)..."
     if [ $TOTAL -ge 2 ]; then
-        tmux split-window -h -t "$SESSION_NAME" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "$RIGHT_WIDTH"
+        tmux split-window -h -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "$RIGHT_WIDTH"
     else
-        tmux split-window -h -t "$SESSION_NAME" -p "$RIGHT_WIDTH"
+        tmux split-window -h -t "$(pane_ref 0)" -p "$RIGHT_WIDTH"
     fi
 
     echo "Adding pane 3 (middle-right)..."
-    tmux select-pane -t "$SESSION_NAME":0.1
+    tmux select-pane -t "$(pane_ref 1)"
     if [ $TOTAL -ge 3 ]; then
-        tmux split-window -v -t "$SESSION_NAME" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "$TOP_RIGHT_HEIGHT"
+        tmux split-window -v -t "$(pane_ref 1)" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "$TOP_RIGHT_HEIGHT"
     else
-        tmux split-window -v -t "$SESSION_NAME" -p "$TOP_RIGHT_HEIGHT"
+        tmux split-window -v -t "$(pane_ref 1)" -p "$TOP_RIGHT_HEIGHT"
     fi
 
     echo "Adding pane 4 (bottom-right)..."
     if [ $TOTAL -ge 4 ]; then
-        tmux split-window -v -t "$SESSION_NAME" -c "$AGENTS_DIR/${AGENTS_ARRAY[3]}" -p "${MIDDLE_RIGHT_HEIGHT:-50}"
+        tmux split-window -v -t "$(pane_ref 2)" -c "$AGENTS_DIR/${AGENTS_ARRAY[3]}" -p "${MIDDLE_RIGHT_HEIGHT:-50}"
     else
-        tmux split-window -v -t "$SESSION_NAME" -p "${MIDDLE_RIGHT_HEIGHT:-50}"
+        tmux split-window -v -t "$(pane_ref 2)" -p "${MIDDLE_RIGHT_HEIGHT:-50}"
     fi
 elif [ "$LAYOUT_TYPE" = "six-pane" ]; then
     if [ $TOTAL -ge 1 ]; then
         echo "Adding pane 2 for ${AGENTS_ARRAY[0]}..."
-        tmux split-window -h -t "$SESSION_NAME" -c "$AGENTS_DIR/${AGENTS_ARRAY[0]}" -p "$RIGHT_WIDTH"
+        tmux split-window -h -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[0]}" -p "$RIGHT_WIDTH"
     fi
     if [ $TOTAL -ge 2 ]; then
         echo "Adding pane 3 for ${AGENTS_ARRAY[1]}..."
-        tmux select-pane -t "$SESSION_NAME":1.1
-        tmux split-window -v -t "$SESSION_NAME" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "$TOP_RIGHT_HEIGHT"
+        tmux select-pane -t "$(pane_ref 0)"
+        tmux split-window -v -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "$TOP_RIGHT_HEIGHT"
     fi
     if [ $TOTAL -ge 3 ]; then
         echo "Adding pane 4 for ${AGENTS_ARRAY[2]}..."
-        tmux select-pane -t "$SESSION_NAME":1.2
-        tmux split-window -v -t "$SESSION_NAME" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "$TOP_RIGHT_HEIGHT"
+        tmux select-pane -t "$(pane_ref 1)"
+        tmux split-window -v -t "$(pane_ref 1)" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "$TOP_RIGHT_HEIGHT"
     fi
     if [ $TOTAL -ge 4 ]; then
         echo "Adding pane 5 for ${AGENTS_ARRAY[3]}..."
-        tmux select-pane -t "$SESSION_NAME":0.2
-        tmux split-window -v -t "$SESSION_NAME" -c "$AGENTS_DIR/${AGENTS_ARRAY[3]}"
+        tmux select-pane -t "$(pane_ref 2)"
+        tmux split-window -v -t "$(pane_ref 2)" -c "$AGENTS_DIR/${AGENTS_ARRAY[3]}"
     fi
     echo "Adding pane 6 (root)..."
-    tmux select-pane -t "$SESSION_NAME":0.3
-    tmux split-window -v -t "$SESSION_NAME" -c "$REPO_ROOT"
+    tmux select-pane -t "$(pane_ref 3)"
+    tmux split-window -v -t "$(pane_ref 3)" -c "$REPO_ROOT"
 else
     if [ $TOTAL -ge 2 ]; then
         echo "Adding pane for ${AGENTS_ARRAY[1]}..."
-        tmux split-window -h -t "$SESSION_NAME" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "$RIGHT_WIDTH"
-        tmux resize-pane -t "$SESSION_NAME":0.1 -y "${TOP_RIGHT_HEIGHT}%"
+        tmux split-window -h -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "$RIGHT_WIDTH"
+        tmux resize-pane -t "$(pane_ref 1)" -y "${TOP_RIGHT_HEIGHT}%"
     fi
     if [ $TOTAL -ge 3 ]; then
         echo "Adding pane for ${AGENTS_ARRAY[2]}..."
-        tmux select-pane -t "$SESSION_NAME":0.0
-        tmux split-window -v -t "$SESSION_NAME" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "${BOTTOM_HEIGHT:-30}"
+        tmux select-pane -t "$(pane_ref 0)"
+        tmux split-window -v -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "${BOTTOM_HEIGHT:-30}"
     fi
     if [ $TOTAL -ge 4 ]; then
         echo "Adding pane for ${AGENTS_ARRAY[3]}..."
-        tmux select-pane -t "$SESSION_NAME":0.1
-        tmux split-window -v -t "$SESSION_NAME" -c "$AGENTS_DIR/${AGENTS_ARRAY[3]}" -p "${BOTTOM_HEIGHT:-30}"
+        tmux select-pane -t "$(pane_ref 1)"
+        tmux split-window -v -t "$(pane_ref 1)" -c "$AGENTS_DIR/${AGENTS_ARRAY[3]}" -p "${BOTTOM_HEIGHT:-30}"
     fi
 fi
 
