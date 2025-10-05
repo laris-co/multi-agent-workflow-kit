@@ -1,2 +1,7 @@
-# Ignore generated git worktrees for agents
-agents/
+# Ignore all agent worktree checkouts
+*
+!.gitignore
+!*.sh
+!*.yaml
+!*.md
+!profiles/

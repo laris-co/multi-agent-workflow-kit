@@ -38,7 +38,7 @@ fi
 
 if ! tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
     echo "Error: Session '$SESSION_NAME' not found"
-    echo "Run .agents/start-agents.sh first to create the session"
+    echo "Run agents/start-agents.sh first to create the session"
     exit 1
 fi
 

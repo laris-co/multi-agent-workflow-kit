@@ -20,13 +20,25 @@ create() {
   path=$(read_yaml ".agents.$agent.worktree_path")
 
   case "$path" in
-    agents/*|.agents/agents/*) : ;;
-    *) echo "Error: worktree_path '$path' must start with agents/ or .agents/agents/" >&2; exit 1;;
+    agents/*) : ;;
+    *) echo "Error: worktree_path '$path' must start with agents/" >&2; exit 1;;
   esac
 
   abs_path="$REPO_ROOT/$path"
 
-  git -C "$REPO_ROOT" branch "$branch" 2>/dev/null || true
+  if ! git -C "$REPO_ROOT" rev-parse --verify HEAD >/dev/null 2>&1; then
+    cat <<'EOF'
+⚠️  The current repository has no commits yet.
+   Create an initial commit before running agent setup so Git worktrees have a base revision.
+   For example:
+     git commit --allow-empty -m "Initial commit"
+EOF
+    exit 1
+  fi
+
+  if ! git -C "$REPO_ROOT" rev-parse --verify "$branch" >/dev/null 2>&1; then
+    git -C "$REPO_ROOT" branch "$branch"
+  fi
   mkdir -p "$(dirname "$abs_path")"
 
   if [ -d "$abs_path" ]; then
@@ -41,26 +53,18 @@ list() {
   echo "📋 Git worktrees:"
   git -C "$REPO_ROOT" worktree list
   echo ""
-  local bases=("$REPO_ROOT/agents" "$SCRIPT_DIR/agents")
-  for base in "${bases[@]}"; do
-    if [ -d "$base" ]; then
-      local label
-      if [[ "$base" == "$REPO_ROOT/agents" ]]; then
-        label="agents/"
-      else
-        label=".agents/agents/"
+  local base="$REPO_ROOT/agents"
+  if [ -d "$base" ]; then
+    echo "📤 Agents under agents/"
+    for d in "$base"/*; do
+      if [ -d "$d" ]; then
+        local branch
+        branch=$(git -C "$d" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "?")
+        printf "  %s [%s]\n" "${d#$REPO_ROOT/}" "$branch"
       fi
-      echo "📤 Agents under $label"
-      for d in "$base"/*; do
-        if [ -d "$d" ]; then
-          local branch
-          branch=$(git -C "$d" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "?")
-          printf "  %s [%s]\n" "${d#$REPO_ROOT/}" "$branch"
-        fi
-      done
-      echo ""
-    fi
-  done
+    done
+    echo ""
+  fi
 }
 
 remove() {

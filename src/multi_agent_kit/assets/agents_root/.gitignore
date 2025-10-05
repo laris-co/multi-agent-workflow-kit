@@ -1,3 +1,0 @@
-# Ignore agent worktree checkouts placed at repo root
-*
-!.gitignore

@@ -6,18 +6,9 @@ set -e
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 REPO_ROOT=$(cd "$SCRIPT_DIR/.." && pwd)
 PROFILES_DIR="$SCRIPT_DIR/profiles"
-DEFAULT_AGENTS_DIR="$REPO_ROOT/agents"
-LEGACY_AGENTS_DIR="$SCRIPT_DIR/agents"
+AGENTS_DIR="$REPO_ROOT/agents"
 
-if [ -d "$DEFAULT_AGENTS_DIR" ]; then
-    AGENTS_DIR="$DEFAULT_AGENTS_DIR"
-else
-    AGENTS_DIR="$LEGACY_AGENTS_DIR"
-fi
-
-if [ "$AGENTS_DIR" = "$DEFAULT_AGENTS_DIR" ]; then
-    mkdir -p "$AGENTS_DIR"
-fi
+mkdir -p "$AGENTS_DIR"
 
 CUSTOM_PREFIX=""
 PROFILE="profile1"
@@ -64,33 +55,32 @@ fi
 AGENTS=$(cd "$AGENTS_DIR" && ls -d */ 2>/dev/null | sed 's#/##' | tr '\n' ' ')
 if [ -z "$AGENTS" ]; then
     echo "⚠️  No agent worktrees detected in $AGENTS_DIR"
-    echo "Run .agents/setup.sh or .agents/agents.sh create <name> first."
+    echo "Run agents/setup.sh or agents/agents.sh create <name> first."
     exit 1
 fi
 
 BASE_PREFIX=${SESSION_PREFIX:-ai}
 DIR_NAME=$(basename "$REPO_ROOT")
+SESSION_EXISTS=false
 
 if [ -n "$CUSTOM_PREFIX" ]; then
     SESSION_NAME="${BASE_PREFIX}-${DIR_NAME}-${CUSTOM_PREFIX}"
 else
     SESSION_NAME="${BASE_PREFIX}-${DIR_NAME}"
-fi
-
-SESSION_EXISTS=false
-if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
-    SESSION_EXISTS=true
-fi
-
-if [ "$SESSION_EXISTS" = true ] && [ -z "$CUSTOM_PREFIX" ]; then
-    echo "🔄 Session '$SESSION_NAME' already running"
-    if [ "$DETACHED" = true ]; then
-        echo "📌 Leaving existing session detached"
-        echo "💡 Attach with: tmux attach-session -t $SESSION_NAME"
-        exit 0
+    if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
+        SESSION_EXISTS=true
     fi
-    echo "📍 Attaching to existing session..."
-    tmux attach-session -t "$SESSION_NAME"
+fi
+
+if [ "$SESSION_EXISTS" = true ]; then
+    echo "ℹ️ Session '$SESSION_NAME' already running"
+    if [ "$DETACHED" = true ]; then
+        echo "📌 Running in detached mode"
+        echo "💡 Attach with: tmux attach-session -t $SESSION_NAME"
+    else
+        echo "📍 Attaching to existing session..."
+        tmux attach-session -t "$SESSION_NAME"
+    fi
     exit 0
 fi
 

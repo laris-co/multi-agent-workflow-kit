@@ -22,13 +22,13 @@ Main repository (.git)
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
-| Worktree registry | `.agents/agents.yaml` | Maps agent names to branches and worktree paths |
-| Worktree manager | `.agents/agents.sh` | Creates/list/removes worktrees using the registry |
-| Bootstrapper | `.agents/setup.sh` | Installs TPM, provisions worktrees from registry |
-| Tmux launcher | `.agents/start-agents.sh` | Spins up layouts, naming sessions consistently |
-| Layout profiles | `.agents/profiles/*.sh` | Parameterized pane geometries |
-| Broadcast helper | `.agents/send-commands.sh` | Sends commands to each pane |
-| Cleanup utility | `.agents/kill-all.sh` | Kills tmux sessions with shared prefix |
+| Worktree registry | `agents/agents.yaml` | Maps agent names to branches and worktree paths |
+| Worktree manager | `agents/agents.sh` | Creates/list/removes worktrees using the registry |
+| Bootstrapper | `agents/setup.sh` | Installs TPM, provisions worktrees from registry |
+| Tmux launcher | `agents/start-agents.sh` | Spins up layouts, naming sessions consistently |
+| Layout profiles | `agents/profiles/*.sh` | Parameterized pane geometries |
+| Broadcast helper | `agents/send-commands.sh` | Sends commands to each pane |
+| Cleanup utility | `agents/kill-all.sh` | Kills tmux sessions with shared prefix |
 | Shared config | `.tmux.conf` | Mouse support, theming, plugin config |
 
 ## Workflow
@@ -59,6 +59,6 @@ Main repository (.git)
 - For larger teams, consider a dashboard that reads `tmux list-clients` / `git status` across panes to surface stalled agents.
 
 ## Next Improvements
-- Script to bootstrap new repositories (copy `.agents/` + `.tmux.conf`).
+- Script to bootstrap new repositories (copy toolkit assets + `.tmux.conf`).
 - Optional CI workflow verifying agent branches fast-forward to `main` before merging.
 - Health monitor service that alerts when an agent pane exits unexpectedly.

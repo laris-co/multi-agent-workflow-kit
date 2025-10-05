@@ -1,6 +1,6 @@
 #!/bin/bash
 # Setup script: Creates all agents and installs tmux plugins
-# Usage: .agents/setup.sh
+# Usage: agents/setup.sh
 
 set -e
 
@@ -46,17 +46,6 @@ tmux source-file "$REPO_ROOT/.tmux.conf" 2>/dev/null || true
 TMUX_CONF="$REPO_ROOT/.tmux.conf" "$TPM_DIR/bin/install_plugins" 2>/dev/null || echo "⚠️  Plugin installation skipped (will auto-install in tmux session)"
 echo "✅ Tmux plugins configured"
 echo ""
-
-# ========================================
-# Ensure repository has an initial commit
-# ========================================
-if ! git -C "$REPO_ROOT" rev-parse --verify HEAD >/dev/null 2>&1; then
-    echo "ℹ️  This repository has no commits yet, so agent worktrees are skipped."
-    echo "💡 Create an initial commit then rerun .agents/setup.sh:"
-    echo "   git add .agents/ .tmux.conf"
-    echo "   git commit -m \"Initial commit: bootstrap multi-agent kit\""
-    exit 0
-fi
 
 # ========================================
 # Create agent worktrees
