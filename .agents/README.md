@@ -22,6 +22,10 @@ cp .agents/agents.yaml .agents/agents.local.yaml   # optional snapshot
 # Edit .agents/agents.yaml with your agent names / branches
 
 # Create worktrees and install tmux plugins
+# NOTE: git worktrees require at least one commit in the repository.
+#       On a fresh repo, the setup script exits early and prints the
+#       commands below so you can commit the toolkit assets first:
+#       git add .agents/ .tmux.conf && git commit -m "Initial toolkit commit"
 .agents/setup.sh
 
 # Launch tmux session (default layout = profile1)
