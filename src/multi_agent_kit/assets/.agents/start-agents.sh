@@ -141,12 +141,12 @@ elif [ "$LAYOUT_TYPE" = "full-left" ]; then
         tmux split-window -v -t "$(pane_ref 1)" -p "$TOP_RIGHT_HEIGHT"
     fi
 
-    echo "Adding pane 4 (bottom-right)..."
-    if [ $TOTAL -ge 4 ]; then
-        tmux split-window -v -t "$(pane_ref 2)" -c "$AGENTS_DIR/${AGENTS_ARRAY[3]}" -p "${MIDDLE_RIGHT_HEIGHT:-50}"
-    else
-        tmux split-window -v -t "$(pane_ref 2)" -p "${MIDDLE_RIGHT_HEIGHT:-50}"
-    fi
+    #echo "Adding pane 4 (bottom-right)..."
+    #if [ $TOTAL -ge 4 ]; then
+    #    tmux split-window -v -t "$(pane_ref 2)" -c "$AGENTS_DIR/${AGENTS_ARRAY[3]}" -p "${MIDDLE_RIGHT_HEIGHT:-50}"
+    #else
+    #    tmux split-window -v -t "$(pane_ref 2)" -p "${MIDDLE_RIGHT_HEIGHT:-50}"
+    #fi
 elif [ "$LAYOUT_TYPE" = "six-pane" ]; then
     if [ $TOTAL -ge 1 ]; then
         echo "Adding pane 2 for ${AGENTS_ARRAY[0]}..."
