@@ -48,6 +48,17 @@ echo "✅ Tmux plugins configured"
 echo ""
 
 # ========================================
+# Ensure repository has an initial commit
+# ========================================
+if ! git -C "$REPO_ROOT" rev-parse --verify HEAD >/dev/null 2>&1; then
+    echo "ℹ️  This repository has no commits yet, so agent worktrees are skipped."
+    echo "💡 Create an initial commit then rerun .agents/setup.sh:"
+    echo "   git add .agents/ .tmux.conf"
+    echo "   git commit -m \"Initial commit: bootstrap multi-agent kit\""
+    exit 0
+fi
+
+# ========================================
 # Create agent worktrees
 # ========================================
 if [ ! -f "$AGENTS_YAML" ]; then

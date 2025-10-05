@@ -22,6 +22,9 @@ uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git \
 $EDITOR .agents/agents.yaml
 
 # Provision worktrees + install tmux plugins (manual alternative)
+# Requires at least one commit in the repository. If none exist, the
+# setup script exits early and prints these commands for you to run:
+# git add .agents/ .tmux.conf && git commit -m "Initial toolkit commit"
 .agents/setup.sh
 
 # Launch the session manually (profile1 = balanced grid)
