@@ -78,6 +78,11 @@ agents/                    # Agent worktrees (fully gitignored)
 ├── 2-agent/               # Worktree for agent 2
 └── 3-agent/               # Worktree for agent 3
 
+.claude/                   # Claude configuration (optional)
+├── commands/              # Custom slash commands (with catlab- prefix)
+│   ├── catlab-agents-create.md   # Agent creation command (/catlab-agents-create)
+│   └── catlab-codex.md          # Codex integration command (/catlab-codex)
+
 .tmux.conf                 # curated tmux config with TPM + power theme
 docs/                      # deep dives and checklists
 ```

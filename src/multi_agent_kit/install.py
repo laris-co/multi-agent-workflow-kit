@@ -12,6 +12,7 @@ ASSET_ROOT_NAME = "assets"
 ITEM_MAP = (
     (".agents", ".agents"),    # Toolkit files go to .agents/
     ("agents", "agents"),      # Gitignore-only directory for worktrees
+    (".claude", ".claude"),    # Claude commands and configuration
     ("tmux.conf", ".tmux.conf"),
 )
 
