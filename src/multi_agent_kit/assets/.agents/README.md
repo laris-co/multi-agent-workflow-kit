@@ -15,7 +15,7 @@ gh repo clone laris-co/multi-agent-workflow-kit
 cd multi-agent-workflow-kit
 
 # Optional: run the uvx bootstrap (setup + tmux launch)
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git multi-agent-kit init
+uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main multi-agent-kit init
 
 # Customize agent registry
 cp .agents/agents.yaml .agents/agents.local.yaml   # optional snapshot

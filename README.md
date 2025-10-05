@@ -15,7 +15,7 @@ gh repo clone laris-co/multi-agent-workflow-kit
 cd multi-agent-workflow-kit
 
 # One-shot bootstrap (installs toolkit assets, setup, and tmux launch)
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git \
+uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --prefix demo
 
 # Configure your agents
@@ -35,11 +35,11 @@ The `multi-agent-kit init` command accepts the same layout options as the shell 
 
 ```bash
 # Skip setup if agents are already provisioned
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git \
+uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --skip-setup profile2
 
 # Launch detached session with a custom prefix
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git \
+uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --prefix hackathon --detach
 ```
 
