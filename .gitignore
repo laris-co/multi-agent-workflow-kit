@@ -5,3 +5,11 @@
 .tmux/plugins/
 .envrc
 .context/
+
+# Python build artifacts
+build/
+dist/
+*.egg-info/
+__pycache__/
+*.pyc
+*.pyo
