@@ -64,12 +64,23 @@ if [ -n "$CUSTOM_PREFIX" ]; then
     SESSION_NAME="${BASE_PREFIX}-${DIR_NAME}-${CUSTOM_PREFIX}"
 else
     SESSION_NAME="${BASE_PREFIX}-${DIR_NAME}"
-    if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
-        echo "❌ Error: Session '$SESSION_NAME' already exists"
-        echo "💡 Use --prefix <name> to create a separate session"
-        echo "   Example: .agents/start-agents.sh profile1 --prefix work"
-        exit 1
+fi
+
+SESSION_EXISTS=false
+if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
+    SESSION_EXISTS=true
+fi
+
+if [ "$SESSION_EXISTS" = true ] && [ -z "$CUSTOM_PREFIX" ]; then
+    echo "🔄 Session '$SESSION_NAME' already running"
+    if [ "$DETACHED" = true ]; then
+        echo "📌 Leaving existing session detached"
+        echo "💡 Attach with: tmux attach-session -t $SESSION_NAME"
+        exit 0
     fi
+    echo "📍 Attaching to existing session..."
+    tmux attach-session -t "$SESSION_NAME"
+    exit 0
 fi
 
 tmux kill-session -t "$SESSION_NAME" 2>/dev/null || true
