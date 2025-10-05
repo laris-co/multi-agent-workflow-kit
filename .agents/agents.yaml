@@ -1,0 +1,18 @@
+# Define each agent's branch and worktree location here.
+# Copy this file to match your team structure; run `agents/setup.sh` afterward.
+agents:
+  1-agent:
+    branch: agents/1-agent
+    worktree_path: agents/1-agent
+    model: default
+    description: Primary agent workspace
+  2-agent:
+    branch: agents/2-agent
+    worktree_path: agents/2-agent
+    model: default
+    description: Secondary agent workspace
+  3-agent:
+    branch: agents/3-agent
+    worktree_path: agents/3-agent
+    model: default
+    description: Tertiary agent workspace
