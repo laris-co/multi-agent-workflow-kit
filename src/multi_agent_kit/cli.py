@@ -74,6 +74,30 @@ def repo_root() -> Path:
     return Path.cwd()
 
 
+def ensure_git_repo(root: Path) -> Path:
+    result = subprocess.run(
+        ["git", "rev-parse", "--show-toplevel"],
+        cwd=root,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        raise BootstrapError(
+            "This command must be run inside a Git repository. "
+            "Run 'git init' or switch to an existing repo first."
+        )
+
+    toplevel = Path(result.stdout.strip()).resolve()
+    cwd_resolved = root.resolve()
+    if cwd_resolved != toplevel:
+        raise BootstrapError(
+            "Detected Git repository at '{}' but the tool was invoked inside '{}'\n"
+            "Run the init command from the repository root.".format(toplevel, cwd_resolved)
+        )
+    return toplevel
+
+
 def prompt_yes_no(message: str) -> bool:
     try:
         answer = input(message).strip().lower()
@@ -137,6 +161,7 @@ def run_script(script: Path, *args: str) -> None:
 def handle_init(args: argparse.Namespace) -> None:
     ensure_binaries()
     root = repo_root()
+    ensure_git_repo(root)
 
     missing = list(missing_assets(root))
     installer = AssetInstaller(root, force=args.force_assets)
