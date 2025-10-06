@@ -1,10 +1,11 @@
-# Ignore all agent worktree checkouts
+# Track toolkit assets within .agents while ignoring generated content
 *
 !.gitignore
-!*.sh
-!*.yaml
-!*.md
-!profiles/
-!scripts/
+!agents.yaml
+!README.md
 !config/
 !config/tmux.conf
+!profiles/
+!profiles/*.sh
+!scripts/
+!scripts/*.sh
