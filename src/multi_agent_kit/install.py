@@ -15,6 +15,7 @@ ITEM_MAP = (
     (".claude", ".claude"),    # Claude commands and configuration
     ("tmux.conf", ".tmux.conf"),
     ("start.sh", "start.sh"),  # Convenience wrapper for start-agents.sh
+    ("remove.sh", "remove.sh"),  # Worktree cleanup helper
 )
 
 
