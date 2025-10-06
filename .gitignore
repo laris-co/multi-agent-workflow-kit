@@ -1,6 +1,8 @@
 # Agent worktrees are created under agents/ at repo root
 # The agents/ directory has its own .gitignore to manage itself
 
+.agents/
+
 .tmux/resurrect/
 .tmux/plugins/
 .context/
