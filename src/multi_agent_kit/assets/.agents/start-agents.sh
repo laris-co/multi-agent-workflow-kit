@@ -78,8 +78,21 @@ if [ "$SESSION_EXISTS" = true ]; then
         echo "📌 Running in detached mode"
         echo "💡 Attach with: tmux attach-session -t $SESSION_NAME"
     else
-        echo "📍 Attaching to existing session..."
-        tmux attach-session -t "$SESSION_NAME"
+        if [ -t 0 ]; then
+            read -r -p "❓ Attach to existing session? [y/N]: " attach_choice
+            case "$attach_choice" in
+                [yY][eE][sS]|[yY])
+                    echo "📍 Attaching to existing session..."
+                    tmux attach-session -t "$SESSION_NAME"
+                    ;;
+                *)
+                    echo "⚪ Leaving session running; not attaching."
+                    ;;
+            esac
+        else
+            echo "📍 Attaching to existing session..."
+            tmux attach-session -t "$SESSION_NAME"
+        fi
     fi
     exit 0
 fi
