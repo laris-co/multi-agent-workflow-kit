@@ -140,7 +140,29 @@ def maybe_commit_assets(root: Path, written: list[Path]) -> None:
         print("   Run 'git add -f' manually if you want them tracked.")
         return
 
-    print("ℹ️  Toolkit assets installed. Commit manually with:")
+    print("ℹ️  Toolkit assets installed:")
+    for path in rel_paths:
+        print(f"   • {path}")
+
+    if prompt_yes_no("Commit these assets now? [y/N] "):
+        add_cmd = ["git", "add", "--", *rel_paths]
+        add_proc = subprocess.run(add_cmd, cwd=root, check=False)
+        if add_proc.returncode == 0:
+            commit_cmd = [
+                "git",
+                "commit",
+                "-m",
+                "Add multi-agent toolkit assets",
+            ]
+            commit_proc = subprocess.run(commit_cmd, cwd=root, check=False)
+            if commit_proc.returncode == 0:
+                print("✅  Staged and committed toolkit assets.")
+                return
+            print("⚠️  git commit failed; staged files remain. Commit manually.")
+        else:
+            print("⚠️  git add failed; no changes were staged.")
+
+    print("ℹ️  Commit manually with:")
     print("   git add -- " + " ".join(rel_paths))
     print("   git commit -m \"Add multi-agent toolkit assets\"")
 
