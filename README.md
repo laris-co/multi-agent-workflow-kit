@@ -97,13 +97,20 @@ agents/                    # Agent worktrees (fully gitignored)
 
 .envrc                     # direnv hook that exports CODEX_HOME for tools
 .claude/                   # Claude configuration (optional)
-├── commands/              # Custom slash commands (with catlab- prefix)
+├── commands/              # Custom slash commands for Claude
 │   ├── catlab-agents-create.md   # Agent creation command (/catlab-agents-create)
-│   └── catlab-codex.md          # Codex integration command (/catlab-codex)
+│   ├── catlab-codex.md          # Codex integration command (/catlab-codex)
+│   ├── catlab-codex.sh          # Shell helper backing the codex command
+│   ├── claude-sync.md           # Sync helper for main/agents worktrees (/claude-sync)
+│   └── claude-sync.sh           # Shell helper implementing sync rules
 
 .tmux.conf                 # curated tmux config with TPM + power theme
 docs/                      # deep dives and checklists
 ```
+
+### Claude Slash Commands
+- `/claude-sync` — syncs the active worktree: pulls `origin/main` when on `main`, or merges local `main` into `agents/*` worktrees.
+- `/catlab-codex` — sends a prompt to the Codex agent pane (requires running tmux session).
 
 ## Operating Model
 1. Define each agent in `.agents/agents.yaml` (branch + worktree path pointing into `agents/`).
