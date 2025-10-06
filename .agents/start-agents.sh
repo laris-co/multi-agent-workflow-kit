@@ -200,6 +200,21 @@ else
     fi
 fi
 
+reload_tmux_conf_across_panes() {
+    local conf_path="${TMUX_CONF:-$REPO_ROOT/.tmux.conf}"
+    if [ ! -f "$conf_path" ]; then
+        return
+    fi
+
+    tmux source-file "$conf_path" 2>/dev/null || true
+
+    while IFS= read -r pane_id; do
+        tmux send-keys -t "$pane_id" "tmux" "source-file" "$conf_path" C-m
+    done < <(tmux list-panes -s -t "$SESSION_NAME" -F "#{pane_id}" 2>/dev/null || true)
+}
+
+reload_tmux_conf_across_panes
+
 echo ""
 echo "✅ Started $TOTAL agents in tmux session: $SESSION_NAME"
 
