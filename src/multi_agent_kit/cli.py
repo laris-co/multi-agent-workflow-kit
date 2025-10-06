@@ -152,13 +152,33 @@ def maybe_commit_assets(root: Path, written: list[Path]) -> None:
             )
         rel_paths = [str(placeholder.relative_to(root))]
 
+    add_cmd = ["git", "add", "--", *rel_paths]
     add_result = subprocess.run(
-        ["git", "add", "--", *rel_paths],
+        add_cmd,
         cwd=root,
+        capture_output=True,
+        text=True,
         check=False,
     )
     if add_result.returncode != 0:
-        raise BootstrapError("Failed to add toolkit assets to git index")
+        stderr = add_result.stderr or ""
+        if "The following paths are ignored" in stderr:
+            print("⚠️  Toolkit files are ignored by .gitignore: \n" + stderr.strip())
+            if not prompt_yes_no("Force add them to the commit? [y/N] "):
+                print("ℹ️  Skipping toolkit commit because files remain ignored.")
+                return
+
+            add_result = subprocess.run(
+                ["git", "add", "-f", "--", *rel_paths],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            if add_result.returncode != 0:
+                raise BootstrapError("Failed to force-add toolkit assets")
+        else:
+            raise BootstrapError("Failed to add toolkit assets to git index")
 
     diff_check = subprocess.run(
         ["git", "diff", "--cached", "--quiet"],
