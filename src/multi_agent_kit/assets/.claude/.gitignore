@@ -1,0 +1,4 @@
+# Ignore all bundled Claude commands by default
+*.md
+*.sh
+!README.md
