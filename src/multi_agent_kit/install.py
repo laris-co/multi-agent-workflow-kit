@@ -48,6 +48,7 @@ class AssetInstaller:
                 source = self._asset_root().joinpath(source_name)
                 destination = self.target / dest_name
                 self._copy(source, destination, written)
+        self._ensure_root_gitignore(written)
         return written
 
     def _asset_root(self) -> Traversable:
@@ -72,6 +73,35 @@ class AssetInstaller:
         with importlib_resources.as_file(source) as src_path:
             shutil.copy2(src_path, destination)
         written.append(destination)
+
+    def _ensure_root_gitignore(self, written: list[Path]) -> None:
+        gitignore_path = self.target / ".gitignore"
+        ignore_line = ".agents/"
+        marker = "# Added by Multi-Agent Workflow Kit"
+
+        try:
+            existing = gitignore_path.read_text()
+        except FileNotFoundError:
+            content = f"{marker}\n{ignore_line}\n"
+            gitignore_path.write_text(content)
+            written.append(gitignore_path)
+            return
+
+        lines = [line.strip() for line in existing.splitlines()]
+        if ignore_line in lines:
+            return
+
+        append_text = ""
+        if not existing.endswith("\n"):
+            append_text += "\n"
+        if marker not in existing:
+            append_text += f"\n{marker}\n{ignore_line}\n"
+        else:
+            append_text += f"{ignore_line}\n"
+
+        if append_text:
+            gitignore_path.write_text(existing + append_text)
+            written.append(gitignore_path)
 
 
 def missing_assets(target: Path) -> Iterator[str]:
