@@ -18,6 +18,8 @@ cd multi-agent-workflow-kit
 uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --prefix demo
 
+# The init flow prompts you to commit the installed assets before worktrees are created.
+
 # Configure your agents
 $EDITOR .agents/agents.yaml
 

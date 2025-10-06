@@ -74,6 +74,44 @@ def repo_root() -> Path:
     return Path.cwd()
 
 
+def prompt_yes_no(message: str) -> bool:
+    try:
+        answer = input(message).strip().lower()
+    except EOFError:
+        return False
+    return answer in {"y", "yes"}
+
+
+def maybe_commit_assets(root: Path, written: list[Path]) -> None:
+    if not written:
+        return
+
+    rel_paths = sorted({str(path.relative_to(root)) for path in written})
+    if not rel_paths:
+        return
+
+    if not prompt_yes_no(
+        "Create a git commit with the newly installed toolkit assets? [y/N] "
+    ):
+        return
+
+    add_result = subprocess.run(
+        ["git", "add", "--", *rel_paths],
+        cwd=root,
+        check=False,
+    )
+    if add_result.returncode != 0:
+        raise BootstrapError("Failed to add toolkit assets to git index")
+
+    commit_result = subprocess.run(
+        ["git", "commit", "-m", "Add multi-agent toolkit assets"],
+        cwd=root,
+        check=False,
+    )
+    if commit_result.returncode != 0:
+        raise BootstrapError("Failed to create git commit for toolkit assets")
+
+
 def run_script(script: Path, *args: str) -> None:
     if not script.exists():
         raise BootstrapError(f"Script not found: {script}")
@@ -93,14 +131,16 @@ def handle_init(args: argparse.Namespace) -> None:
 
     missing = list(missing_assets(root))
     installer = AssetInstaller(root, force=args.force_assets)
+    written: list[Path] = []
     if missing or args.force_assets:
         written = installer.ensure_assets()
         if written:
-            print("📦 Installed toolkit assets:" )
+            print("📦 Installed toolkit assets:")
             for path in written:
                 print(f"  {path.relative_to(root)}")
         elif args.force_assets:
             print("⚠️  No assets overwritten (files identical or missing in package)")
+    maybe_commit_assets(root, written)
 
     setup_script = root / ".agents" / "setup.sh"
     start_script = root / ".agents" / "start-agents.sh"
