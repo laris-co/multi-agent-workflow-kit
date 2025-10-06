@@ -1,8 +1,7 @@
 # Agent worktrees live under /agents and /.agents at repo root
 /.agents/
 .claude/settings.local.json
-.claude/.gitignore
-.claude/commands/catlab-*
+
 
 .tmux/resurrect/
 .tmux/plugins/

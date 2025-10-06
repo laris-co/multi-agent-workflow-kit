@@ -12,7 +12,7 @@ ASSET_ROOT_NAME = "assets"
 ITEM_MAP = (
     (".agents", ".agents"),    # Toolkit files go to .agents/
     ("agents", "agents"),      # Gitignore-only directory for worktrees
-    (".claude", ".claude"),    # Claude commands and configuration (ignored by default)
+    (".claude", ".claude"),    # Claude commands and configuration
     (".envrc", ".envrc"),  # direnv hook for tmux config
     ("AGENTS.md", "AGENTS.md"),  # Guide for human/AI collaborators
 )
@@ -46,7 +46,6 @@ class AssetInstaller:
                 destination = self.target / dest_name
                 self._copy(source, destination, written)
         self._ensure_root_gitignore(written)
-        self._ensure_claude_gitignore(written)
         return written
 
     def _asset_root(self) -> Traversable:
@@ -87,10 +86,7 @@ class AssetInstaller:
 
         lines = [line.strip() for line in existing.splitlines()]
 
-        append_lines: list[str] = []
-        for entry in ignore_lines:
-            if entry not in lines:
-                append_lines.append(entry)
+        append_lines = [entry for entry in ignore_lines if entry not in lines]
 
         if not append_lines:
             return
