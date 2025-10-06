@@ -74,6 +74,7 @@ To uninstall the toolkit assets from a repo, run `maw-uninstall --dry-run` (or `
 
 ## Repository Layout
 ```
+AGENTS.md                 # worktree/branch conventions for human + AI collaborators
 .agents/                   # Toolkit directory (committed to git)
 ├── agents.yaml            # agent registry (edit me)
 ├── scripts/

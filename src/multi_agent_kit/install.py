@@ -14,6 +14,7 @@ ITEM_MAP = (
     ("agents", "agents"),      # Gitignore-only directory for worktrees
     (".claude", ".claude"),    # Claude commands and configuration (ignored by default)
     (".envrc", ".envrc"),  # direnv hook for tmux config
+    ("AGENTS.md", "AGENTS.md"),  # Guide for human/AI collaborators
 )
 
 
