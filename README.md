@@ -100,20 +100,20 @@ agents/                    # Agent worktrees (fully gitignored)
 .envrc                     # direnv hook adding script aliases and PATH entries
 .claude/                   # Claude configuration (optional)
 ├── commands/              # Custom slash commands for Claude
-│   ├── catlab-agents-create.md   # Agent creation command (/catlab-agents-create)
-│   ├── catlab-codex.md          # Codex integration command (/catlab-codex)
-│   ├── catlab-codex.sh          # Shell helper backing the codex command
-│   ├── catlab-sync.md           # Sync helper for main/agents worktrees (/catlab-sync)
-│   └── catlab-sync.sh           # Shell helper implementing sync rules
+│   ├── maw-agents-create.md     # Agent creation command (/maw-agents-create)
+│   ├── maw-codex.md            # Codex integration command (/maw-codex)
+│   ├── maw-codex.sh            # Shell helper backing the codex command
+│   ├── maw-sync.md             # Sync helper for main/agents worktrees (/maw-sync)
+│   └── maw-sync.sh             # Shell helper implementing sync rules
 
 .agents/config/tmux.conf   # curated tmux config with TPM + power theme
-/.codex/ (optional)          # Codex CLI prompts/cache; .envrc exports CODEX_HOME automatically
+/.codex/ (optional)        # Codex CLI prompts and cache; .envrc sets CODEX_HOME if present
 docs/                      # deep dives and checklists
 ```
 
 ### Claude Slash Commands
-- `/catlab-sync` — syncs the active worktree: pulls `origin/main` when on `main`, or merges local `main` into `agents/*` worktrees.
-- `/catlab-codex` — sends a prompt to the Codex agent pane (requires running tmux session).
+- `/maw-sync` — syncs the active worktree: pulls `origin/main` when on `main`, or merges local `main` into `agents/*` worktrees.
+- `/maw-codex` — sends a prompt to the Codex agent pane (requires running tmux session).
 
 ## Operating Model
 1. Define each agent in `.agents/agents.yaml` (branch + worktree path pointing into `agents/`).
