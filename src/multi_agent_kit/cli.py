@@ -178,6 +178,37 @@ def maybe_commit_assets(root: Path, written: list[Path]) -> None:
         raise BootstrapError("Failed to create git commit for toolkit assets")
 
 
+def ensure_initial_commit(root: Path) -> None:
+    head_check = subprocess.run(
+        ["git", "rev-parse", "--verify", "HEAD"],
+        cwd=root,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    if head_check.returncode == 0:
+        return
+
+    print("⚠️  Repository has no commits yet.")
+    if not prompt_yes_no("Create an empty initial commit now? [y/N] "):
+        raise BootstrapError(
+            "Repository must have at least one commit before provisioning agents. "
+            "Run 'git commit --allow-empty -m \"Initial commit\"' and retry."
+        )
+
+    commit_result = subprocess.run(
+        ["git", "commit", "--allow-empty", "-m", "Initial commit"],
+        cwd=root,
+        check=False,
+    )
+
+    if commit_result.returncode != 0:
+        raise BootstrapError("Failed to create empty initial commit")
+
+    print("✅  Created empty initial commit")
+
+
 def run_script(script: Path, *args: str) -> None:
     if not script.exists():
         raise BootstrapError(f"Script not found: {script}")
@@ -208,6 +239,7 @@ def handle_init(args: argparse.Namespace) -> None:
         elif args.force_assets:
             print("⚠️  No assets overwritten (files identical or missing in package)")
     maybe_commit_assets(root, written)
+    ensure_initial_commit(root)
 
     setup_script = root / ".agents" / "scripts" / "setup.sh"
     start_script = root / ".agents" / "scripts" / "start-agents.sh"

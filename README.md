@@ -124,6 +124,8 @@ Session names follow `ai-<repo-name>` by default. Provide `--prefix sprint` to s
 
 > Tip: Allow direnv (`direnv allow`) to expose `mag-start`, `mag-setup`, `mag-agents`, `mag-kill`, and `mag-send` aliases that wrap the scripts in `.agents/scripts/`.
 
+> _Brand new repo?_ The `init` command now offers to create an empty `Initial commit` if Git history is missing, or run `git commit --allow-empty -m "Initial commit"` yourself before provisioning agents.
+
 ## Documentation
 - `docs/architecture.md` — architecture, strengths, risks, and integration ideas.
 - `docs/operations-checklist.md` — launch/teardown guardrails for reliable runs.

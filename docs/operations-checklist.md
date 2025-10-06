@@ -4,6 +4,7 @@ Repeat these steps when launching or retiring a multi-agent tmux session.
 
 ## Before Launch
 - [ ] Update `.agents/agents.yaml` with the current roster and branches.
+- [ ] Ensure the repo has at least one commit (`git log --oneline` or let `uvx multi-agent-kit init` create an empty `Initial commit`).
 - [ ] Run `.agents/scripts/agents.sh list` to confirm every branch/worktree pair looks correct.
 - [ ] `git status` from the repo root to verify a clean state before agents start working.
 - [ ] Verify dependencies: `tmux -V`, `yq --version`, `direnv --version` (if used).
