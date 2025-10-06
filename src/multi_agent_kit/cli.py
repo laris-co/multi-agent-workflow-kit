@@ -127,71 +127,22 @@ def prompt_yes_no(message: str) -> bool:
 
 def maybe_commit_assets(root: Path, written: list[Path]) -> None:
     rel_paths = sorted({str(path.relative_to(root)) for path in written}) if written else []
-    has_asset_changes = bool(rel_paths)
 
-    if has_asset_changes:
-        ignored_assets = detect_ignored_paths(root, rel_paths)
-        if ignored_assets:
-            print("ℹ️  Toolkit assets are ignored by .gitignore; skipping automated commit.")
-            for path in ignored_assets:
-                print(f"   • {path}")
-            print("   Run 'git add -f' manually if you still want to track them.")
-            return
-
-        wants_commit = prompt_yes_no(
-            "Create a git commit with the newly installed toolkit assets? [y/N] "
-        )
-        commit_message = "Add multi-agent toolkit assets"
-    else:
-        wants_commit = prompt_yes_no(
-            "Toolkit assets already present. Create a placeholder commit? [y/N] "
-        )
-        commit_message = "Record multi-agent toolkit init"
-
-    if not wants_commit:
+    if not rel_paths:
+        # Nothing new installed; nothing to stage.
         return
 
-    if not has_asset_changes:
-        placeholder = root / ".multi-agent-kit-init"
-        if not placeholder.exists():
-            placeholder.touch()
-            print(
-                "ℹ️  Added placeholder file '.multi-agent-kit-init' to record the init step."
-            )
-        rel_paths = [str(placeholder.relative_to(root))]
-
-        ignored_placeholder = detect_ignored_paths(root, rel_paths)
-        if ignored_placeholder:
-            print("ℹ️  Placeholder file is ignored by .gitignore; skipping automated commit.")
-            for path in ignored_placeholder:
-                print(f"   • {path}")
-            print("   Run 'git add -f' manually if you still want to track it.")
-            return
-
-    add_result = subprocess.run(
-        ["git", "add", "--", *rel_paths],
-        cwd=root,
-        check=False,
-    )
-    if add_result.returncode != 0:
-        raise BootstrapError("Failed to add toolkit assets to git index")
-
-    diff_check = subprocess.run(
-        ["git", "diff", "--cached", "--quiet"],
-        cwd=root,
-        check=False,
-    )
-    if diff_check.returncode == 0:
-        print("ℹ️  No changes staged; skipping commit.")
+    ignored_assets = detect_ignored_paths(root, rel_paths)
+    if ignored_assets:
+        print("ℹ️  Toolkit assets are ignored by .gitignore; leaving them unstaged.")
+        for path in ignored_assets:
+            print(f"   • {path}")
+        print("   Run 'git add -f' manually if you want them tracked.")
         return
 
-    commit_result = subprocess.run(
-        ["git", "commit", "-m", commit_message],
-        cwd=root,
-        check=False,
-    )
-    if commit_result.returncode != 0:
-        raise BootstrapError("Failed to create git commit for toolkit assets")
+    print("ℹ️  Toolkit assets installed. Commit manually with:")
+    print("   git add -- " + " ".join(rel_paths))
+    print("   git commit -m \"Add multi-agent toolkit assets\"")
 
 
 def detect_ignored_paths(root: Path, rel_paths: list[str]) -> list[str]:
