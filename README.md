@@ -107,6 +107,7 @@ agents/                    # Agent worktrees (fully gitignored)
 │   └── catlab-sync.sh           # Shell helper implementing sync rules
 
 .agents/config/tmux.conf   # curated tmux config with TPM + power theme
+/.codex/ (optional)          # Codex CLI prompts/cache; .envrc exports CODEX_HOME automatically
 docs/                      # deep dives and checklists
 ```
 
