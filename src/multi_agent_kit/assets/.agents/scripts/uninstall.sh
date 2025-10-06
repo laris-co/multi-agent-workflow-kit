@@ -2,11 +2,12 @@
 set -euo pipefail
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-REPO_ROOT="$SCRIPT_DIR"
+AGENT_ROOT=$(cd "$SCRIPT_DIR/.." && pwd)
+REPO_ROOT=$(cd "$AGENT_ROOT/.." && pwd)
 
 usage() {
     cat <<USAGE
-Usage: ./uninstall.sh [options]
+Usage: .agents/scripts/uninstall.sh [options]
 
 Remove toolkit assets installed by multi-agent-kit.
 
@@ -66,7 +67,7 @@ CLAUDE_FILES=(
     ".claude/commands/catlab-sync.sh"
 )
 
-SELF_PATH="uninstall.sh"
+SELF_PATH=".agents/scripts/uninstall.sh"
 
 if [ ! -d "$REPO_ROOT/.agents" ]; then
     warn ".agents directory not found; toolkit may already be uninstalled."
@@ -109,15 +110,15 @@ if [ "$FORCE" = false ] && [ "$DRY_RUN" = false ]; then
     esac
 fi
 
-REMOVE_SCRIPT="$REPO_ROOT/remove.sh"
+REMOVE_SCRIPT="$AGENT_ROOT/scripts/remove.sh"
 if [ -f "$REMOVE_SCRIPT" ] && [ -d "$REPO_ROOT/.agents" ]; then
     if [ "$DRY_RUN" = true ]; then
-        log "Dry run: would execute ./remove.sh --force to clean up agent worktrees and branches."
+        log "Dry run: would execute mag-remove --force to clean up agent worktrees and branches."
     else
         if command -v yq >/dev/null 2>&1; then
-            log "Running ./remove.sh --force to remove agent worktrees and branches..."
+            log "Running mag-remove --force to remove agent worktrees and branches..."
             if ! "$REMOVE_SCRIPT" --force; then
-                warn "./remove.sh --force exited with an error; check agent branches manually."
+                warn "mag-remove --force exited with an error; check agent branches manually."
             fi
         else
             warn "Skipping agent clean-up because 'yq' is not available; remove agent branches manually if needed."

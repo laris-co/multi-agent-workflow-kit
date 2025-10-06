@@ -59,7 +59,7 @@ uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
 
 Use `--setup-only` to prepare worktrees without starting tmux. The first run copies toolkit assets and `.tmux.conf` into the current repository; pass `--force-assets` to overwrite those files if you need to refresh them.
 
-To uninstall the toolkit assets from a repo, run `./uninstall.sh --dry-run` to preview the changes and then `./uninstall.sh` when you're ready. The script only deletes the bundled `.claude` command files, leaving any other Claude content untouched. Pass `--remove-agents` if you also want to delete the `agents/` worktree folder (after you've cleaned it up).
+To uninstall the toolkit assets from a repo, run `mag-uninstall --dry-run` (or `.agents/scripts/uninstall.sh --dry-run`) to preview the changes and then `mag-uninstall` when you're ready. The script only deletes the bundled `.claude` command files, leaving any other Claude content untouched. Pass `--remove-agents` if you also want to delete the `agents/` worktree folder (after you've cleaned it up).
 
 ## Prerequisites
 | Tool | Purpose |
@@ -122,7 +122,7 @@ docs/                      # deep dives and checklists
 
 Session names follow `ai-<repo-name>` by default. Provide `--prefix sprint` to spawn `ai-<repo-name>-sprint`. You can also export `SESSION_PREFIX` to change the base prefix (e.g., `export SESSION_PREFIX=research`).
 
-> Tip: Allow direnv (`direnv allow`) to expose `mag-start`, `mag-setup`, `mag-agents`, `mag-kill`, and `mag-send` aliases that wrap the scripts in `.agents/scripts/`.
+> Tip: Allow direnv (`direnv allow`) to expose `mag-start`, `mag-setup`, `mag-agents`, `mag-kill`, `mag-send`, `mag-remove`, and `mag-uninstall` aliases that wrap the scripts in `.agents/scripts/`.
 
 > _Brand new repo?_ The `init` command now offers to create an empty `Initial commit` if Git history is missing, or run `git commit --allow-empty -m "Initial commit"` yourself before provisioning agents.
 

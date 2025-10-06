@@ -28,8 +28,8 @@ Repeat these steps when launching or retiring a multi-agent tmux session.
 ## Wrap-Up
 - [ ] `.agents/scripts/kill-all.sh --prefix <suffix?>` to close active sessions.
 - [ ] `git worktree prune` and remove unused agent definitions from `agents.yaml`.
-- [ ] Run `./remove.sh --dry-run` (or `./remove.sh --force`) to tear down agent worktrees as needed.
-- [ ] Run `./uninstall.sh --dry-run` before removing toolkit assets, then `./uninstall.sh` if the repo no longer needs them.
+- [ ] Run `mag-remove --dry-run` (or `.agents/scripts/remove.sh --dry-run`) to tear down agent worktrees as needed.
+- [ ] Run `mag-uninstall --dry-run` before removing toolkit assets, then `mag-uninstall` if the repo no longer needs them.
 - [ ] Archive outputs (reports, notes) where the next agents can find them.
 - [ ] Run a retrospective capturing wins, gaps, and follow-up actions.
 - [ ] Tag this toolkit snapshot or branch it if you plan to reuse the configuration elsewhere.

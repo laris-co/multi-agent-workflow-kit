@@ -2,13 +2,14 @@
 set -euo pipefail
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-REPO_ROOT="$SCRIPT_DIR"
-AGENTS_DIR="$REPO_ROOT/.agents"
+AGENT_ROOT=$(cd "$SCRIPT_DIR/.." && pwd)
+REPO_ROOT=$(cd "$AGENT_ROOT/.." && pwd)
+AGENTS_DIR="$AGENT_ROOT"
 AGENTS_YAML="$AGENTS_DIR/agents.yaml"
 
 usage() {
     cat <<USAGE
-Usage: ./remove.sh [options] [agent...]
+Usage: .agents/scripts/remove.sh [options] [agent...]
 
 Remove agent worktrees defined in .agents/agents.yaml.
 
