@@ -66,6 +66,13 @@ if [ -z "$AGENTS" ]; then
     exit 1
 fi
 
+if ! git -C "$REPO_ROOT" rev-parse --verify HEAD >/dev/null 2>&1; then
+    echo "❌ Repository has no commits yet."
+    echo "   Create an initial commit before starting agents, for example:"
+    echo "   git commit --allow-empty -m \"Initial commit\""
+    exit 1
+fi
+
 BASE_PREFIX=${SESSION_PREFIX:-ai}
 DIR_NAME=$(basename "$REPO_ROOT")
 SESSION_EXISTS=false
