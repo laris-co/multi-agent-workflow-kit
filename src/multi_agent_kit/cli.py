@@ -103,6 +103,15 @@ def maybe_commit_assets(root: Path, written: list[Path]) -> None:
     if add_result.returncode != 0:
         raise BootstrapError("Failed to add toolkit assets to git index")
 
+    diff_check = subprocess.run(
+        ["git", "diff", "--cached", "--quiet"],
+        cwd=root,
+        check=False,
+    )
+    if diff_check.returncode == 0:
+        print("ℹ️  No changes staged; skipping commit.")
+        return
+
     commit_result = subprocess.run(
         ["git", "commit", "-m", "Add multi-agent toolkit assets"],
         cwd=root,
