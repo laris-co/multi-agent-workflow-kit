@@ -45,6 +45,7 @@ class AssetInstaller:
                 destination = self.target / dest_name
                 self._copy(source, destination, written)
         self._ensure_root_gitignore(written)
+        self._ensure_claude_gitignore(written)
         return written
 
     def _asset_root(self) -> Traversable:
@@ -98,6 +99,27 @@ class AssetInstaller:
         if append_text:
             gitignore_path.write_text(existing + append_text)
             written.append(gitignore_path)
+
+    def _ensure_claude_gitignore(self, written: list[Path]) -> None:
+        claude_dir = self.target / ".claude"
+        if not claude_dir.exists():
+            return
+
+        gitignore_path = claude_dir / ".gitignore"
+        desired = (
+            "# Ignore toolkit-provided Claude commands; customize by removing these entries\n"
+            "commands/catlab-agents-create.md\n"
+            "commands/catlab-codex.md\n"
+            "commands/catlab-codex.sh\n"
+            "commands/catlab-sync.md\n"
+            "commands/catlab-sync.sh\n"
+        )
+
+        if gitignore_path.exists() and gitignore_path.read_text() == desired:
+            return
+
+        gitignore_path.write_text(desired)
+        written.append(gitignore_path)
 
 
 def missing_assets(target: Path) -> Iterator[str]:
