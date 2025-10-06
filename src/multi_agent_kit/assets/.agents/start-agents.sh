@@ -116,11 +116,7 @@ if [ "$LAYOUT_TYPE" = "two-pane" ]; then
     fi
 
     if [ $TOTAL -gt 2 ]; then
-        for ((i = 2; i < TOTAL; i++)); do
-            agent_name=${AGENTS_ARRAY[$i]}
-            echo "Opening window for ${agent_name}..."
-            tmux new-window -t "$SESSION_NAME" -c "$AGENTS_DIR/${agent_name}" -n "${agent_name}"
-        done
+        echo "⚠️  profile0 shows only two panes. Additional agents will not open panes: ${AGENTS_ARRAY[@]:2}" >&2
     fi
 elif [ "$LAYOUT_TYPE" = "three-pane" ]; then
     if [ $TOTAL -ge 2 ]; then
