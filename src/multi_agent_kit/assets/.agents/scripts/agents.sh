@@ -2,8 +2,9 @@
 set -euo pipefail
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-REPO_ROOT=$(cd "$SCRIPT_DIR/.." && pwd)
-REGISTRY="$SCRIPT_DIR/agents.yaml"
+AGENT_ROOT=$(cd "$SCRIPT_DIR/.." && pwd)
+REPO_ROOT=$(cd "$AGENT_ROOT/.." && pwd)
+REGISTRY="$AGENT_ROOT/agents.yaml"
 cmd=${1:-}
 
 need() { command -v "$1" >/dev/null 2>&1 || { echo "Error: missing dependency '$1'" >&2; exit 1; }; }

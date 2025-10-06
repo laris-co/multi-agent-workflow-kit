@@ -4,8 +4,9 @@
 set -e
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-REPO_ROOT=$(cd "$SCRIPT_DIR/.." && pwd)
-PROFILES_DIR="$SCRIPT_DIR/profiles"
+AGENT_ROOT=$(cd "$SCRIPT_DIR/.." && pwd)
+REPO_ROOT=$(cd "$AGENT_ROOT/.." && pwd)
+PROFILES_DIR="$AGENT_ROOT/profiles"
 AGENTS_DIR="$REPO_ROOT/agents"
 
 mkdir -p "$AGENTS_DIR"
@@ -55,7 +56,7 @@ fi
 AGENTS=$(cd "$AGENTS_DIR" && ls -d */ 2>/dev/null | sed 's#/##' | tr '\n' ' ')
 if [ -z "$AGENTS" ]; then
     echo "⚠️  No agent worktrees detected in $AGENTS_DIR"
-    echo "Run .agents/setup.sh or .agents/agents.sh create <name> first."
+    echo "Run .agents/scripts/setup.sh or .agents/scripts/agents.sh create <name> first."
     exit 1
 fi
 

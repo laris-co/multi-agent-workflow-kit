@@ -4,7 +4,8 @@
 set -e
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-REPO_ROOT=$(cd "$SCRIPT_DIR/.." && pwd)
+AGENT_ROOT=$(cd "$SCRIPT_DIR/.." && pwd)
+REPO_ROOT=$(cd "$AGENT_ROOT/.." && pwd)
 CUSTOM_PREFIX=""
 SESSION_PREFIX_OVERRIDE=""
 

@@ -27,10 +27,10 @@ $EDITOR .agents/agents.yaml
 # Requires at least one commit in the repository. If none exist, the
 # setup script exits early and prints these commands for you to run:
 # git add .agents/ agents/ .tmux.conf && git commit -m "Initial toolkit commit"
-.agents/setup.sh
+.agents/scripts/setup.sh
 
 # Launch the session manually (profile0 = top with split bottom row, profile1 = left column + stacked right)
-.agents/start-agents.sh profile0
+.agents/scripts/start-agents.sh profile0
 
 > **Profile0 default:** top pane spans the upper half; bottom row splits into left/right panes.
 >
@@ -76,11 +76,12 @@ To uninstall the toolkit assets from a repo, run `./uninstall.sh --dry-run` to p
 ```
 .agents/                   # Toolkit directory (committed to git)
 ├── agents.yaml            # agent registry (edit me)
-├── agents.sh              # create/list/remove worktrees
-├── setup.sh               # bootstrap tmux plugins + agents
-├── start-agents.sh        # tmux launcher with layout profiles
-├── send-commands.sh       # broadcast commands to panes
-├── kill-all.sh            # kill sessions by prefix
+├── scripts/
+│   ├── agents.sh          # create/list/remove worktrees
+│   ├── setup.sh           # bootstrap tmux plugins + agents
+│   ├── start-agents.sh    # tmux launcher with layout profiles
+│   ├── send-commands.sh   # broadcast commands to panes
+│   └── kill-all.sh        # kill sessions by prefix
 ├── profiles/              # tmux layout recipes
 │   ├── profile0.sh        # top pane + bottom left/right split (default)
 │   ├── profile1.sh        # 2×2 grid with left column dominant
@@ -95,7 +96,7 @@ agents/                    # Agent worktrees (fully gitignored)
 ├── 2-agent/               # Worktree for agent 2
 └── 3-agent/               # Worktree for agent 3
 
-.envrc                     # direnv hook that exports CODEX_HOME for tools
+.envrc                     # direnv hook adding script aliases and PATH entries
 .claude/                   # Claude configuration (optional)
 ├── commands/              # Custom slash commands for Claude
 │   ├── catlab-agents-create.md   # Agent creation command (/catlab-agents-create)
@@ -114,12 +115,14 @@ docs/                      # deep dives and checklists
 
 ## Operating Model
 1. Define each agent in `.agents/agents.yaml` (branch + worktree path pointing into `agents/`).
-2. Run `.agents/setup.sh` after edits to sync worktrees and ensure dependencies.
-3. Start the tmux session with `.agents/start-agents.sh <profile> [--prefix <suffix>]`.
-4. Use `.agents/send-commands.sh` to broadcast helpful commands (`git status`, `ls`).
-5. Stop active sessions via `.agents/kill-all.sh --prefix <suffix>` when done.
+2. Run `.agents/scripts/setup.sh` after edits to sync worktrees and ensure dependencies.
+3. Start the tmux session with `.agents/scripts/start-agents.sh <profile> [--prefix <suffix>]`.
+4. Use `.agents/scripts/send-commands.sh` to broadcast helpful commands (`git status`, `ls`).
+5. Stop active sessions via `.agents/scripts/kill-all.sh --prefix <suffix>` when done.
 
 Session names follow `ai-<repo-name>` by default. Provide `--prefix sprint` to spawn `ai-<repo-name>-sprint`. You can also export `SESSION_PREFIX` to change the base prefix (e.g., `export SESSION_PREFIX=research`).
+
+> Tip: Allow direnv (`direnv allow`) to expose `mag-start`, `mag-setup`, `mag-agents`, `mag-kill`, and `mag-send` aliases that wrap the scripts in `.agents/scripts/`.
 
 ## Documentation
 - `docs/architecture.md` — architecture, strengths, risks, and integration ideas.

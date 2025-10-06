@@ -1,12 +1,13 @@
 #!/bin/bash
 # Setup script: Creates all agents and installs tmux plugins
-# Usage: .agents/setup.sh
+# Usage: .agents/scripts/setup.sh
 
 set -e
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
-REPO_ROOT=$(cd "$SCRIPT_DIR/.." && pwd)
-AGENTS_YAML="$SCRIPT_DIR/agents.yaml"
+AGENT_ROOT=$(cd "$SCRIPT_DIR/.." && pwd)
+REPO_ROOT=$(cd "$AGENT_ROOT/.." && pwd)
+AGENTS_YAML="$AGENT_ROOT/agents.yaml"
 TPM_DIR="$HOME/.tmux/plugins/tpm"
 
 # ========================================
@@ -19,7 +20,7 @@ if ! command -v direnv &> /dev/null; then
     echo ""
 else
     echo "✅ direnv installed"
-if [ -f "$REPO_ROOT/.envrc" ]; then
+    if [ -f "$REPO_ROOT/.envrc" ]; then
         echo "💡 Run 'direnv allow' to enable project config auto-loading"
     fi
 fi

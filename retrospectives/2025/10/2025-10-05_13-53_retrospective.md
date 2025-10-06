@@ -30,18 +30,18 @@ Restored the dual-directory architecture where `.agents/` contains toolkit files
 ### Files Modified
 ```
 .agents/README.md
-.agents/agents.sh
+.agents/scripts/agents.sh
 .agents/agents.yaml
 .agents/agents/.gitkeep
-.agents/kill-all.sh
+.agents/scripts/kill-all.sh
 .agents/profiles/profile1.sh
 .agents/profiles/profile2.sh
 .agents/profiles/profile3.sh
 .agents/profiles/profile4.sh
 .agents/profiles/profile5.sh
-.agents/send-commands.sh
-.agents/setup.sh
-.agents/start-agents.sh
+.agents/scripts/send-commands.sh
+.agents/scripts/setup.sh
+.agents/scripts/start-agents.sh
 .claude/commands/agents-create.md
 README.md
 docs/architecture.md

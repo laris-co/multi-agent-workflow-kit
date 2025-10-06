@@ -23,26 +23,26 @@ Main repository (.git)
 | Component | Location | Purpose |
 |-----------|----------|---------|
 | Worktree registry | `.agents/agents.yaml` | Maps agent names to branches and worktree paths |
-| Worktree manager | `.agents/agents.sh` | Creates/list/removes worktrees using the registry |
-| Bootstrapper | `.agents/setup.sh` | Installs TPM, provisions worktrees from registry |
-| Tmux launcher | `.agents/start-agents.sh` | Spins up layouts, naming sessions consistently |
+| Worktree manager | `.agents/scripts/agents.sh` | Creates/list/removes worktrees using the registry |
+| Bootstrapper | `.agents/scripts/setup.sh` | Installs TPM, provisions worktrees from registry |
+| Tmux launcher | `.agents/scripts/start-agents.sh` | Spins up layouts, naming sessions consistently |
 | Layout profiles | `.agents/profiles/*.sh` | Parameterized pane geometries |
-| Broadcast helper | `.agents/send-commands.sh` | Sends commands to each pane |
-| Cleanup utility | `.agents/kill-all.sh` | Kills tmux sessions with shared prefix |
+| Broadcast helper | `.agents/scripts/send-commands.sh` | Sends commands to each pane |
+| Cleanup utility | `.agents/scripts/kill-all.sh` | Kills tmux sessions with shared prefix |
 | Shared config | `.tmux.conf` | Mouse support, theming, plugin config |
 
 ## Workflow
 1. **Registry first** – define the agents, branches, and paths.
-2. **Provision** – `setup.sh` creates branches/worktrees and ensures tmux plugins.
-3. **Launch** – `start-agents.sh` reads the registry, builds a pane layout, and names the session `ai-<repo>-<suffix?>`.
+2. **Provision** – `scripts/setup.sh` creates branches/worktrees and ensures tmux plugins.
+3. **Launch** – `scripts/start-agents.sh` reads the registry, builds a pane layout, and names the session `ai-<repo>-<suffix?>`.
 4. **Operate** – agents work in their panes; supervisors monitor output, broadcast commands, or open additional panes.
-5. **Tear down** – `kill-all.sh` or `git worktree remove` resets the environment when the effort completes.
+5. **Tear down** – `scripts/kill-all.sh` or `git worktree remove` resets the environment when the effort completes.
 
 ## Strengths
 - **Isolation**: each agent has a branch + working directory with zero branch switching.
 - **Observability**: tmux panes expose command history for every agent in one screen.
 - **Consistency**: enforced directory structure and naming reduce coordination mistakes.
-- **Speed**: new agents can be provisioned quickly via `agents.sh create`.
+- **Speed**: new agents can be provisioned quickly via `scripts/agents.sh create`.
 
 ## Risks & Mitigations
 | Risk | Mitigation |
