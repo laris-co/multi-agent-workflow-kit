@@ -4,7 +4,7 @@ set -euo pipefail
 PROMPT="$*"
 
 if [ -z "$PROMPT" ]; then
-    echo "Usage: catlab-codex.sh <prompt>"
+    echo "Usage: maw-codex.sh <prompt>"
     exit 1
 fi
 
