@@ -130,6 +130,14 @@ def maybe_commit_assets(root: Path, written: list[Path]) -> None:
     has_asset_changes = bool(rel_paths)
 
     if has_asset_changes:
+        ignored_assets = detect_ignored_paths(root, rel_paths)
+        if ignored_assets:
+            print("ℹ️  Toolkit assets are ignored by .gitignore; skipping automated commit.")
+            for path in ignored_assets:
+                print(f"   • {path}")
+            print("   Run 'git add -f' manually if you still want to track them.")
+            return
+
         wants_commit = prompt_yes_no(
             "Create a git commit with the newly installed toolkit assets? [y/N] "
         )
@@ -152,13 +160,13 @@ def maybe_commit_assets(root: Path, written: list[Path]) -> None:
             )
         rel_paths = [str(placeholder.relative_to(root))]
 
-    ignored = detect_ignored_paths(root, rel_paths)
-    if ignored:
-        print("ℹ️  Toolkit assets are ignored by .gitignore; skipping automated commit.")
-        for path in ignored:
-            print(f"   • {path}")
-        print("   Run 'git add -f' manually if you still want to track them.")
-        return
+        ignored_placeholder = detect_ignored_paths(root, rel_paths)
+        if ignored_placeholder:
+            print("ℹ️  Placeholder file is ignored by .gitignore; skipping automated commit.")
+            for path in ignored_placeholder:
+                print(f"   • {path}")
+            print("   Run 'git add -f' manually if you still want to track it.")
+            return
 
     add_result = subprocess.run(
         ["git", "add", "--", *rel_paths],
