@@ -23,6 +23,7 @@ else
     echo "✅ direnv installed"
     if [ -f "$REPO_ROOT/.envrc" ]; then
         echo "💡 Run 'direnv allow' to enable project config auto-loading"
+        echo "   Tip: also run 'direnv allow agents/*' so each agent worktree trusts the env."
     fi
 fi
 echo ""
