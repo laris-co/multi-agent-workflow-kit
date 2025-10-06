@@ -26,6 +26,17 @@ cp .agents/agents.yaml .agents/agents.local.yaml   # optional snapshot
 
 # Launch tmux session (default layout = profile0)
 .agents/start-agents.sh profile0
+
+> **Profile0 default:** top pane spans the upper half; bottom row splits into left/right panes for the next two agents.
+>
+> ```
+> ┌──────────────────────────────┐
+> │            Pane0             │
+> ├──────────────┬───────────────┤
+> │    Pane1     │     Pane2     │
+> └──────────────┴───────────────┘
+> ```
+> Tweak `BOTTOM_HEIGHT` / `BOTTOM_RIGHT_WIDTH` in `profiles/profile0.sh` to rebalance the grid.
 ```
 
 ## Common Commands

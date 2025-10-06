@@ -32,6 +32,18 @@ $EDITOR .agents/agents.yaml
 # Launch the session manually (profile0 = top with split bottom row, profile1 = left column + stacked right)
 .agents/start-agents.sh profile0
 
+> **Profile0 default:** top pane spans the upper half; bottom row splits into left/right panes.
+>
+> ```
+> ┌──────────────────────────────┐
+> │            Pane0             │ ← agent 1
+> ├──────────────┬───────────────┤
+> │    Pane1     │     Pane2     │
+> │  agent 2     │  agent 3/root │
+> └──────────────┴───────────────┘
+> ```
+> Adjust `BOTTOM_HEIGHT` or `BOTTOM_RIGHT_WIDTH` in `profile0.sh` to change proportions.
+
 ### uvx Entry Point Options
 The `multi-agent-kit init` command accepts the same layout options as the shell scripts:
 
