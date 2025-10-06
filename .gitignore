@@ -1,5 +1,5 @@
-# Agent worktrees are created under agents/ at repo root
-# The agents/ directory has its own .gitignore to manage itself
+# Agent worktrees live under /agents and /.agents at repo root
+/.agents/
 
 .tmux/resurrect/
 .tmux/plugins/
@@ -15,3 +15,6 @@ __pycache__/
 
 # Local IDE/tool overrides
 settings.local.json
+
+# Added by Multi-Agent Workflow Kit
+.agents/
