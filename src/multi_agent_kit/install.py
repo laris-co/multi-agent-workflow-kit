@@ -73,32 +73,36 @@ class AssetInstaller:
 
     def _ensure_root_gitignore(self, written: list[Path]) -> None:
         gitignore_path = self.target / ".gitignore"
-        ignore_line = "/.agents/"
         marker = "# Added by Multi-Agent Workflow Kit"
+        ignore_lines = ["/.agents/", ".claude/.gitignore", ".claude/commands/catlab-*"]
 
         try:
             existing = gitignore_path.read_text()
         except FileNotFoundError:
-            content = f"{marker}\n{ignore_line}\n"
+            content = marker + "\n" + "\n".join(ignore_lines) + "\n"
             gitignore_path.write_text(content)
             written.append(gitignore_path)
             return
 
         lines = [line.strip() for line in existing.splitlines()]
-        if ignore_line in lines:
+
+        append_lines: list[str] = []
+        for entry in ignore_lines:
+            if entry not in lines:
+                append_lines.append(entry)
+
+        if not append_lines:
             return
 
         append_text = ""
         if not existing.endswith("\n"):
             append_text += "\n"
         if marker not in existing:
-            append_text += f"\n{marker}\n{ignore_line}\n"
-        else:
-            append_text += f"{ignore_line}\n"
+            append_text += f"\n{marker}\n"
+        append_text += "\n".join(append_lines) + "\n"
 
-        if append_text:
-            gitignore_path.write_text(existing + append_text)
-            written.append(gitignore_path)
+        gitignore_path.write_text(existing + append_text)
+        written.append(gitignore_path)
 
     def _ensure_claude_gitignore(self, written: list[Path]) -> None:
         claude_dir = self.target / ".claude"
