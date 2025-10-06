@@ -97,7 +97,7 @@ agents/                    # Agent worktrees (fully gitignored)
 ├── 2-agent/               # Worktree for agent 2
 └── 3-agent/               # Worktree for agent 3
 
-.envrc                     # direnv hook adding script aliases and PATH entries
+.envrc                     # direnv hook adding script aliases and PATH entries (run `direnv allow` here and `direnv allow agents/*` inside worktrees)
 .claude/                   # Claude configuration (optional)
 ├── commands/              # Custom slash commands for Claude
 │   ├── maw-agents-create.md     # Agent creation command (/maw-agents-create)
