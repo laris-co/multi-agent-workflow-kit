@@ -129,23 +129,19 @@ def maybe_commit_assets(root: Path, written: list[Path]) -> None:
     rel_paths = sorted({str(path.relative_to(root)) for path in written}) if written else []
 
     if not rel_paths:
-        # Nothing new installed; nothing to stage.
         return
 
     ignored_assets = detect_ignored_paths(root, rel_paths)
-    if ignored_assets:
-        print("ℹ️  Toolkit assets are ignored by .gitignore; leaving them unstaged.")
-        for path in ignored_assets:
-            print(f"   • {path}")
-        print("   Run 'git add -f' manually if you want them tracked.")
-        return
 
     print("ℹ️  Toolkit assets installed:")
     for path in rel_paths:
         print(f"   • {path}")
 
+    if ignored_assets:
+        print("   These files are normally ignored; staging will use 'git add -f'.")
+
     if prompt_yes_no("Commit these assets now? [y/N] "):
-        add_cmd = ["git", "add", "--", *rel_paths]
+        add_cmd = ["git", "add", "-f", "--", *rel_paths]
         add_proc = subprocess.run(add_cmd, cwd=root, check=False)
         if add_proc.returncode == 0:
             commit_cmd = [

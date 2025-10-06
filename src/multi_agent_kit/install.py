@@ -12,7 +12,7 @@ ASSET_ROOT_NAME = "assets"
 ITEM_MAP = (
     (".agents", ".agents"),    # Toolkit files go to .agents/
     ("agents", "agents"),      # Gitignore-only directory for worktrees
-    (".claude", ".claude"),    # Claude commands and configuration (ignored by default)
+    (".claude", ".claude"),    # Claude commands and configuration
     (".envrc", ".envrc"),  # direnv hook for tmux config
     ("AGENTS.md", "AGENTS.md"),  # Guide for human/AI collaborators
 )
@@ -46,7 +46,6 @@ class AssetInstaller:
                 destination = self.target / dest_name
                 self._copy(source, destination, written)
         self._ensure_root_gitignore(written)
-        self._ensure_claude_gitignore(written)
         return written
 
     def _asset_root(self) -> Traversable:
@@ -75,7 +74,7 @@ class AssetInstaller:
     def _ensure_root_gitignore(self, written: list[Path]) -> None:
         gitignore_path = self.target / ".gitignore"
         marker = "# Added by Multi-Agent Workflow Kit"
-        ignore_lines = ["/.agents/", ".claude/.gitignore", ".claude/commands/catlab-*"]
+        ignore_lines = ["/.agents/"]
 
         try:
             existing = gitignore_path.read_text()
@@ -87,10 +86,7 @@ class AssetInstaller:
 
         lines = [line.strip() for line in existing.splitlines()]
 
-        append_lines: list[str] = []
-        for entry in ignore_lines:
-            if entry not in lines:
-                append_lines.append(entry)
+        append_lines = [entry for entry in ignore_lines if entry not in lines]
 
         if not append_lines:
             return
@@ -103,27 +99,6 @@ class AssetInstaller:
         append_text += "\n".join(append_lines) + "\n"
 
         gitignore_path.write_text(existing + append_text)
-        written.append(gitignore_path)
-
-    def _ensure_claude_gitignore(self, written: list[Path]) -> None:
-        claude_dir = self.target / ".claude"
-        if not claude_dir.exists():
-            return
-
-        gitignore_path = claude_dir / ".gitignore"
-        desired = (
-            "# Ignore toolkit-provided Claude commands; customize by removing these entries\n"
-            "commands/catlab-agents-create.md\n"
-            "commands/catlab-codex.md\n"
-            "commands/catlab-codex.sh\n"
-            "commands/catlab-sync.md\n"
-            "commands/catlab-sync.sh\n"
-        )
-
-        if gitignore_path.exists() and gitignore_path.read_text() == desired:
-            return
-
-        gitignore_path.write_text(desired)
         written.append(gitignore_path)
 
 
