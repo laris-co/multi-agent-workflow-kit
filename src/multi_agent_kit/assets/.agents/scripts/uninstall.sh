@@ -26,6 +26,11 @@ abort() { printf 'Error: %s\n' "$1" >&2; exit 1; }
 FORCE=false
 DRY_RUN=false
 REMOVE_AGENTS=false
+if command -v tmux >/dev/null 2>&1; then
+    TMUX_AVAILABLE=true
+else
+    TMUX_AVAILABLE=false
+fi
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -85,6 +90,38 @@ if [ "$REMOVE_AGENTS" = true ]; then
         warn "agents/ directory not found (nothing to remove)."
     fi
 fi
+
+kill_agent_sessions() {
+    if [ "$TMUX_AVAILABLE" = false ]; then
+        return
+    fi
+
+    local base_prefix="${SESSION_PREFIX:-ai}"
+    local dir_name
+    dir_name=$(basename "$REPO_ROOT")
+    local pattern="${base_prefix}-${dir_name}"
+
+    local sessions
+    sessions=$(tmux list-sessions -F "#{session_name}" 2>/dev/null | grep "^${pattern}" || true)
+    if [ -z "$sessions" ]; then
+        return
+    fi
+
+    if [ "$DRY_RUN" = true ]; then
+        log "Dry run: would kill tmux sessions before uninstalling:" >&2
+        echo "$sessions" >&2
+        return
+    fi
+
+    log "🛑 Stopping tmux sessions before uninstall..."
+    while IFS= read -r session; do
+        [ -z "$session" ] && continue
+        tmux kill-session -t "$session" 2>/dev/null || true
+    done <<<"$sessions"
+    log "✅ tmux sessions stopped (if any were running)."
+}
+
+kill_agent_sessions
 
 PREVIEW=("${TARGET_DIRS[@]}" "${TARGET_FILES[@]}" "${CLAUDE_FILES[@]}" "$SELF_PATH")
 

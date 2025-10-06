@@ -43,6 +43,11 @@ require_file "$AGENTS_DIR" "Toolkit not installed. Run: uvx multi-agent-kit init
 require_file "$AGENTS_YAML" "Missing $AGENTS_YAML"
 require_cmd git
 require_cmd yq
+if command -v tmux >/dev/null 2>&1; then
+    TMUX_AVAILABLE=true
+else
+    TMUX_AVAILABLE=false
+fi
 
 FORCE=false
 DRY_RUN=false
@@ -102,6 +107,36 @@ contains_agent() {
         fi
     done
     return 1
+}
+
+kill_agent_sessions() {
+    if [ "$TMUX_AVAILABLE" = false ]; then
+        return
+    fi
+
+    local base_prefix="${SESSION_PREFIX:-ai}"
+    local dir_name
+    dir_name=$(basename "$REPO_ROOT")
+    local pattern="${base_prefix}-${dir_name}"
+
+    local sessions
+    sessions=$(tmux list-sessions -F "#{session_name}" 2>/dev/null | grep "^${pattern}" || true)
+    if [ -z "$sessions" ]; then
+        return
+    fi
+
+    if [ "$DRY_RUN" = true ]; then
+        echo "🛈 Dry run: would kill tmux sessions before removing worktrees:" >&2
+        echo "$sessions" >&2
+        return
+    fi
+
+    echo "🛑 Stopping tmux sessions before removing worktrees..."
+    while IFS= read -r session; do
+        [ -z "$session" ] && continue
+        tmux kill-session -t "$session" 2>/dev/null || true
+    done <<<"$sessions"
+    echo "✅ tmux sessions stopped (if any were running)."
 }
 
 select_agent() {
@@ -260,6 +295,8 @@ is_dirty_agent() {
     done
     return 1
 }
+
+kill_agent_sessions
 
 removed_any=false
 skipped_any=false
