@@ -209,7 +209,6 @@ reload_tmux_conf_across_panes() {
     tmux source-file "$conf_path" 2>/dev/null || true
 
     while IFS= read -r pane_id; do
-        tmux send-keys -t "$pane_id" "git" Space "merge" Space "--ff-only" Space "main" C-m
         tmux send-keys -t "$pane_id" "tmux" Space "source-file" Space "$conf_path" C-m
     done < <(tmux list-panes -s -t "$SESSION_NAME" -F "#{pane_id}" 2>/dev/null || true)
 }
