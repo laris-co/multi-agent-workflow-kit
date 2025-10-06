@@ -83,14 +83,33 @@ def ensure_git_repo(root: Path) -> Path:
         check=False,
     )
     if result.returncode != 0:
-        raise BootstrapError(
-            "This command must be run inside a Git repository. "
-            "Run 'git init' or switch to an existing repo first."
-        )
+        if prompt_yes_no("No Git repository detected. Initialize one now? [y/N] "):
+            init_cmd = subprocess.run(["git", "init"], cwd=root, check=False)
+            if init_cmd.returncode != 0:
+                raise BootstrapError("Failed to initialize Git repository")
+            result = subprocess.run(
+                ["git", "rev-parse", "--show-toplevel"],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            if result.returncode != 0:
+                raise BootstrapError("Unable to determine Git repository root after initialization")
+        else:
+            raise BootstrapError(
+                "This command must be run inside a Git repository. "
+                "Run 'git init' or switch to an existing repo first."
+            )
 
     toplevel = Path(result.stdout.strip()).resolve()
     cwd_resolved = root.resolve()
     if cwd_resolved != toplevel:
+        if prompt_yes_no(
+            f"Detected Git repo at '{toplevel}'. Change working directory to it now? [y/N] "
+        ):
+            os.chdir(toplevel)
+            return toplevel
         raise BootstrapError(
             "Detected Git repository at '{}' but the tool was invoked inside '{}'\n"
             "Run the init command from the repository root.".format(toplevel, cwd_resolved)
