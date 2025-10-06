@@ -114,6 +114,14 @@ if [ "$LAYOUT_TYPE" = "two-pane" ]; then
         echo "Adding bottom pane (repo root)..."
         tmux split-window -v -t "$(pane_ref 0)" -c "$REPO_ROOT" -p "${BOTTOM_HEIGHT:-50}"
     fi
+
+    if [ $TOTAL -gt 2 ]; then
+        for ((i = 2; i < TOTAL; i++)); do
+            agent_name=${AGENTS_ARRAY[$i]}
+            echo "Opening window for ${agent_name}..."
+            tmux new-window -t "$SESSION_NAME" -c "$AGENTS_DIR/${agent_name}" -n "${agent_name}"
+        done
+    fi
 elif [ "$LAYOUT_TYPE" = "three-pane" ]; then
     if [ $TOTAL -ge 2 ]; then
         echo "Adding pane for ${AGENTS_ARRAY[1]}..."
