@@ -106,7 +106,15 @@ pane_ref() {
 }
 tmux select-window -t "$SESSION_NAME":"$WINDOW_INDEX"
 
-if [ "$LAYOUT_TYPE" = "three-pane" ]; then
+if [ "$LAYOUT_TYPE" = "two-pane" ]; then
+    if [ $TOTAL -ge 2 ]; then
+        echo "Adding bottom pane for ${AGENTS_ARRAY[1]}..."
+        tmux split-window -v -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "${BOTTOM_HEIGHT:-50}"
+    else
+        echo "Adding bottom pane (repo root)..."
+        tmux split-window -v -t "$(pane_ref 0)" -c "$REPO_ROOT" -p "${BOTTOM_HEIGHT:-50}"
+    fi
+elif [ "$LAYOUT_TYPE" = "three-pane" ]; then
     if [ $TOTAL -ge 2 ]; then
         echo "Adding pane for ${AGENTS_ARRAY[1]}..."
         tmux split-window -h -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "$RIGHT_WIDTH"

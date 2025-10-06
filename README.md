@@ -27,7 +27,7 @@ $EDITOR .agents/agents.yaml
 # git add .agents/ agents/ .tmux.conf && git commit -m "Initial toolkit commit"
 .agents/setup.sh
 
-# Launch the session manually (profile1 = balanced grid)
+# Launch the session manually (profile0 = top/bottom split, profile1 = balanced grid)
 .agents/start-agents.sh profile1
 
 ### uvx Entry Point Options
@@ -66,6 +66,7 @@ Use `--setup-only` to prepare worktrees without starting tmux. The first run cop
 ├── send-commands.sh       # broadcast commands to panes
 ├── kill-all.sh            # kill sessions by prefix
 ├── profiles/              # tmux layout recipes
+│   ├── profile0.sh        # simple 50/50 top-bottom split
 │   ├── profile1.sh        # default 2×2 grid
 │   ├── profile2.sh        # full-left layout
 │   ├── profile3.sh        # top-full layout

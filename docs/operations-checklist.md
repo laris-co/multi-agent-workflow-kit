@@ -12,7 +12,7 @@ Repeat these steps when launching or retiring a multi-agent tmux session.
 
 ## Launch Sequence
 1. `.agents/setup.sh` (first run or whenever `agents.yaml` changes).
-2. `.agents/start-agents.sh profile1 --prefix <suffix?>`.
+2. `.agents/start-agents.sh profile0 --prefix <suffix?>` (swap the profile as needed).
 3. In each pane, run the agent-specific bootstrap (install deps, load env vars, etc.).
 4. Capture a quick note or screenshot of the layout for later retrospectives (optional).
 

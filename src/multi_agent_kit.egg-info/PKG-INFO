@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: multi-agent-kit
-Version: 0.1.0
+Version: 0.1.1
 Summary: uvx entry point for bootstrapping the Multi-Agent Workflow Kit.
 Author: Multi-Agent Workflow Kit Maintainers
 Classifier: Programming Language :: Python :: 3
@@ -26,31 +26,31 @@ gh repo clone laris-co/multi-agent-workflow-kit
 cd multi-agent-workflow-kit
 
 # One-shot bootstrap (installs toolkit assets, setup, and tmux launch)
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git \
+uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --prefix demo
 
 # Configure your agents
-$EDITOR agents/agents.yaml
+$EDITOR .agents/agents.yaml
 
 # Provision worktrees + install tmux plugins (manual alternative)
 # Requires at least one commit in the repository. If none exist, the
 # setup script exits early and prints these commands for you to run:
-# git add agents/ .tmux.conf && git commit -m "Initial toolkit commit"
-agents/setup.sh
+# git add .agents/ agents/ .tmux.conf && git commit -m "Initial toolkit commit"
+.agents/setup.sh
 
-# Launch the session manually (profile1 = balanced grid)
-agents/start-agents.sh profile1
+# Launch the session manually (profile0 = top/bottom split, profile1 = balanced grid)
+.agents/start-agents.sh profile1
 
 ### uvx Entry Point Options
 The `multi-agent-kit init` command accepts the same layout options as the shell scripts:
 
 ```bash
 # Skip setup if agents are already provisioned
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git \
+uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --skip-setup profile2
 
 # Launch detached session with a custom prefix
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git \
+uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --prefix hackathon --detach
 ```
 
@@ -69,7 +69,7 @@ Use `--setup-only` to prepare worktrees without starting tmux. The first run cop
 
 ## Repository Layout
 ```
-agents/
+.agents/                   # Toolkit directory (committed to git)
 ├── agents.yaml            # agent registry (edit me)
 ├── agents.sh              # create/list/remove worktrees
 ├── setup.sh               # bootstrap tmux plugins + agents
@@ -77,23 +77,34 @@ agents/
 ├── send-commands.sh       # broadcast commands to panes
 ├── kill-all.sh            # kill sessions by prefix
 ├── profiles/              # tmux layout recipes
+│   ├── profile0.sh        # simple 50/50 top-bottom split
 │   ├── profile1.sh        # default 2×2 grid
 │   ├── profile2.sh        # full-left layout
 │   ├── profile3.sh        # top-full layout
 │   ├── profile4.sh        # three-pane layout
 │   └── profile5.sh        # six-pane dashboard
-agents/                    # repo-root worktrees (gitignored via agents/.gitignore)
+
+agents/                    # Agent worktrees (fully gitignored)
+├── .gitignore             # Ignores all contents
+├── 1-agent/               # Worktree for agent 1
+├── 2-agent/               # Worktree for agent 2
+└── 3-agent/               # Worktree for agent 3
+
+.claude/                   # Claude configuration (optional)
+├── commands/              # Custom slash commands (with catlab- prefix)
+│   ├── catlab-agents-create.md   # Agent creation command (/catlab-agents-create)
+│   └── catlab-codex.md          # Codex integration command (/catlab-codex)
 
 .tmux.conf                 # curated tmux config with TPM + power theme
 docs/                      # deep dives and checklists
 ```
 
 ## Operating Model
-1. Define each agent in `agents/agents.yaml` (branch + worktree path pointing into `agents/`).
-2. Run `agents/setup.sh` after edits to sync worktrees and ensure dependencies.
-3. Start the tmux session with `agents/start-agents.sh <profile> [--prefix <suffix>]`.
-4. Use `agents/send-commands.sh` to broadcast helpful commands (`git status`, `ls`).
-5. Stop active sessions via `agents/kill-all.sh --prefix <suffix>` when done.
+1. Define each agent in `.agents/agents.yaml` (branch + worktree path pointing into `agents/`).
+2. Run `.agents/setup.sh` after edits to sync worktrees and ensure dependencies.
+3. Start the tmux session with `.agents/start-agents.sh <profile> [--prefix <suffix>]`.
+4. Use `.agents/send-commands.sh` to broadcast helpful commands (`git status`, `ls`).
+5. Stop active sessions via `.agents/kill-all.sh --prefix <suffix>` when done.
 
 Session names follow `ai-<repo-name>` by default. Provide `--prefix sprint` to spawn `ai-<repo-name>-sprint`. You can also export `SESSION_PREFIX` to change the base prefix (e.g., `export SESSION_PREFIX=research`).
 
