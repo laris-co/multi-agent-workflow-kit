@@ -3,7 +3,6 @@
 
 .tmux/resurrect/
 .tmux/plugins/
-.envrc
 .context/
 
 # Python build artifacts

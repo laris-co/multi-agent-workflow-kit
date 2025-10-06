@@ -81,6 +81,7 @@ agents/                    # Agent worktrees (fully gitignored)
 ├── 2-agent/               # Worktree for agent 2
 └── 3-agent/               # Worktree for agent 3
 
+.envrc                     # direnv hook that reloads .tmux.conf inside tmux
 .claude/                   # Claude configuration (optional)
 ├── commands/              # Custom slash commands (with catlab- prefix)
 │   ├── catlab-agents-create.md   # Agent creation command (/catlab-agents-create)

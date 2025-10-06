@@ -17,6 +17,7 @@ ITEM_MAP = (
     ("start.sh", "start.sh"),  # Convenience wrapper for start-agents.sh
     ("remove.sh", "remove.sh"),  # Worktree cleanup helper
     ("uninstall.sh", "uninstall.sh"),  # Remove toolkit assets
+    (".envrc", ".envrc"),  # direnv hook for tmux config
 )
 
 
