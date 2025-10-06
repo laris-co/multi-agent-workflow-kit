@@ -11,7 +11,7 @@ AGENTS_DIR="$REPO_ROOT/agents"
 mkdir -p "$AGENTS_DIR"
 
 CUSTOM_PREFIX=""
-PROFILE="profile1"
+PROFILE="profile0"
 DETACHED=false
 
 while [[ $# -gt 0 ]]; do
@@ -116,7 +116,28 @@ if [ "$LAYOUT_TYPE" = "two-pane" ]; then
     fi
 
     if [ $TOTAL -gt 2 ]; then
-        echo "⚠️  profile0 shows only two panes. Additional agents will not open panes: ${AGENTS_ARRAY[@]:2}" >&2
+        echo "⚠️  two-pane layout shows only two panes. Additional agents will not open panes: ${AGENTS_ARRAY[@]:2}" >&2
+    fi
+elif [ "$LAYOUT_TYPE" = "two-pane-bottom-right" ]; then
+    if [ $TOTAL -ge 2 ]; then
+        echo "Adding bottom-left pane for ${AGENTS_ARRAY[1]}..."
+        tmux split-window -v -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "${BOTTOM_HEIGHT:-50}"
+    else
+        echo "Adding bottom-left pane (repo root)..."
+        tmux split-window -v -t "$(pane_ref 0)" -c "$REPO_ROOT" -p "${BOTTOM_HEIGHT:-50}"
+    fi
+
+    tmux select-pane -t "$(pane_ref 1)"
+    if [ $TOTAL -ge 3 ]; then
+        echo "Adding bottom-right pane for ${AGENTS_ARRAY[2]}..."
+        tmux split-window -h -t "$(pane_ref 1)" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "${BOTTOM_RIGHT_WIDTH:-50}"
+    else
+        echo "Adding bottom-right pane (repo root)..."
+        tmux split-window -h -t "$(pane_ref 1)" -c "$REPO_ROOT" -p "${BOTTOM_RIGHT_WIDTH:-50}"
+    fi
+
+    if [ $TOTAL -gt 3 ]; then
+        echo "⚠️  profile0 shows only three panes. Additional agents will not open panes: ${AGENTS_ARRAY[@]:3}" >&2
     fi
 elif [ "$LAYOUT_TYPE" = "three-pane" ]; then
     if [ $TOTAL -ge 2 ]; then
