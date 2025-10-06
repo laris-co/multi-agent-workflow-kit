@@ -30,8 +30,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     init_parser.add_argument(
         "profile",
         nargs="?",
-        default="profile0",
-        help="Layout profile to use (defaults to profile0).",
+        default="profile1",
+        help="Layout profile to use (defaults to profile1).",
     )
     init_parser.add_argument(
         "--prefix",

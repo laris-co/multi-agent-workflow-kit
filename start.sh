@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Simple wrapper for .agents/start-agents.sh
-# Default to profile0 if no arguments provided
+# Default to profile1 if no arguments provided
 
 # Check if .agents exists
 if [ ! -d ".agents" ]; then
@@ -10,9 +10,9 @@ if [ ! -d ".agents" ]; then
     exit 1
 fi
 
-# Default to profile0 if no arguments
+# Default to profile1 if no arguments
 if [ $# -eq 0 ]; then
-    exec .agents/start-agents.sh profile0
+    exec .agents/start-agents.sh profile1
 else
     exec .agents/start-agents.sh "$@"
 fi
