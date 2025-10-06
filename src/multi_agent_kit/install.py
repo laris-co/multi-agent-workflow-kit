@@ -16,6 +16,7 @@ ITEM_MAP = (
     ("tmux.conf", ".tmux.conf"),
     ("start.sh", "start.sh"),  # Convenience wrapper for start-agents.sh
     ("remove.sh", "remove.sh"),  # Worktree cleanup helper
+    ("uninstall.sh", "uninstall.sh"),  # Remove toolkit assets
 )
 
 
