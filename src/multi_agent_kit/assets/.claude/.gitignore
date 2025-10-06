@@ -1,4 +1,6 @@
-# Ignore all bundled Claude commands by default
-*.md
-*.sh
-!README.md
+# Ignore toolkit-provided Claude commands; customize by removing these entries
+commands/catlab-agents-create.md
+commands/catlab-codex.md
+commands/catlab-codex.sh
+commands/catlab-sync.md
+commands/catlab-sync.sh
