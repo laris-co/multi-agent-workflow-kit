@@ -45,7 +45,7 @@ uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
 
 Use `--setup-only` to prepare worktrees without starting tmux. The first run copies toolkit assets and `.tmux.conf` into the current repository; pass `--force-assets` to overwrite those files if you need to refresh them.
 
-To uninstall the toolkit assets from a repo, run `./uninstall.sh --dry-run` to preview the changes and then `./uninstall.sh` when you're ready. Pass `--remove-agents` if you also want to delete the `agents/` worktree folder (after you've cleaned it up).
+To uninstall the toolkit assets from a repo, run `./uninstall.sh --dry-run` to preview the changes and then `./uninstall.sh` when you're ready. The script only deletes the bundled `.claude` command files, leaving any other Claude content untouched. Pass `--remove-agents` if you also want to delete the `agents/` worktree folder (after you've cleaned it up).
 
 ## Prerequisites
 | Tool | Purpose |

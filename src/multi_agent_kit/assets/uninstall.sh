@@ -11,7 +11,7 @@ Usage: ./uninstall.sh [options]
 Remove toolkit assets installed by multi-agent-kit.
 
 Options:
-  -f, --force             Skip confirmation prompts.
+  -f, --force             Skip confirmation prompts and override safe-guards.
   -n, --dry-run           Show what would be removed without deleting anything.
   --remove-agents         Remove the git worktree directory under agents/ (if safe).
   -h, --help              Show this help message.
@@ -50,15 +50,20 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-TARGETS=(
+TARGET_DIRS=(
     ".agents"
-    ".claude"
+)
+TARGET_FILES=(
     ".tmux.conf"
     "start.sh"
     "remove.sh"
 )
+CLAUDE_FILES=(
+    ".claude/commands/catlab-agents-create.md"
+    ".claude/commands/catlab-codex.md"
+    ".claude/commands/catlab-codex.sh"
+)
 
-# uninstall.sh removes itself at the end if present
 SELF_PATH="uninstall.sh"
 
 if [ ! -d "$REPO_ROOT/.agents" ]; then
@@ -66,15 +71,27 @@ if [ ! -d "$REPO_ROOT/.agents" ]; then
 fi
 
 if [ "$REMOVE_AGENTS" = true ]; then
-    TARGETS+=("agents")
+    AGENTS_DIR="$REPO_ROOT/agents"
+    if [ -d "$AGENTS_DIR" ]; then
+        MAP_RESULT="$(find "$AGENTS_DIR" -mindepth 1 \( ! -name '.gitignore' \) -print -quit 2>/dev/null || true)"
+        if [ -n "$MAP_RESULT" ] && [ "$FORCE" = false ]; then
+            warn "agents/ contains worktrees or files; skipping removal (use --force with --remove-agents to override)."
+        else
+            TARGET_DIRS+=("agents")
+        fi
+    elif [ "$FORCE" = true ]; then
+        warn "agents/ directory not found (nothing to remove)."
+    fi
 fi
+
+PREVIEW=("${TARGET_DIRS[@]}" "${TARGET_FILES[@]}" "${CLAUDE_FILES[@]}" "$SELF_PATH")
 
 if [ "$DRY_RUN" = true ]; then
     log "Dry run: the following paths would be removed:"
 else
     log "The following paths will be removed:"
 fi
-for target in "${TARGETS[@]}" "$SELF_PATH"; do
+for target in "${PREVIEW[@]}"; do
     printf '  %s\n' "$target"
 done
 
@@ -113,45 +130,38 @@ remove_path() {
     fi
 }
 
-# Handle agents directory separately to ensure it is safe to remove
-if [ "$REMOVE_AGENTS" = true ]; then
-    AGENTS_DIR="$REPO_ROOT/agents"
-    if [ -d "$AGENTS_DIR" ]; then
-        MAP_RESULT="$(find "$AGENTS_DIR" -mindepth 1 \( ! -name '.gitignore' \) -print -quit 2>/dev/null || true)"
-        if [ -n "$MAP_RESULT" ] && [ "$FORCE" = false ]; then
-            warn "agents/ contains worktrees or files; skipping removal (use --force with --remove-agents to override)."
-            # remove from TARGETS to avoid deletion later
-            NEW_TARGETS=()
-            for entry in "${TARGETS[@]}"; do
-                if [ "$entry" != "agents" ]; then
-                    NEW_TARGETS+=("$entry")
-                fi
-            done
-            TARGETS=("${NEW_TARGETS[@]}")
-        fi
-    else
-        warn "agents/ directory not found."
-        NEW_TARGETS=()
-        for entry in "${TARGETS[@]}"; do
-            if [ "$entry" != "agents" ]; then
-                NEW_TARGETS+=("$entry")
-            fi
-        done
-        TARGETS=("${NEW_TARGETS[@]}")
-    fi
-fi
-
-# Iterate through remaining targets
-for target in "${TARGETS[@]}"; do
-    [ -z "$target" ] && continue
-    if [ "$target" = "agents" ]; then
-        remove_path "$target"
-    else
-        remove_path "$target"
-    fi
+for dir_target in "${TARGET_DIRS[@]}"; do
+    remove_path "$dir_target"
 done
 
-# Remove uninstall.sh last (if not dry run)
+for file_target in "${TARGET_FILES[@]}"; do
+    remove_path "$file_target"
+done
+
+for claude_file in "${CLAUDE_FILES[@]}"; do
+    remove_path "$claude_file"
+done
+
+cleanup_dir_if_empty() {
+    local rel=$1
+    local abs="$REPO_ROOT/$rel"
+    if [ "$DRY_RUN" = true ]; then
+        return
+    fi
+    if [ -d "$abs" ]; then
+        if find "$abs" -mindepth 1 -print -quit 2>/dev/null | grep -q .; then
+            return
+        fi
+        rmdir "$abs"
+        log "Removed empty directory $rel"
+    fi
+}
+
+if [ "$DRY_RUN" = false ]; then
+    cleanup_dir_if_empty ".claude/commands"
+    cleanup_dir_if_empty ".claude"
+fi
+
 if [ "$DRY_RUN" = true ]; then
     log "Would remove $SELF_PATH"
 else
