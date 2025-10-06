@@ -55,6 +55,26 @@ fi
 echo ""
 
 # ========================================
+# Sync shared prompts for Codex CLI (optional)
+# ========================================
+CLAUDE_PROMPTS_DIR="$REPO_ROOT/.claude/commands"
+CODEX_PROMPTS_DIR="$REPO_ROOT/.codex/prompts"
+
+if [ -d "$CLAUDE_PROMPTS_DIR" ]; then
+    mkdir -p "$CODEX_PROMPTS_DIR"
+    if command -v rsync >/dev/null 2>&1; then
+        rsync -a --include '*/' --include '*.md' --exclude '*' "$CLAUDE_PROMPTS_DIR/" "$CODEX_PROMPTS_DIR/" >/dev/null
+    else
+        find "$CLAUDE_PROMPTS_DIR" -maxdepth 1 -name '*.md' -exec cp "{}" "$CODEX_PROMPTS_DIR/" \;
+    fi
+    echo "📄 Updated Codex prompt templates in .codex/prompts/ (mirrors .claude/commands)."
+    if [ -z "${CODEX_HOME:-}" ]; then
+        echo "   Export CODEX_HOME=$REPO_ROOT/.codex or allow .envrc to set it automatically."
+    fi
+    echo ""
+fi
+
+# ========================================
 # Clean up stale worktrees
 # ========================================
 echo "🧹 Cleaning up stale worktrees..."
