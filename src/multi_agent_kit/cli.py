@@ -152,33 +152,21 @@ def maybe_commit_assets(root: Path, written: list[Path]) -> None:
             )
         rel_paths = [str(placeholder.relative_to(root))]
 
-    add_cmd = ["git", "add", "--", *rel_paths]
+    ignored = detect_ignored_paths(root, rel_paths)
+    if ignored:
+        print("ℹ️  Toolkit assets are ignored by .gitignore; skipping automated commit.")
+        for path in ignored:
+            print(f"   • {path}")
+        print("   Run 'git add -f' manually if you still want to track them.")
+        return
+
     add_result = subprocess.run(
-        add_cmd,
+        ["git", "add", "--", *rel_paths],
         cwd=root,
-        capture_output=True,
-        text=True,
         check=False,
     )
     if add_result.returncode != 0:
-        stderr = add_result.stderr or ""
-        if "The following paths are ignored" in stderr:
-            print("⚠️  Toolkit files are ignored by .gitignore: \n" + stderr.strip())
-            if not prompt_yes_no("Force add them to the commit? [y/N] "):
-                print("ℹ️  Skipping toolkit commit because files remain ignored.")
-                return
-
-            add_result = subprocess.run(
-                ["git", "add", "-f", "--", *rel_paths],
-                cwd=root,
-                capture_output=True,
-                text=True,
-                check=False,
-            )
-            if add_result.returncode != 0:
-                raise BootstrapError("Failed to force-add toolkit assets")
-        else:
-            raise BootstrapError("Failed to add toolkit assets to git index")
+        raise BootstrapError("Failed to add toolkit assets to git index")
 
     diff_check = subprocess.run(
         ["git", "diff", "--cached", "--quiet"],
@@ -196,6 +184,29 @@ def maybe_commit_assets(root: Path, written: list[Path]) -> None:
     )
     if commit_result.returncode != 0:
         raise BootstrapError("Failed to create git commit for toolkit assets")
+
+
+def detect_ignored_paths(root: Path, rel_paths: list[str]) -> list[str]:
+    if not rel_paths:
+        return []
+
+    proc = subprocess.run(
+        ["git", "check-ignore", "--stdin"],
+        cwd=root,
+        capture_output=True,
+        text=True,
+        input="\n".join(rel_paths) + "\n",
+        check=False,
+    )
+
+    if proc.returncode == 0:
+        return [line.strip() for line in proc.stdout.splitlines() if line.strip()]
+    if proc.returncode == 1:
+        return []
+
+    raise BootstrapError(
+        "Failed to inspect ignored toolkit assets: " + (proc.stderr.strip() or "unknown error")
+    )
 
 
 def ensure_initial_commit(root: Path) -> None:
