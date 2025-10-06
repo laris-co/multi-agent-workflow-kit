@@ -55,9 +55,8 @@ TARGET_DIRS=(
     ".agents"
 )
 TARGET_FILES=(
-    ".tmux.conf"
-    "start.sh"
-    "remove.sh"
+    ".agents/config/tmux.conf"
+    ".envrc"
 )
 CLAUDE_FILES=(
     ".claude/commands/catlab-agents-create.md"

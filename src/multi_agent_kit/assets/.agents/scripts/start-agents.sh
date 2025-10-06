@@ -49,7 +49,13 @@ if [ ! -d "$AGENTS_DIR" ]; then
     exit 1
 fi
 
-if [ -f "$REPO_ROOT/.tmux.conf" ]; then
+DEFAULT_TMUX_CONF="$AGENT_ROOT/config/tmux.conf"
+
+if [ -n "${TMUX_CONF:-}" ] && [ -f "$TMUX_CONF" ]; then
+    tmux source-file "$TMUX_CONF" 2>/dev/null || true
+elif [ -f "$DEFAULT_TMUX_CONF" ]; then
+    tmux source-file "$DEFAULT_TMUX_CONF" 2>/dev/null || true
+elif [ -f "$REPO_ROOT/.tmux.conf" ]; then
     tmux source-file "$REPO_ROOT/.tmux.conf" 2>/dev/null || true
 fi
 
@@ -236,7 +242,14 @@ else
 fi
 
 reload_tmux_conf_across_panes() {
-    local conf_path="${TMUX_CONF:-$REPO_ROOT/.tmux.conf}"
+    local conf_path
+    if [ -n "${TMUX_CONF:-}" ] && [ -f "$TMUX_CONF" ]; then
+        conf_path="$TMUX_CONF"
+    elif [ -f "$DEFAULT_TMUX_CONF" ]; then
+        conf_path="$DEFAULT_TMUX_CONF"
+    else
+        conf_path="$REPO_ROOT/.tmux.conf"
+    fi
     if [ ! -f "$conf_path" ]; then
         return
     fi

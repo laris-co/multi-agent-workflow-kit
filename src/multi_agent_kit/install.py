@@ -73,7 +73,7 @@ class AssetInstaller:
 
     def _ensure_root_gitignore(self, written: list[Path]) -> None:
         gitignore_path = self.target / ".gitignore"
-        ignore_line = ".agents/"
+        ignore_line = "/.agents/"
         marker = "# Added by Multi-Agent Workflow Kit"
 
         try:

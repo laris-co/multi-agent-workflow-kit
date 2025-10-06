@@ -15,6 +15,3 @@ __pycache__/
 
 # Local IDE/tool overrides
 settings.local.json
-
-# Added by Multi-Agent Workflow Kit
-.agents/

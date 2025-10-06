@@ -8,6 +8,7 @@ SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 AGENT_ROOT=$(cd "$SCRIPT_DIR/.." && pwd)
 REPO_ROOT=$(cd "$AGENT_ROOT/.." && pwd)
 AGENTS_YAML="$AGENT_ROOT/agents.yaml"
+TMUX_CONF_PATH="${TMUX_CONF:-$AGENT_ROOT/config/tmux.conf}"
 TPM_DIR="$HOME/.tmux/plugins/tpm"
 
 # ========================================
@@ -15,7 +16,7 @@ TPM_DIR="$HOME/.tmux/plugins/tpm"
 # ========================================
 echo "🔧 Checking direnv..."
 if ! command -v direnv &> /dev/null; then
-    echo "⚠️  direnv not found. Install it for automatic .tmux.conf loading:"
+echo "⚠️  direnv not found. Install it for automatic tmux config loading:"
     echo "   brew install direnv  # or your package manager"
     echo ""
 else
@@ -38,14 +39,18 @@ else
     echo "✅ TPM already installed"
 fi
 
-# Install plugins (reads from local .tmux.conf via TMUX_CONF env var)
+# Install plugins (reads from local tmux config via TMUX_CONF env var)
 echo "📦 Installing tmux plugins (including tmux-power)..."
-# Start tmux server and set TMUX_PLUGIN_MANAGER_PATH globally
-tmux start-server 2>/dev/null || true
-tmux set-environment -g TMUX_PLUGIN_MANAGER_PATH "$HOME/.tmux/plugins/" 2>/dev/null || true
-tmux source-file "$REPO_ROOT/.tmux.conf" 2>/dev/null || true
-TMUX_CONF="$REPO_ROOT/.tmux.conf" "$TPM_DIR/bin/install_plugins" 2>/dev/null || echo "⚠️  Plugin installation skipped (will auto-install in tmux session)"
-echo "✅ Tmux plugins configured"
+if [ -f "$TMUX_CONF_PATH" ]; then
+    tmux start-server 2>/dev/null || true
+    tmux set-environment -g TMUX_PLUGIN_MANAGER_PATH "$HOME/.tmux/plugins/" 2>/dev/null || true
+    tmux source-file "$TMUX_CONF_PATH" 2>/dev/null || true
+    TMUX_CONF="$TMUX_CONF_PATH" "$TPM_DIR/bin/install_plugins" 2>/dev/null || echo "⚠️  Plugin installation skipped (will auto-install in tmux session)"
+    echo "✅ Tmux plugins configured"
+else
+    echo "⚠️  Tmux config not found at $TMUX_CONF_PATH"
+    echo "    Create one in .agents/config/tmux.conf or set TMUX_CONF to a custom path before retrying."
+fi
 echo ""
 
 # ========================================
@@ -86,4 +91,4 @@ echo ""
 echo "📋 Current worktrees:"
 "$SCRIPT_DIR/agents.sh" list
 echo ""
-echo "💡 Tip: Restart tmux or run 'tmux source-file ~/.tmux.conf' to load plugins"
+echo "💡 Tip: Restart tmux or run 'tmux source-file .agents/config/tmux.conf' to load plugins"

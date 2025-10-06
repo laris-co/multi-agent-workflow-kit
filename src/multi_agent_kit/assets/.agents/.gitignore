@@ -6,3 +6,5 @@
 !*.md
 !profiles/
 !scripts/
+!config/
+!config/tmux.conf

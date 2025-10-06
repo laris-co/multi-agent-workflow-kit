@@ -29,7 +29,7 @@ Main repository (.git)
 | Layout profiles | `.agents/profiles/*.sh` | Parameterized pane geometries |
 | Broadcast helper | `.agents/scripts/send-commands.sh` | Sends commands to each pane |
 | Cleanup utility | `.agents/scripts/kill-all.sh` | Kills tmux sessions with shared prefix |
-| Shared config | `.tmux.conf` | Mouse support, theming, plugin config |
+| Shared config | `.agents/config/tmux.conf` | Mouse support, theming, plugin config |
 
 ## Workflow
 1. **Registry first** – define the agents, branches, and paths.
@@ -59,6 +59,6 @@ Main repository (.git)
 - For larger teams, consider a dashboard that reads `tmux list-clients` / `git status` across panes to surface stalled agents.
 
 ## Next Improvements
-- Script to bootstrap new repositories (copy toolkit assets + `.tmux.conf`).
+- Script to bootstrap new repositories (copy toolkit assets + `.agents/config/tmux.conf`).
 - Optional CI workflow verifying agent branches fast-forward to `main` before merging.
 - Health monitor service that alerts when an agent pane exits unexpectedly.

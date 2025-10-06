@@ -26,7 +26,7 @@ $EDITOR .agents/agents.yaml
 # Provision worktrees + install tmux plugins (manual alternative)
 # Requires at least one commit in the repository. If none exist, the
 # setup script exits early and prints these commands for you to run:
-# git add .agents/ agents/ .tmux.conf && git commit -m "Initial toolkit commit"
+# git add .agents/ agents/ && git commit -m "Initial toolkit commit"
 .agents/scripts/setup.sh
 
 # Launch the session manually (profile0 = top with split bottom row, profile1 = left column + stacked right)
@@ -57,7 +57,7 @@ uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --prefix hackathon --detach
 ```
 
-Use `--setup-only` to prepare worktrees without starting tmux. The first run copies toolkit assets and `.tmux.conf` into the current repository; pass `--force-assets` to overwrite those files if you need to refresh them.
+Use `--setup-only` to prepare worktrees without starting tmux. The first run copies toolkit assets and `.agents/config/tmux.conf` into the current repository; pass `--force-assets` to overwrite those files if you need to refresh them.
 
 To uninstall the toolkit assets from a repo, run `maw-uninstall --dry-run` (or `.agents/scripts/uninstall.sh --dry-run`) to preview the changes and then `maw-uninstall` when you're ready. The script only deletes the bundled `.claude` command files, leaving any other Claude content untouched. Pass `--remove-agents` if you also want to delete the `agents/` worktree folder (after you've cleaned it up).
 
@@ -105,7 +105,7 @@ agents/                    # Agent worktrees (fully gitignored)
 │   ├── catlab-sync.md           # Sync helper for main/agents worktrees (/catlab-sync)
 │   └── catlab-sync.sh           # Shell helper implementing sync rules
 
-.tmux.conf                 # curated tmux config with TPM + power theme
+.agents/config/tmux.conf   # curated tmux config with TPM + power theme
 docs/                      # deep dives and checklists
 ```
 
