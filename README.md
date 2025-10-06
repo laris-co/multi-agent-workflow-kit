@@ -29,8 +29,8 @@ $EDITOR .agents/agents.yaml
 # git add .agents/ agents/ .tmux.conf && git commit -m "Initial toolkit commit"
 .agents/setup.sh
 
-# Launch the session manually (profile0 = top/bottom split, profile1 = balanced grid)
-.agents/start-agents.sh profile1
+# Launch the session manually (profile0 = top with split bottom row, profile1 = left column + stacked right)
+.agents/start-agents.sh profile0
 
 ### uvx Entry Point Options
 The `multi-agent-kit init` command accepts the same layout options as the shell scripts:
@@ -70,8 +70,8 @@ To uninstall the toolkit assets from a repo, run `./uninstall.sh --dry-run` to p
 ├── send-commands.sh       # broadcast commands to panes
 ├── kill-all.sh            # kill sessions by prefix
 ├── profiles/              # tmux layout recipes
-│   ├── profile0.sh        # simple 50/50 top-bottom split
-│   ├── profile1.sh        # default 2×2 grid
+│   ├── profile0.sh        # top pane + bottom left/right split (default)
+│   ├── profile1.sh        # 2×2 grid with left column dominant
 │   ├── profile2.sh        # full-left layout
 │   ├── profile3.sh        # top-full layout
 │   ├── profile4.sh        # three-pane layout

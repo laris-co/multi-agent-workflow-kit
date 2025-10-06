@@ -24,8 +24,8 @@ cp .agents/agents.yaml .agents/agents.local.yaml   # optional snapshot
 # Create worktrees and install tmux plugins
 .agents/setup.sh
 
-# Launch tmux session (default layout = profile1)
-.agents/start-agents.sh profile1
+# Launch tmux session (default layout = profile0)
+.agents/start-agents.sh profile0
 ```
 
 ## Common Commands
@@ -33,7 +33,7 @@ cp .agents/agents.yaml .agents/agents.local.yaml   # optional snapshot
 .agents/agents.sh create 1-agent         # create specific agent worktree
 .agents/agents.sh list                   # list registered agents + branches
 .agents/start-agents.sh profile2         # launch tmux with alternate layout
-.agents/start-agents.sh profile1 --prefix work  # run a second session side-by-side
+.agents/start-agents.sh profile0 --prefix work  # run a second session side-by-side
 .agents/send-commands.sh --prefix work   # broadcast commands to panes in that session
 .agents/kill-all.sh --prefix work        # cleanly stop all matching sessions
 ```
@@ -53,7 +53,8 @@ agents:
 
 ## Layout Profiles
 Profiles live under `.agents/profiles/` and can be customized or duplicated. Key layouts include:
-- `profile1` – balanced 2×2 grid (default)
+- `profile0` – top pane with split bottom row (default)
+- `profile1` – balanced 2×2 grid
 - `profile2` – full-height left pane with three right-side stacks
 - `profile3` – top pane covering full width, two panes below
 - `profile4` – three-pane layout (left split into two)
@@ -83,6 +84,7 @@ To add new layouts, copy an existing profile and adjust the environment variable
 ├── send-commands.sh       # broadcast commands to panes
 ├── kill-all.sh            # stop sessions matching prefix
 ├── profiles/              # tmux layout definitions
+│   ├── profile0.sh
 │   ├── profile1.sh
 │   ├── profile2.sh
 │   ├── profile3.sh
