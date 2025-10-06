@@ -2,7 +2,7 @@
 description: Sync the current worktree with main-aware rules
 argument-hint: (no args)
 allowed-tools:
-  - Bash(.claude/commands/claude-sync.sh:*)
+  - Bash(.claude/commands/catlab-sync.sh:*)
 ---
 
 Goal: Keep local worktrees aligned with `main` without relying on remote fetches inside agent directories.
@@ -19,12 +19,12 @@ Behavior:
 Shell template:
 
 ```bash
-.claude/commands/claude-sync.sh "$@"
+.claude/commands/catlab-sync.sh "$@"
 ```
 
 Usage examples:
-- `/claude-sync` (from the main worktree)
-- `/claude-sync` (from an agent worktree such as `agents/1-agent`)
+- `/catlab-sync` (from the main worktree)
+- `/catlab-sync` (from an agent worktree such as `agents/1-agent`)
 
 Notes:
 - Requires a clean working tree. Commit, stash, or discard changes before rerunning.
