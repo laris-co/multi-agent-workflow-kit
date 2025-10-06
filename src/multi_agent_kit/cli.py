@@ -126,17 +126,31 @@ def prompt_yes_no(message: str) -> bool:
 
 
 def maybe_commit_assets(root: Path, written: list[Path]) -> None:
-    if not written:
+    rel_paths = sorted({str(path.relative_to(root)) for path in written}) if written else []
+    has_asset_changes = bool(rel_paths)
+
+    if has_asset_changes:
+        wants_commit = prompt_yes_no(
+            "Create a git commit with the newly installed toolkit assets? [y/N] "
+        )
+        commit_message = "Add multi-agent toolkit assets"
+    else:
+        wants_commit = prompt_yes_no(
+            "Toolkit assets already present. Create a placeholder commit? [y/N] "
+        )
+        commit_message = "Record multi-agent toolkit init"
+
+    if not wants_commit:
         return
 
-    rel_paths = sorted({str(path.relative_to(root)) for path in written})
-    if not rel_paths:
-        return
-
-    if not prompt_yes_no(
-        "Create a git commit with the newly installed toolkit assets? [y/N] "
-    ):
-        return
+    if not has_asset_changes:
+        placeholder = root / ".multi-agent-kit-init"
+        if not placeholder.exists():
+            placeholder.touch()
+            print(
+                "ℹ️  Added placeholder file '.multi-agent-kit-init' to record the init step."
+            )
+        rel_paths = [str(placeholder.relative_to(root))]
 
     add_result = subprocess.run(
         ["git", "add", "--", *rel_paths],
@@ -156,7 +170,7 @@ def maybe_commit_assets(root: Path, written: list[Path]) -> None:
         return
 
     commit_result = subprocess.run(
-        ["git", "commit", "-m", "Add multi-agent toolkit assets"],
+        ["git", "commit", "-m", commit_message],
         cwd=root,
         check=False,
     )
