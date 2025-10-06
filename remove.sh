@@ -130,6 +130,96 @@ get_worktree_path() {
     yq -r ".agents.\"$agent\".worktree_path // \"\"" "$AGENTS_YAML"
 }
 
+get_branch_name() {
+    local agent=$1
+    yq -r ".agents.\"$agent\".branch // \"\"" "$AGENTS_YAML"
+}
+
+branch_in_use() {
+    local branch=$1
+    git -C "$REPO_ROOT" worktree list --porcelain \
+        | awk '/^branch /{print $2}' \
+        | sed 's#^refs/heads/##' \
+        | grep -Fx "$branch" >/dev/null 2>&1
+}
+
+declare -a PROCESSED_BRANCHES=()
+
+branch_already_processed() {
+    local target=$1
+    if [ ${#PROCESSED_BRANCHES[@]} -eq 0 ]; then
+        return 1
+    fi
+    local existing
+    for existing in "${PROCESSED_BRANCHES[@]}"; do
+        if [ "$existing" = "$target" ]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+mark_branch_processed() {
+    PROCESSED_BRANCHES+=("$1")
+}
+
+describe_branch_action() {
+    local agent=$1
+    local branch=$2
+    if [ -z "$branch" ] || [ "$branch" = "main" ]; then
+        return
+    fi
+    if branch_already_processed "$branch"; then
+        return
+    fi
+    mark_branch_processed "$branch"
+    if ! git -C "$REPO_ROOT" rev-parse --verify --quiet "$branch" >/dev/null; then
+        printf '%s ... branch %s not found (nothing to delete)\n' "$agent" "$branch"
+        return
+    fi
+    if branch_in_use "$branch"; then
+        printf '%s ... branch %s still attached to another worktree (would skip)\n' "$agent" "$branch"
+        return
+    fi
+    if [ "$FORCE" = true ]; then
+        printf '%s ... would delete branch %s (--force)\n' "$agent" "$branch"
+    else
+        printf '%s ... would delete branch %s (if fully merged)\n' "$agent" "$branch"
+    fi
+}
+
+delete_branch_if_possible() {
+    local agent=$1
+    local branch=$2
+    if [ -z "$branch" ] || [ "$branch" = "main" ]; then
+        return
+    fi
+    if branch_already_processed "$branch"; then
+        return
+    fi
+    mark_branch_processed "$branch"
+    if ! git -C "$REPO_ROOT" rev-parse --verify --quiet "$branch" >/dev/null; then
+        return
+    fi
+    if branch_in_use "$branch"; then
+        printf '%s ... branch %s still attached to another worktree (skipped)\n' "$agent" "$branch"
+        return
+    fi
+    if [ "$FORCE" = true ]; then
+        if git -C "$REPO_ROOT" branch -D "$branch" >/dev/null 2>&1; then
+            printf '%s ... deleted branch %s (--force)\n' "$agent" "$branch"
+        else
+            printf '%s ... failed to delete branch %s (--force)\n' "$agent" "$branch"
+        fi
+    else
+        if git -C "$REPO_ROOT" branch -d "$branch" >/dev/null 2>&1; then
+            printf '%s ... deleted branch %s\n' "$agent" "$branch"
+        else
+            printf '%s ... branch %s not fully merged (use --force to delete)\n' "$agent" "$branch"
+        fi
+    fi
+}
+
 has_uncommitted_changes() {
     local worktree=$1
     if [ ! -d "$worktree" ]; then
@@ -175,6 +265,7 @@ skipped_any=false
 for agent in "${SELECTED_AGENTS[@]}"; do
     path=$(get_worktree_path "$agent")
     abs="$REPO_ROOT/$path"
+    branch=$(get_branch_name "$agent")
 
     was_dirty=false
     if is_dirty_agent "$agent"; then
@@ -206,12 +297,14 @@ for agent in "${SELECTED_AGENTS[@]}"; do
         else
             printf '%s ... clean (no worktree found)\n' "$agent"
         fi
+        describe_branch_action "$agent" "$branch"
         continue
     fi
 
     if [ "$was_dirty" = true ] && [ "$FORCE" = false ]; then
         printf '%s ... dirty (skipped; use --force)\n' "$agent"
         skipped_any=true
+        delete_branch_if_possible "$agent" "$branch"
         continue
     fi
 
@@ -247,6 +340,8 @@ for agent in "${SELECTED_AGENTS[@]}"; do
     if [ -d "$abs" ]; then
         printf 'Warning: directory %s still exists after removal attempt\n' "$path" >&2
     fi
+
+    delete_branch_if_possible "$agent" "$branch"
 done
 
 if [ "$DRY_RUN" = true ]; then

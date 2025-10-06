@@ -62,6 +62,8 @@ CLAUDE_FILES=(
     ".claude/commands/catlab-agents-create.md"
     ".claude/commands/catlab-codex.md"
     ".claude/commands/catlab-codex.sh"
+    ".claude/commands/catlab-sync.md"
+    ".claude/commands/catlab-sync.sh"
 )
 
 SELF_PATH="uninstall.sh"
@@ -105,6 +107,22 @@ if [ "$FORCE" = false ] && [ "$DRY_RUN" = false ]; then
             exit 0
             ;;
     esac
+fi
+
+REMOVE_SCRIPT="$REPO_ROOT/remove.sh"
+if [ -f "$REMOVE_SCRIPT" ] && [ -d "$REPO_ROOT/.agents" ]; then
+    if [ "$DRY_RUN" = true ]; then
+        log "Dry run: would execute ./remove.sh --force to clean up agent worktrees and branches."
+    else
+        if command -v yq >/dev/null 2>&1; then
+            log "Running ./remove.sh --force to remove agent worktrees and branches..."
+            if ! "$REMOVE_SCRIPT" --force; then
+                warn "./remove.sh --force exited with an error; check agent branches manually."
+            fi
+        else
+            warn "Skipping agent clean-up because 'yq' is not available; remove agent branches manually if needed."
+        fi
+    fi
 fi
 
 remove_path() {
