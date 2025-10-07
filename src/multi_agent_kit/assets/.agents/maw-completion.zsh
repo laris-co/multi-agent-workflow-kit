@@ -2,6 +2,9 @@
 # Can be sourced directly or loaded via fpath
 
 _maw() {
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
   local -a subcommands
   subcommands=(
     'install:Run setup.sh to provision or refresh agent worktrees'
@@ -16,19 +19,16 @@ _maw() {
     'help:Show help message'
   )
 
-  local context state line
-  typeset -A opt_args
-
   _arguments -C \
     '1: :->subcommand' \
-    '*:: :->args'
+    '*::arg:->args' && return 0
 
-  case $state in
+  case "$state" in
     subcommand)
-      _describe 'maw subcommand' subcommands
+      _describe -t subcommands 'maw subcommand' subcommands
       ;;
     args)
-      case $words[1] in
+      case "${words[1]}" in
         warp)
           local -a targets
           targets=('root:Repository root directory')
@@ -39,10 +39,10 @@ _maw() {
               targets+=("$agent:Agent worktree")
             done
           fi
-          _describe 'warp target' targets
+          _describe -t targets 'warp target' targets
           ;;
         start)
-          local -a profiles flags
+          local -a profiles
           profiles=(
             'profile0:Top pane + bottom left/right split (3 agents)'
             'profile1:Left column dominant'
@@ -51,22 +51,13 @@ _maw() {
             'profile4:Three-pane layout'
             'profile5:Six-pane dashboard'
           )
-          flags=(
-            '--prefix:Session suffix'
-            '--detach:Run in detached mode'
-            '-d:Run in detached mode'
-          )
-          _arguments \
-            '1: :_describe "profile" profiles' \
-            '(--prefix)--prefix[Session suffix]:suffix:' \
-            '(--detach -d)'{--detach,-d}'[Run in detached mode]'
+          _describe -t profiles 'profile' profiles
           ;;
         remove|uninstall)
           _arguments \
             '(-n --dry-run)'{-n,--dry-run}'[Show planned actions without executing]' \
             '(-f --force)'{-f,--force}'[Force operation]' \
-            '(-h --help)'{-h,--help}'[Show help message]' \
-            '*:agent:'
+            '(-h --help)'{-h,--help}'[Show help message]'
           ;;
         agents)
           local -a agent_cmds
@@ -75,11 +66,11 @@ _maw() {
             'list:List all agent worktrees'
             'remove:Remove an agent worktree'
           )
-          _describe 'agents subcommand' agent_cmds
+          _describe -t commands 'agents subcommand' agent_cmds
           ;;
       esac
       ;;
   esac
-}
 
-_maw "$@"
+  return 0
+}
