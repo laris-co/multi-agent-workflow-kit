@@ -73,6 +73,27 @@ if ! git -C "$REPO_ROOT" rev-parse --verify HEAD >/dev/null 2>&1; then
     exit 1
 fi
 
+direnv_broadcast() {
+    if [ "${SKIP_DIRENV_ALLOW:-}" = "1" ]; then
+        return
+    fi
+    if ! command -v direnv >/dev/null 2>&1; then
+        return
+    fi
+
+    local panes
+    panes=$(tmux list-panes -s -t "$SESSION_NAME" -F "#{pane_id}" 2>/dev/null || true)
+    if [ -z "$panes" ]; then
+        return
+    fi
+
+    echo "🔐 Running 'direnv allow' in each tmux pane..."
+    while IFS= read -r pane_id; do
+        [ -z "$pane_id" ] && continue
+        tmux send-keys -t "$pane_id" "direnv allow >/dev/null 2>&1 || true" C-m
+    done <<<"$panes"
+}
+
 BASE_PREFIX=${SESSION_PREFIX:-ai}
 DIR_NAME=$(basename "$REPO_ROOT")
 SESSION_EXISTS=false
@@ -269,6 +290,7 @@ reload_tmux_conf_across_panes() {
 }
 
 reload_tmux_conf_across_panes
+direnv_broadcast
 
 echo ""
 echo "✅ Started $TOTAL agents in tmux session: $SESSION_NAME"
