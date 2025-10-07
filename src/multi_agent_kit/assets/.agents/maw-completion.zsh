@@ -30,20 +30,26 @@ _maw() {
     args)
       case "${words[1]}" in
         warp)
-          local -a targets agent_names
-          targets=('root:Repository root directory')
           local agents_dir="${MAW_REPO_ROOT:-$PWD}/agents"
+          local -a agent_dirs
+
+          # Add root option
+          _wanted targets expl 'warp target' compadd -d '(Repository root directory)' root
+
+          # Add agent directories if they exist
           if [[ -d "$agents_dir" ]]; then
-            # Get just the directory names, not full paths
-            agent_names=(${(f)"$(cd "$agents_dir" 2>/dev/null && ls -1d */ 2>/dev/null | sed 's#/##g')"})
-            local agent
-            for agent in $agent_names; do
-              [[ "$agent" == .* ]] && continue
-              [[ -z "$agent" ]] && continue
-              targets+=("$agent:Agent worktree")
+            agent_dirs=()
+            local dir
+            for dir in "$agents_dir"/*(N/); do
+              local basename="${dir:t}"
+              [[ "$basename" == .* ]] && continue
+              agent_dirs+=("$basename")
             done
+
+            if [[ ${#agent_dirs[@]} -gt 0 ]]; then
+              _wanted agents expl 'agent worktree' compadd -a agent_dirs
+            fi
           fi
-          _describe -t targets 'warp target' targets
           ;;
         start)
           local -a profiles
