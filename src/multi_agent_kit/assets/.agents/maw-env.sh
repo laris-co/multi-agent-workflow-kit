@@ -171,10 +171,10 @@ alias maw-uninstall='maw uninstall'
 
 # Load shell completion if available
 if [[ -n "${ZSH_VERSION:-}" ]]; then
-  # Zsh completion - add to fpath and enable
+  # Zsh completion - add to fpath and load completion
   if [[ -d "$toolkit_dir" ]] && [[ -f "$toolkit_dir/maw-completion.zsh" ]]; then
     fpath=("$toolkit_dir" $fpath)
-    autoload -Uz compinit
+    autoload -Uz compinit _maw
     compinit -C
   fi
 elif [[ -n "${BASH_VERSION:-}" ]]; then
