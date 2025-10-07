@@ -30,14 +30,16 @@ _maw() {
     args)
       case "${words[1]}" in
         warp)
-          local -a targets
+          local -a targets agent_names
           targets=('root:Repository root directory')
           local agents_dir="${MAW_REPO_ROOT:-$PWD}/agents"
           if [[ -d "$agents_dir" ]]; then
+            # Get just the directory names, not full paths
+            agent_names=(${(f)"$(cd "$agents_dir" 2>/dev/null && ls -1d */ 2>/dev/null | sed 's#/##g')"})
             local agent
-            for agent in "$agents_dir"/*(N:t); do
+            for agent in $agent_names; do
               [[ "$agent" == .* ]] && continue
-              [[ "$agent" == ".gitignore" ]] && continue
+              [[ -z "$agent" ]] && continue
               targets+=("$agent:Agent worktree")
             done
           fi
