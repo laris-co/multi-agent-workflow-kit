@@ -4,3 +4,6 @@
 !README.md
 !prompts/
 !prompts/**
+
+# Ignore generated MAW prompt files
+prompts/maw-*.md
