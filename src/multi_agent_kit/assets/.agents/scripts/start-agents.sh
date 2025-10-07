@@ -12,7 +12,7 @@ AGENTS_DIR="$REPO_ROOT/agents"
 mkdir -p "$AGENTS_DIR"
 
 CUSTOM_PREFIX=""
-PROFILE="profile0"
+PROFILE="profile2"
 DETACHED=false
 
 while [[ $# -gt 0 ]]; do
