@@ -1,13 +1,26 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Delete local chore/* branches that are fully merged into main.
-# Pass --force to remove unmerged branches after a confirmation prompt.
+# Delete local <prefix>/* branches that are fully merged into main.
+# Usage: ./delete-chore-branches.sh [--force] [prefix ...]
+# Defaults to the "chore" prefix when none are provided.
 
 force_delete=false
+declare -a prefixes=()
 
-if [[ ${1:-} == "--force" ]]; then
-  force_delete=true
+for arg in "$@"; do
+  case "$arg" in
+    --force)
+      force_delete=true
+      ;;
+    *)
+      prefixes+=("$arg")
+      ;;
+  esac
+done
+
+if ((${#prefixes[@]} == 0)); then
+  prefixes=("chore")
 fi
 
 current_branch=$(git rev-parse --abbrev-ref HEAD)
@@ -23,23 +36,30 @@ fi
 
 merged=()
 skipped=()
+declare -A seen
 
-while IFS= read -r branch; do
-  branch=${branch##* }
-  branch=${branch#* }
-  if git merge-base --is-ancestor "$branch" main; then
-    git branch -d "$branch"
-    merged+=("$branch")
-  else
-    skipped+=("$branch")
-  fi
-done < <(git branch --list 'chore/*')
+for prefix in "${prefixes[@]}"; do
+  pattern=$prefix
+  [[ $pattern == */* ]] || pattern+="/*"
+  while IFS= read -r line; do
+    branch=${line##* }
+    branch=${branch#* }
+    [[ -n ${seen[$branch]:-} ]] && continue
+    seen[$branch]=1
+    if git merge-base --is-ancestor "$branch" main; then
+      git branch -d "$branch"
+      merged+=("$branch")
+    else
+      skipped+=("$branch")
+    fi
+  done < <(git branch --list "$pattern")
+done
 
 if ((${#merged[@]})); then
-  printf '✅ Deleted merged chore branches:\n'
+  printf '✅ Deleted merged branches:\n'
   printf '  - %s\n' "${merged[@]}"
 else
-  echo "ℹ️  No chore branches were deleted."
+  echo "ℹ️  No branches were deleted."
 fi
 
 if ((${#skipped[@]})); then
