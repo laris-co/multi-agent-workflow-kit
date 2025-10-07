@@ -97,14 +97,15 @@ agents/                    # Agent worktrees (fully gitignored)
 ├── 2-agent/               # Worktree for agent 2
 └── 3-agent/               # Worktree for agent 3
 
-.envrc                     # direnv hook adding script aliases and PATH entries (run `direnv allow` here and `direnv allow agents/*` inside worktrees)
-.claude/                   # Claude configuration (optional)
+.envrc                     # direnv hook adding script aliases and PATH entries; run `direnv allow` here and inside each agents/* worktree
+.claude/                   # Claude workspace shared by tracked commands and prompts
 ├── commands/              # Custom slash commands for Claude
 │   ├── maw-agents-create.md     # Agent creation command (/maw-agents-create)
 │   ├── maw-codex.md            # Codex integration command (/maw-codex)
 │   ├── maw-codex.sh            # Shell helper backing the codex command
 │   ├── maw-sync.md             # Sync helper for main/agents worktrees (/maw-sync)
 │   └── maw-sync.sh             # Shell helper implementing sync rules
+└── prompts/               # Shared prompt templates (tracked)
 
 .agents/config/tmux.conf   # curated tmux config with TPM + power theme
 /.codex/                   # Codex CLI workspace; .envrc points CODEX_HOME here automatically
@@ -133,6 +134,7 @@ Session names follow `ai-<repo-name>` by default. Provide `--prefix sprint` to s
 ## Documentation
 - `docs/architecture.md` — architecture, strengths, risks, and integration ideas.
 - `docs/operations-checklist.md` — launch/teardown guardrails for reliable runs.
+- `docs/testing.md` — smoke-test routine before shipping updates or releases.
 
 ## Extending the Kit
 - Pair the toolkit with your governance/constitution doc so agents share common rules.

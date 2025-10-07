@@ -75,7 +75,15 @@ class AssetInstaller:
     def _ensure_root_gitignore(self, written: list[Path]) -> None:
         gitignore_path = self.target / ".gitignore"
         marker = "# Added by Multi-Agent Workflow Kit"
-        ignore_lines = ["/.agents/", ".claude/settings.local.json"]
+        ignore_lines = [
+            "/.agents/",
+            ".claude/settings.local.json",
+            "/.claude/*",
+            "!.claude/commands/",
+            "!.claude/commands/**",
+            "!.claude/prompts/",
+            "!.claude/prompts/**",
+        ]
 
         try:
             existing = gitignore_path.read_text()
