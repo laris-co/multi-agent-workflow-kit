@@ -130,7 +130,7 @@ docs/                      # deep dives and checklists
 
 Session names follow `ai-<repo-name>` by default. Provide `--prefix sprint` to spawn `ai-<repo-name>-sprint`. You can also export `SESSION_PREFIX` to change the base prefix (e.g., `export SESSION_PREFIX=research`).
 
-> Tip: Allow direnv (`direnv allow`) to expose a `maw` helper so you can run `maw install`, `maw start`, `maw remove`, and `maw uninstall` without remembering the underlying scripts. The legacy `maw-*` aliases remain available for muscle memory.
+> Tip: Allow direnv (`direnv allow`) to expose a `maw` helper so you can run `maw install`, `maw start`, `maw attach`, `maw remove`, and `maw uninstall` without remembering the underlying scripts. The legacy `maw-*` aliases remain available for muscle memory.
 
 > _Brand new repo?_ The `init` command now offers to create an empty `Initial commit` if Git history is missing, or run `git commit --allow-empty -m "Initial commit"` yourself before provisioning agents.
 

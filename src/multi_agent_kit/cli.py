@@ -268,10 +268,26 @@ def handle_init(args: argparse.Namespace) -> None:
     start_args: list[str] = [args.profile]
     if args.prefix:
         start_args.extend(["--prefix", args.prefix])
-    if args.detach:
-        start_args.append("--detach")
+    start_args.append("--detach")
 
     run_script(start_script, *start_args)
+
+    if args.detach:
+        return
+
+    attach_script = start_script.parent / "attach.sh"
+    if not attach_script.exists():
+        print("⚠️  attach.sh not found; attach manually with tmux.", file=sys.stderr)
+        return
+
+    if not prompt_yes_no("Attach to session now? [y/N] "):
+        return
+
+    attach_args: list[str] = []
+    if args.prefix:
+        attach_args.extend(["--prefix", args.prefix])
+
+    run_script(attach_script, *attach_args)
 
 
 def main(argv: list[str] | None = None) -> None:
