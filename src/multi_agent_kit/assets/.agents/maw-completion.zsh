@@ -34,8 +34,10 @@ _maw() {
           targets=('root:Repository root directory')
           local agents_dir="${MAW_REPO_ROOT:-$PWD}/agents"
           if [[ -d "$agents_dir" ]]; then
-            for agent in "$agents_dir"/*(/N:t); do
+            local agent
+            for agent in "$agents_dir"/*(N:t); do
               [[ "$agent" == .* ]] && continue
+              [[ "$agent" == ".gitignore" ]] && continue
               targets+=("$agent:Agent worktree")
             done
           fi
