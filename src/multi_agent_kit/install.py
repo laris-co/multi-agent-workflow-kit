@@ -76,12 +76,12 @@ class AssetInstaller:
         gitignore_path = self.target / ".gitignore"
         marker = "# Added by Multi-Agent Workflow Kit"
         ignore_lines = [
-            "/.agents/",
+            "/.agents/",  # With / = only at repo root
             ".claude/settings.local.json",
-            "/.claude/*",
+            ".claude/*",  # No / = anywhere in repo (toolkit assets & user installations)
             "!.claude/commands/",
             "!.claude/commands/**",
-            "/.codex/*",
+            ".codex/*",  # No / = anywhere in repo (toolkit assets & user installations)
             "!.codex/prompts/",
             "!.codex/prompts/**",
         ]
