@@ -168,3 +168,21 @@ alias maw-kill='maw kill'
 alias maw-send='maw send'
 alias maw-remove='maw remove'
 alias maw-uninstall='maw uninstall'
+
+# Load shell completion if available
+if [[ -n "${ZSH_VERSION:-}" ]]; then
+  # Zsh completion
+  completion_file="$toolkit_dir/maw-completion.zsh"
+  if [[ -f "$completion_file" ]]; then
+    autoload -Uz compinit
+    compinit -C
+    source "$completion_file"
+  fi
+elif [[ -n "${BASH_VERSION:-}" ]]; then
+  # Bash completion
+  completion_file="$toolkit_dir/maw-completion.bash"
+  if [[ -f "$completion_file" ]]; then
+    # shellcheck disable=SC1090
+    source "$completion_file"
+  fi
+fi
