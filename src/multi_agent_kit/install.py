@@ -76,14 +76,13 @@ class AssetInstaller:
         gitignore_path = self.target / ".gitignore"
         marker = "# Added by Multi-Agent Workflow Kit"
         ignore_lines = [
-            "agents/*",
-            "!agents/.gitignore",
-            ".agents/scripts/__pycache__/",
-            ".claude/settings.local.json",
+            ".agents",
+            "agents",
+            ".claude/*",
+            "!.claude/commands/",
             ".claude/commands/maw-*",
-            ".codex/auth.json",
-            ".codex/history.jsonl",
-            ".codex/log/",
+            ".codex/*",
+            "!.codex/prompts/",
             ".codex/prompts/maw-*.md",
             ".codex/prompts/handoff.md",
             ".codex/prompts/analysis.md",
