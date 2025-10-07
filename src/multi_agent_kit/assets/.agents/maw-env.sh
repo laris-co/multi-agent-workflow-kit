@@ -174,8 +174,11 @@ if [[ -n "${ZSH_VERSION:-}" ]]; then
   # Zsh completion - add to fpath and load completion
   if [[ -d "$toolkit_dir" ]] && [[ -f "$toolkit_dir/maw-completion.zsh" ]]; then
     fpath=("$toolkit_dir" $fpath)
-    autoload -Uz compinit _maw
+    autoload -Uz compinit
     compinit -C
+    # Source the completion file directly to register _maw function
+    source "$toolkit_dir/maw-completion.zsh"
+    compdef _maw maw
   fi
 elif [[ -n "${BASH_VERSION:-}" ]]; then
   # Bash completion

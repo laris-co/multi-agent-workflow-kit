@@ -1,5 +1,5 @@
-#compdef maw
 # Zsh completion for maw command
+# Can be sourced directly or loaded via fpath
 
 _maw() {
   local -a subcommands
