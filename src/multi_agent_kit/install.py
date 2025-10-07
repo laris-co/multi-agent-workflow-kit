@@ -13,6 +13,7 @@ ITEM_MAP = (
     (".agents", ".agents"),    # Toolkit files go to .agents/
     ("agents", "agents"),      # Gitignore-only directory for worktrees
     (".claude", ".claude"),    # Claude commands and configuration
+    (".codex", ".codex"),      # Codex CLI prompts and cache scaffolding
     (".envrc", ".envrc"),  # direnv hook for tmux config
     ("AGENTS.md", "AGENTS.md"),  # Guide for human/AI collaborators
 )

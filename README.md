@@ -107,7 +107,7 @@ agents/                    # Agent worktrees (fully gitignored)
 │   └── maw-sync.sh             # Shell helper implementing sync rules
 
 .agents/config/tmux.conf   # curated tmux config with TPM + power theme
-/.codex/ (optional)        # Codex CLI prompts and cache; .envrc sets CODEX_HOME if present
+/.codex/                   # Codex CLI workspace; .envrc points CODEX_HOME here automatically
 docs/                      # deep dives and checklists
 ```
 
