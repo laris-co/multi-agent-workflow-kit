@@ -36,7 +36,7 @@ fi
 
 merged=()
 skipped=()
-declare -A seen
+seen_branches=""
 
 for prefix in "${prefixes[@]}"; do
   pattern=$prefix
@@ -44,8 +44,12 @@ for prefix in "${prefixes[@]}"; do
   while IFS= read -r line; do
     branch=${line##* }
     branch=${branch#* }
-    [[ -n ${seen[$branch]:-} ]] && continue
-    seen[$branch]=1
+    case " $seen_branches " in
+      *" $branch "*)
+        continue
+        ;;
+    esac
+    seen_branches+="$branch "
     if git merge-base --is-ancestor "$branch" main; then
       git branch -d "$branch"
       merged+=("$branch")
