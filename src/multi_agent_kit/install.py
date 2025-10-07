@@ -13,6 +13,7 @@ ITEM_MAP = (
     (".agents", ".agents"),    # Toolkit files go to .agents/
     ("agents", "agents"),      # Gitignore-only directory for worktrees
     (".claude", ".claude"),    # Claude commands and configuration
+    (".codex", ".codex"),      # Codex CLI prompts and cache scaffolding
     (".envrc", ".envrc"),  # direnv hook for tmux config
     ("AGENTS.md", "AGENTS.md"),  # Guide for human/AI collaborators
 )
@@ -74,7 +75,15 @@ class AssetInstaller:
     def _ensure_root_gitignore(self, written: list[Path]) -> None:
         gitignore_path = self.target / ".gitignore"
         marker = "# Added by Multi-Agent Workflow Kit"
-        ignore_lines = ["/.agents/", ".claude/settings.local.json"]
+        ignore_lines = [
+            "/.agents/",
+            ".claude/settings.local.json",
+            "/.claude/*",
+            "!.claude/commands/",
+            "!.claude/commands/**",
+            "!.claude/prompts/",
+            "!.claude/prompts/**",
+        ]
 
         try:
             existing = gitignore_path.read_text()

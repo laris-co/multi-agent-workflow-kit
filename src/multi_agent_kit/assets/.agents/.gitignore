@@ -5,6 +5,7 @@
 !README.md
 !config/
 !config/tmux.conf
+!maw-env.sh
 !profiles/
 !profiles/*.sh
 !scripts/

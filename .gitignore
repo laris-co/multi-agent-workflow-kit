@@ -1,6 +1,14 @@
 # Agent worktrees live under /agents and /.agents at repo root
 /.agents/
 .claude/settings.local.json
+/.claude/*
+!.claude/commands/
+!.claude/commands/**
+!.claude/prompts/
+!.claude/prompts/**
+/.codex/*
+!.codex/prompts/
+!.codex/prompts/**
 
 
 .tmux/resurrect/
