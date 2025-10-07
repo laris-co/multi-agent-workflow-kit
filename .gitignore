@@ -1,7 +1,6 @@
 # Multi-Agent Workflow Kit generated directories
-# - /.agents/ (with leading /) = only at repo root (agent worktrees)
-# - .claude/* and .codex/* (no leading /) = anywhere in repo (toolkit assets & user installations)
-/.agents/
+.agents
+agents
 .claude/settings.local.json
 .claude/*
 !.claude/commands/
