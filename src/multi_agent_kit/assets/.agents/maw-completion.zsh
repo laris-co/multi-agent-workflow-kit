@@ -1,5 +1,5 @@
-# Zsh completion for maw command
 #compdef maw
+# Zsh completion for maw command
 
 _maw() {
   local -a subcommands
