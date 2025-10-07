@@ -1,5 +1,9 @@
-# Repository Codex Workspace
+# Codex Prompts
 
-This folder holds prompts and other data produced by the Codex CLI while you
-work inside this repo. It is intentionally committed so `.envrc` can point
-`CODEX_HOME` here without extra setup.
+Store shared Codex prompt templates here. The root `.gitignore` keeps the rest
+of the Codex CLI runtime state out of git while retaining this folder so the
+toolkit can rely on `CODEX_HOME` existing.
+
+Bundled starters:
+- `analysis.md` — structure discovery work before anyone starts coding.
+- `handoff.md` — capture progress and next steps when another agent takes over.

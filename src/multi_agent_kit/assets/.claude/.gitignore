@@ -1,7 +1,5 @@
-# Keep prompts and commands tracked; ignore other Claude artifacts
+# Keep command files tracked; ignore other Claude artifacts
 *
 !.gitignore
 !commands/
 !commands/**
-!prompts/
-!prompts/**
