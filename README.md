@@ -15,7 +15,7 @@ gh repo clone laris-co/multi-agent-workflow-kit
 cd multi-agent-workflow-kit
 
 # One-shot bootstrap (installs toolkit assets, setup, and tmux launch)
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --prefix demo
 
 # The init flow prompts you to commit the installed assets before worktrees are created.
@@ -49,11 +49,11 @@ The `multi-agent-kit init` command accepts the same layout options as the shell 
 
 ```bash
 # Skip setup if agents are already provisioned
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --skip-setup profile2
 
 # Launch detached session with a custom prefix
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --prefix hackathon --detach
 ```
 
@@ -86,7 +86,7 @@ AGENTS.md                 # worktree/branch conventions for human + AI collabora
 ├── profiles/              # tmux layout recipes
 │   ├── profile0.sh        # top pane + bottom left/right split (default)
 │   ├── profile1.sh        # 2×2 grid with left column dominant
-│   ├── profile2.sh        # full-left layout
+│   ├── profile2.sh        # top row 2 agents + bottom full-width root
 │   ├── profile3.sh        # top-full layout
 │   ├── profile4.sh        # three-pane layout
 │   └── profile5.sh        # six-pane dashboard

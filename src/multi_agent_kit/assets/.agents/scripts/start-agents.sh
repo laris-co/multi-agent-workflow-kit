@@ -252,20 +252,12 @@ elif [ "$LAYOUT_TYPE" = "six-pane" ]; then
     tmux select-pane -t "$(pane_ref 3)"
     tmux split-window -v -t "$(pane_ref 3)" -c "$REPO_ROOT"
 else
+    echo "Adding pane (repo root)..."
+    tmux split-window -v -t "$(pane_ref 0)" -c "$REPO_ROOT" -p "${BOTTOM_HEIGHT:-30}"
     if [ $TOTAL -ge 2 ]; then
         echo "Adding pane for ${AGENTS_ARRAY[1]}..."
-        tmux split-window -h -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "$RIGHT_WIDTH"
-        tmux resize-pane -t "$(pane_ref 1)" -y "${TOP_RIGHT_HEIGHT}%"
-    fi
-    if [ $TOTAL -ge 3 ]; then
-        echo "Adding pane for ${AGENTS_ARRAY[2]}..."
         tmux select-pane -t "$(pane_ref 0)"
-        tmux split-window -v -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "${BOTTOM_HEIGHT:-30}"
-    fi
-    if [ $TOTAL -ge 4 ]; then
-        echo "Adding pane for ${AGENTS_ARRAY[3]}..."
-        tmux select-pane -t "$(pane_ref 1)"
-        tmux split-window -v -t "$(pane_ref 1)" -c "$AGENTS_DIR/${AGENTS_ARRAY[3]}" -p "${BOTTOM_HEIGHT:-30}"
+        tmux split-window -h -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p 50
     fi
 fi
 
