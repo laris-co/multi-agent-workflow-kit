@@ -1,4 +1,6 @@
-# Agent worktrees live under /agents and /.agents at repo root
+# Multi-Agent Workflow Kit generated directories
+# - /.agents/ (with leading /) = only at repo root (agent worktrees)
+# - .claude/* and .codex/* (no leading /) = anywhere in repo (toolkit assets & user installations)
 /.agents/
 .claude/settings.local.json
 .claude/*
