@@ -138,10 +138,10 @@ def maybe_commit_assets(root: Path, written: list[Path]) -> None:
         print(f"   • {path}")
 
     if ignored_assets:
-        print("   These files are normally ignored; staging will use 'git add -f'.")
+        print("   ⚠️  Some files match gitignore patterns but will be staged anyway.")
 
     if prompt_yes_no("Commit these assets now? [y/N] "):
-        add_cmd = ["git", "add", "-f", "--", *rel_paths]
+        add_cmd = ["git", "add", "--", *rel_paths]
         add_proc = subprocess.run(add_cmd, cwd=root, check=False)
         if add_proc.returncode == 0:
             commit_cmd = [
