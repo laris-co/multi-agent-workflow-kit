@@ -18,7 +18,7 @@ pushd "$tmpdir"
 git init -q
 uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@BRANCH multi-agent-kit init
 ```
-- Replace `BRANCH` with the branch under test (e.g., `release/v0.1.7`).
+- Replace `BRANCH` with the branch under test (e.g., `release/v0.1.8`).
 - Expect a prompt to commit the installed assets; decline for the smoke test.
 - Expect a prompt to create an empty `Initial commit` if the repository is brand
   new. The installer should exit gracefully after printing instructions.
