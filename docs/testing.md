@@ -27,8 +27,8 @@ Verify the following filesystem state inside the temporary repo:
 - `.envrc` exists and contains the helper sourcing block.
 - `.codex/README.md` exists and `CODEX_HOME` is set to that directory when
   `direnv` loads.
-- `.claude/commands/` and `.claude/prompts/` are present (with README) while
-  other Claude files remain ignored.
+- `.codex/prompts/` contains the tracked prompt templates while `.claude`
+  only includes the command definitions.
 - `.gitignore` includes the injected Multi-Agent Kit section and preserves
   Claude overrides.
 

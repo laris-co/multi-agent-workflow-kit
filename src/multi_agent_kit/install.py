@@ -81,8 +81,9 @@ class AssetInstaller:
             "/.claude/*",
             "!.claude/commands/",
             "!.claude/commands/**",
-            "!.claude/prompts/",
-            "!.claude/prompts/**",
+            "/.codex/*",
+            "!.codex/prompts/",
+            "!.codex/prompts/**",
         ]
 
         try:
