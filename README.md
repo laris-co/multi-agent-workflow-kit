@@ -98,17 +98,22 @@ agents/                    # Agent worktrees (fully gitignored)
 └── 3-agent/               # Worktree for agent 3
 
 .envrc                     # direnv hook adding script aliases and PATH entries; run `direnv allow` here and inside each agents/* worktree
-.claude/                   # Claude workspace shared by tracked commands and prompts
+.claude/                   # Claude workspace shared by tracked commands
 ├── commands/              # Custom slash commands for Claude
 │   ├── maw-agents-create.md     # Agent creation command (/maw-agents-create)
 │   ├── maw-codex.md            # Codex integration command (/maw-codex)
 │   ├── maw-codex.sh            # Shell helper backing the codex command
 │   ├── maw-sync.md             # Sync helper for main/agents worktrees (/maw-sync)
 │   └── maw-sync.sh             # Shell helper implementing sync rules
-└── prompts/               # Shared prompt templates (tracked)
 
 .agents/config/tmux.conf   # curated tmux config with TPM + power theme
 /.codex/                   # Codex CLI workspace; .envrc points CODEX_HOME here automatically
+├── .gitignore             # Ignore runtime state but keep prompt templates tracked
+├── README.md              # Explains how the Codex workspace is used
+└── prompts/               # Shared Codex prompt templates
+    ├── README.md
+    ├── analysis.md
+    └── handoff.md
 docs/                      # deep dives and checklists
 ```
 

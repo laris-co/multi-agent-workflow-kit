@@ -34,6 +34,9 @@ src/multi_agent_kit/assets/.claude/commands/maw-codex.md
 src/multi_agent_kit/assets/.claude/commands/maw-codex.sh
 src/multi_agent_kit/assets/.claude/commands/maw-sync.md
 src/multi_agent_kit/assets/.claude/commands/maw-sync.sh
+src/multi_agent_kit/assets/.codex/.gitignore
 src/multi_agent_kit/assets/.codex/prompts/README.md
+src/multi_agent_kit/assets/.codex/prompts/analysis.md
+src/multi_agent_kit/assets/.codex/prompts/handoff.md
 src/multi_agent_kit/assets/.codex/README.md
 tests/test_install.py

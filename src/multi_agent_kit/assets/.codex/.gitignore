@@ -1,0 +1,6 @@
+# Keep prompt templates tracked; ignore other Codex artifacts
+*
+!.gitignore
+!README.md
+!prompts/
+!prompts/**
