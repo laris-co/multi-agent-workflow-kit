@@ -32,6 +32,7 @@ Coordinate through normal GitHub pull requests: merge work from
 -   **⚠️ NEVER MERGE PULL REQUESTS WITHOUT EXPLICIT USER PERMISSION**
 -   **Never use `gh pr merge` unless explicitly instructed by the user**
 -   **Always wait for user review and approval before any merge**
+-   Before you go through the commit -> push -> PR flow, run `gh auth status` to confirm the GitHub CLI is connected; use `gh auth login` if it is not.
 
 ### File Operations
 -   Never use `rm -rf` - use `rm -i` for interactive confirmation.
