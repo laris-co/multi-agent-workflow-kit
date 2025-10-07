@@ -1,10 +1,10 @@
 # Agent worktrees live under /agents and /.agents at repo root
 /.agents/
 .claude/settings.local.json
-/.claude/*
+.claude/*
 !.claude/commands/
 !.claude/commands/**
-/.codex/*
+.codex/*
 !.codex/prompts/
 !.codex/prompts/**
 
