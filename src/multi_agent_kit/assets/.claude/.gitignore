@@ -1,5 +1,5 @@
-# Keep command files tracked; ignore other Claude artifacts
 *
 !.gitignore
 !commands/
 !commands/**
+commands/maw-*
