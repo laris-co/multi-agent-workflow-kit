@@ -26,7 +26,7 @@ gh repo clone laris-co/multi-agent-workflow-kit
 cd multi-agent-workflow-kit
 
 # One-shot bootstrap (installs toolkit assets, setup, and tmux launch)
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --prefix demo
 
 # The init flow prompts you to commit the installed assets before worktrees are created.
@@ -60,11 +60,11 @@ The `multi-agent-kit init` command accepts the same layout options as the shell 
 
 ```bash
 # Skip setup if agents are already provisioned
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --skip-setup profile2
 
 # Launch detached session with a custom prefix
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --prefix hackathon --detach
 ```
 
@@ -97,7 +97,7 @@ AGENTS.md                 # worktree/branch conventions for human + AI collabora
 ├── profiles/              # tmux layout recipes
 │   ├── profile0.sh        # top pane + bottom left/right split (default)
 │   ├── profile1.sh        # 2×2 grid with left column dominant
-│   ├── profile2.sh        # full-left layout
+│   ├── profile2.sh        # top row 2 agents + bottom full-width root
 │   ├── profile3.sh        # top-full layout
 │   ├── profile4.sh        # three-pane layout
 │   └── profile5.sh        # six-pane dashboard
@@ -108,8 +108,8 @@ agents/                    # Agent worktrees (fully gitignored)
 ├── 2-agent/               # Worktree for agent 2
 └── 3-agent/               # Worktree for agent 3
 
-.envrc                     # direnv hook adding script aliases and PATH entries
-.claude/                   # Claude configuration (optional)
+.envrc                     # direnv hook adding script aliases and PATH entries; run `direnv allow` here and inside each agents/* worktree
+.claude/                   # Claude workspace shared by tracked commands
 ├── commands/              # Custom slash commands for Claude
 │   ├── maw-agents-create.md     # Agent creation command (/maw-agents-create)
 │   ├── maw-codex.md            # Codex integration command (/maw-codex)
@@ -119,6 +119,12 @@ agents/                    # Agent worktrees (fully gitignored)
 
 .agents/config/tmux.conf   # curated tmux config with TPM + power theme
 /.codex/                   # Codex CLI workspace; .envrc points CODEX_HOME here automatically
+├── .gitignore             # Ignore runtime state but keep prompt templates tracked
+├── README.md              # Explains how the Codex workspace is used
+└── prompts/               # Shared Codex prompt templates
+    ├── README.md
+    ├── analysis.md
+    └── handoff.md
 docs/                      # deep dives and checklists
 ```
 
@@ -144,6 +150,9 @@ Session names follow `ai-<repo-name>` by default. Provide `--prefix sprint` to s
 ## Documentation
 - `docs/architecture.md` — architecture, strengths, risks, and integration ideas.
 - `docs/operations-checklist.md` — launch/teardown guardrails for reliable runs.
+- `docs/testing.md` — smoke-test routine before shipping updates or releases.
+- `docs/branching-strategy.md` — RRR (Route, Release, Repair) cheat sheet for
+  keeping work flowing through `development` before it reaches `main`.
 
 ## Extending the Kit
 - Pair the toolkit with your governance/constitution doc so agents share common rules.

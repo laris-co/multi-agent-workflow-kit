@@ -64,11 +64,11 @@ TARGET_FILES=(
     ".envrc"
 )
 CLAUDE_FILES=(
-    ".claude/commands/catlab-agents-create.md"
-    ".claude/commands/catlab-codex.md"
-    ".claude/commands/catlab-codex.sh"
-    ".claude/commands/catlab-sync.md"
-    ".claude/commands/catlab-sync.sh"
+    ".claude/commands/maw-agents-create.md"
+    ".claude/commands/maw-codex.md"
+    ".claude/commands/maw-codex.sh"
+    ".claude/commands/maw-sync.md"
+    ".claude/commands/maw-sync.sh"
 )
 
 SELF_PATH=".agents/scripts/uninstall.sh"

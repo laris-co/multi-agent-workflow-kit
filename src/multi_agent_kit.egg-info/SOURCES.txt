@@ -14,6 +14,8 @@ src/multi_agent_kit/assets/start.sh
 src/multi_agent_kit/assets/tmux.conf
 src/multi_agent_kit/assets/.agents/README.md
 src/multi_agent_kit/assets/.agents/agents.yaml
+src/multi_agent_kit/assets/.agents/maw-completion.bash
+src/multi_agent_kit/assets/.agents/maw-completion.zsh
 src/multi_agent_kit/assets/.agents/maw-env.sh
 src/multi_agent_kit/assets/.agents/config/tmux.conf
 src/multi_agent_kit/assets/.agents/profiles/profile0.sh
@@ -35,8 +37,8 @@ src/multi_agent_kit/assets/.claude/commands/maw-codex.sh
 src/multi_agent_kit/assets/.claude/commands/maw-sync.md
 src/multi_agent_kit/assets/.claude/commands/maw-sync.sh
 src/multi_agent_kit/assets/.codex/.gitignore
+src/multi_agent_kit/assets/.codex/README.md
 src/multi_agent_kit/assets/.codex/prompts/README.md
 src/multi_agent_kit/assets/.codex/prompts/analysis.md
 src/multi_agent_kit/assets/.codex/prompts/handoff.md
-src/multi_agent_kit/assets/.codex/README.md
 tests/test_install.py
