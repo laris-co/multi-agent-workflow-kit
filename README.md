@@ -140,6 +140,8 @@ Session names follow `ai-<repo-name>` by default. Provide `--prefix sprint` to s
 - `docs/architecture.md` — architecture, strengths, risks, and integration ideas.
 - `docs/operations-checklist.md` — launch/teardown guardrails for reliable runs.
 - `docs/testing.md` — smoke-test routine before shipping updates or releases.
+- `docs/branching-strategy.md` — guidance on using `development` for staging and
+  `main` for production.
 
 ## Extending the Kit
 - Pair the toolkit with your governance/constitution doc so agents share common rules.
