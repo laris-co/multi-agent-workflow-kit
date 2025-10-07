@@ -78,8 +78,14 @@ class AssetInstaller:
         ignore_lines = [
             ".agents",
             "agents",
-            ".claude",
-            ".codex",
+            ".claude/*",
+            "!.claude/commands/",
+            ".claude/commands/maw-*",
+            ".codex/*",
+            "!.codex/prompts/",
+            ".codex/prompts/maw-*.md",
+            ".codex/prompts/handoff.md",
+            ".codex/prompts/analysis.md",
         ]
 
         try:
