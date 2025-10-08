@@ -1,154 +1,548 @@
 # Multi-Agent Workflow Kit
 
-Reusable toolkit for running parallel AI agents with git worktrees and tmux. It packages scripts, profiles, and conventions that give every agent its own branch while keeping supervision in one tmux session.
+**Orchestrate parallel AI agents in isolated git worktrees with shared tmux visibility.**
 
-## Highlights
-- **Isolation**: dedicated worktrees (`git worktree`) let each agent commit without branch juggling.
-- **Visibility**: curated tmux layouts keep every shell in sight for fast coordination.
-- **Consistency**: shared scripts enforce naming, directory structure, and safe defaults.
-- **Portability**: drop the toolkit into any repo or use this project as a template/submodule.
+This toolkit solves the coordination problem of running multiple AI coding agents simultaneously: each agent gets its own git branch and workspace (via `git worktree`), while you supervise all of them in a single tmux session with curated layouts.
+
+## Why Use This?
+
+**The Problem**: Running multiple AI agents on the same codebase creates chaos—they conflict on branches, overwrite each other's changes, and you lose track of who's doing what.
+
+**The Solution**: This kit provides:
+- **Isolation**: Each agent works in its own worktree (separate directory + branch)
+- **Visibility**: All agents visible in one tmux session with split-screen layouts
+- **Consistency**: Shared scripts and conventions prevent common mistakes
+- **Portability**: Drop into any repo or use as a template
 
 ## Quick Start
-```bash
-# Clone and enter the toolkit
-gh repo clone laris-co/multi-agent-workflow-kit
-cd multi-agent-workflow-kit
 
-# One-shot bootstrap (installs toolkit assets, setup, and tmux launch)
+```bash
+# Bootstrap everything in one command (installs toolkit, creates worktrees, launches tmux)
 uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --prefix demo
 
-# The init flow prompts you to commit the installed assets before worktrees are created.
+# You'll be prompted to:
+# 1. Create an initial commit (if repo is empty)
+# 2. Commit the installed toolkit assets
+# 3. Attach to the tmux session
 
 # Configure your agents
 $EDITOR .agents/agents.yaml
 
-# Provision worktrees + install tmux plugins (manual alternative)
-# Requires at least one commit in the repository. If none exist, the
-# setup script exits early and prints these commands for you to run:
-# git add .agents/ agents/ && git commit -m "Initial toolkit commit"
-.agents/scripts/setup.sh
-
-# Launch the session manually (profile0 = top with split bottom row, profile1 = left column + stacked right)
-.agents/scripts/start-agents.sh profile0
-
-> **Profile0 default:** top pane spans the upper half; bottom row splits into left/right panes.
->
-> ```
-> ┌──────────────────────────────┐
-> │            Pane0             │ ← agent 1
-> ├──────────────┬───────────────┤
-> │    Pane1     │     Pane2     │
-> │  agent 2     │  agent 3/root │
-> └──────────────┴───────────────┘
-> ```
-> Adjust `BOTTOM_HEIGHT` or `BOTTOM_RIGHT_WIDTH` in `profile0.sh` to change proportions.
-
-### uvx Entry Point Options
-The `multi-agent-kit init` command accepts the same layout options as the shell scripts:
-
-```bash
-# Skip setup if agents are already provisioned
-uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
-  multi-agent-kit init --skip-setup profile2
-
-# Launch detached session with a custom prefix
-uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
-  multi-agent-kit init --prefix hackathon --detach
+# Re-run setup to provision any new agents
+maw install
 ```
 
-Use `--setup-only` to prepare worktrees without starting tmux. The first run copies toolkit assets and `.agents/config/tmux.conf` into the current repository; pass `--force-assets` to overwrite those files if you need to refresh them.
-
-To uninstall the toolkit assets from a repo, run `maw-uninstall --dry-run` (or `.agents/scripts/uninstall.sh --dry-run`) to preview the changes and then `maw-uninstall` when you're ready. The script only deletes the bundled `.claude` command files, leaving any other Claude content untouched. Pass `--remove-agents` if you also want to delete the `agents/` worktree folder (after you've cleaned it up).
+**What you get:**
+- `.agents/` directory with scripts and configuration
+- `.envrc` with `maw` helper commands
+- `agents/` directory with worktrees (gitignored)
+- Active tmux session with all agents ready
 
 ## Prerequisites
-| Tool | Purpose |
-|------|---------|
-| `git` ≥ 2.5 | worktree support |
-| `tmux` ≥ 3.2 | terminal multiplexer |
-| `yq` | parses `agents.yaml` |
-| `direnv` (optional) | auto-load repo env inside panes |
-| `gh` (optional) | convenience for cloning / automation |
 
-> The setup script installs TPM (Tmux Plugin Manager) under `~/.tmux/plugins/tpm` if it is missing.
+| Tool | Version | Purpose |
+|------|---------|---------|
+| `git` | ≥ 2.5 | Worktree support |
+| `tmux` | ≥ 3.2 | Terminal multiplexing |
+| `yq` | latest | YAML parsing for agents.yaml |
+| `direnv` | latest | *Optional:* Auto-load env per worktree |
+| `gh` | latest | *Optional:* GitHub CLI for convenience |
+
+> The setup script auto-installs TPM (Tmux Plugin Manager) if missing.
+
+## Core Concepts
+
+### Git Worktrees
+Each agent operates in a **worktree**—a separate directory linked to a unique branch. Changes in one worktree don't affect others until you explicitly merge.
+
+```
+repo/                  ← main worktree (branch: main)
+agents/
+  ├── 1-agent/        ← worktree (branch: agents/1-agent)
+  ├── 2-agent/        ← worktree (branch: agents/2-agent)
+  └── 3-agent/        ← worktree (branch: agents/3-agent)
+```
+
+### Tmux Layouts
+Pre-configured **profiles** organize agent panes:
+
+**Profile 0** (default): Top pane + split bottom
+```
+┌──────────────────────────────┐
+│         Agent 1 (top)        │
+├──────────────┬───────────────┤
+│   Agent 2    │  Agent 3/Root │
+└──────────────┴───────────────┘
+```
+
+**Profile 1**: Left column + stacked right
+```
+┌──────────┬───────────────────┐
+│          │     Agent 2       │
+│ Agent 1  ├───────────────────┤
+│ (left)   │     Agent 3       │
+│          ├───────────────────┤
+│          │   Root (main)     │
+└──────────┴───────────────────┘
+```
+
+See `.agents/profiles/` for all 6 layout options.
+
+### Agent Configuration
+Edit `.agents/agents.yaml` to define agents:
+
+```yaml
+agents:
+  1-agent:
+    branch: agents/1-agent
+    worktree_path: agents/1-agent
+    model: sonnet
+    description: "Backend API development"
+
+  2-agent:
+    branch: agents/2-agent
+    worktree_path: agents/2-agent
+    model: opus
+    description: "Frontend React components"
+```
+
+## Installation & Setup
+
+### Option 1: One-Shot Bootstrap (Recommended)
+
+```bash
+# Clone or navigate to your repo
+cd your-project
+
+# Run init with custom prefix
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
+  multi-agent-kit init --prefix sprint
+
+# This will:
+# - Copy toolkit assets (.agents/, .envrc, etc.)
+# - Prompt you to commit them
+# - Create worktrees from agents.yaml
+# - Launch tmux session
+# - Offer to attach
+```
+
+**Init Options:**
+- `--prefix <name>`: Session name becomes `ai-<repo>-<name>`
+- `--detach`: Launch session in background (no auto-attach)
+- `--skip-setup`: Only launch tmux (skip worktree creation)
+- `--setup-only`: Only create worktrees (don't launch tmux)
+- `--force-assets`: Overwrite existing toolkit files
+
+### Option 2: Manual Installation
+
+```bash
+# 1. Install toolkit assets
+maw install
+# or: .agents/scripts/setup.sh
+
+# 2. Edit agent configuration
+$EDITOR .agents/agents.yaml
+
+# 3. Create worktrees
+maw install  # re-run to sync changes
+
+# 4. Launch tmux session
+maw start profile0
+# or: .agents/scripts/start-agents.sh profile0
+```
+
+### Enable direnv (Recommended)
+
+```bash
+# In main repo
+direnv allow
+
+# In each agent worktree
+cd agents/1-agent && direnv allow
+cd agents/2-agent && direnv allow
+```
+
+This activates the `maw` command wrapper and sets `CODEX_HOME` for shared state.
+
+## Daily Workflow
+
+### Starting & Stopping
+
+```bash
+# Start session with profile
+maw start profile1
+
+# Attach to running session
+maw attach
+
+# Kill session
+maw kill
+```
+
+### Working with Agents
+
+```bash
+# Navigate to agent worktree
+cd agents/1-agent
+
+# Check agent's branch
+git branch --show-current  # → agents/1-agent
+
+# Make changes, commit
+git add .
+git commit -m "Add user authentication"
+
+# Sync with main
+maw sync  # merges main into current agent branch
+```
+
+### Syncing Worktrees
+
+The `maw sync` command (or `/maw-sync` slash command in Claude) intelligently syncs:
+- **On main branch**: Runs `git pull --ff-only origin main`
+- **On agents/* branch**: Runs `git merge main` (fast-forward from local main)
+
+```bash
+# From main worktree
+cd /path/to/main
+maw sync  # pulls from origin
+
+# From agent worktree
+cd agents/1-agent
+maw sync  # merges local main
+```
+
+### Broadcasting Commands
+
+```bash
+# Send command to all agent panes
+maw send "git status"
+maw send "git pull"
+
+# Or use the script directly
+.agents/scripts/send-commands.sh "npm test"
+```
+
+### Managing Agents
+
+```bash
+# List current agents
+maw agents list
+
+# Create new agent
+maw agents create 4-agent -m claude-opus
+
+# Remove agent worktree
+maw remove 3-agent
+```
+
+## Configuration
+
+### Agent Registry: `agents.yaml`
+
+```yaml
+agents:
+  1-agent:
+    branch: agents/1-agent          # Git branch name
+    worktree_path: agents/1-agent   # Directory under agents/
+    model: claude-sonnet-4          # Model identifier (informational)
+    description: "Core backend"     # Purpose (optional)
+```
+
+After editing, run `maw install` to sync worktrees.
+
+### Tmux Profiles
+
+Profiles live in `.agents/profiles/profileN.sh`:
+
+| Profile | Layout | Best For |
+|---------|--------|----------|
+| `profile0` | Top + split bottom | 2-3 agents, one dominant |
+| `profile1` | Left column + stacked right | Primary/secondary split |
+| `profile2` | Top row + full-width bottom | Pair programming style |
+| `profile3` | Single full-width top | Focus mode |
+| `profile4` | Three-pane | Small team |
+| `profile5` | Six-pane dashboard | Full visibility |
+
+Customize by editing the profile files—adjust pane sizes, commands, or layouts.
+
+### Session Naming
+
+Control session names via `--prefix` or `SESSION_PREFIX`:
+
+```bash
+# Default: ai-<repo-name>
+maw start profile0
+
+# Custom: ai-<repo-name>-sprint
+maw start profile0 --prefix sprint
+
+# Change base prefix globally
+export SESSION_PREFIX=research
+maw start profile0  # → research-<repo-name>
+```
 
 ## Repository Layout
+
 ```
-AGENTS.md                 # worktree/branch conventions for human + AI collaborators
-.agents/                   # Toolkit directory (committed to git)
-├── agents.yaml            # agent registry (edit me)
+.agents/                     # Toolkit directory (committed)
+├── agents.yaml              # Agent registry
 ├── scripts/
-│   ├── agents.sh          # create/list/remove worktrees
-│   ├── setup.sh           # bootstrap tmux plugins + agents
-│   ├── start-agents.sh    # tmux launcher with layout profiles
-│   ├── send-commands.sh   # broadcast commands to panes
-│   └── kill-all.sh        # kill sessions by prefix
-├── profiles/              # tmux layout recipes
-│   ├── profile0.sh        # top pane + bottom left/right split (default)
-│   ├── profile1.sh        # 2×2 grid with left column dominant
-│   ├── profile2.sh        # top row 2 agents + bottom full-width root
-│   ├── profile3.sh        # top-full layout
-│   ├── profile4.sh        # three-pane layout
-│   └── profile5.sh        # six-pane dashboard
+│   ├── setup.sh             # Bootstrap worktrees + tmux plugins
+│   ├── start-agents.sh      # Launch tmux session
+│   ├── attach.sh            # Attach to session
+│   ├── agents.sh            # Manage worktrees
+│   ├── send-commands.sh     # Broadcast to panes
+│   ├── kill-all.sh          # Terminate sessions
+│   ├── remove.sh            # Delete worktrees
+│   └── uninstall.sh         # Remove toolkit assets
+├── profiles/                # Tmux layouts (profile0-5)
+└── config/
+    └── tmux.conf            # Tmux configuration with plugins
 
-agents/                    # Agent worktrees (fully gitignored)
-├── .gitignore             # Ignores all contents
-├── 1-agent/               # Worktree for agent 1
-├── 2-agent/               # Worktree for agent 2
-└── 3-agent/               # Worktree for agent 3
+agents/                      # Agent worktrees (gitignored)
+├── .gitignore               # Ignores all contents
+├── 1-agent/                 # Worktree for agent 1
+├── 2-agent/                 # Worktree for agent 2
+└── 3-agent/                 # Worktree for agent 3
 
-.envrc                     # direnv hook adding script aliases and PATH entries; run `direnv allow` here and inside each agents/* worktree
-.claude/                   # Claude workspace shared by tracked commands
-├── commands/              # Custom slash commands for Claude
-│   ├── maw-agents-create.md     # Agent creation command (/maw-agents-create)
-│   ├── maw-codex.md            # Codex integration command (/maw-codex)
-│   ├── maw-codex.sh            # Shell helper backing the codex command
-│   ├── maw-sync.md             # Sync helper for main/agents worktrees (/maw-sync)
-│   └── maw-sync.sh             # Shell helper implementing sync rules
+.envrc                       # Direnv config (maw helpers, CODEX_HOME)
+.codex/                      # Codex CLI workspace (shared across worktrees)
+├── .gitignore               # Excludes runtime state
+├── README.md                # Workspace documentation
+└── prompts/                 # Shared prompt templates
 
-.agents/config/tmux.conf   # curated tmux config with TPM + power theme
-/.codex/                   # Codex CLI workspace; .envrc points CODEX_HOME here automatically
-├── .gitignore             # Ignore runtime state but keep prompt templates tracked
-├── README.md              # Explains how the Codex workspace is used
-└── prompts/               # Shared Codex prompt templates
-    ├── README.md
-    ├── analysis.md
-    └── handoff.md
-docs/                      # deep dives and checklists
+.gitignore                   # Excludes agents/, local files, etc.
+AGENTS.md                    # Conventions for human+AI collaboration
+docs/                        # Architecture, operations, testing guides
 ```
 
-### Claude Slash Commands
-- `/maw-sync` — syncs the active worktree: pulls `origin/main` when on `main`, or merges local `main` into `agents/*` worktrees.
-- `/maw-codex` — sends a prompt to the Codex agent pane (requires running tmux session).
+## `maw` Command Reference
 
-## Operating Model
-1. Define each agent in `.agents/agents.yaml` (branch + worktree path pointing into `agents/`).
-2. Run `.agents/scripts/setup.sh` after edits to sync worktrees and ensure dependencies.
-3. Start the tmux session with `.agents/scripts/start-agents.sh <profile> [--prefix <suffix>]`.
-4. Use `.agents/scripts/send-commands.sh` to broadcast helpful commands (`git status`, `ls`).
-5. Stop active sessions via `.agents/scripts/kill-all.sh --prefix <suffix>` when done.
+The direnv hook provides a unified `maw` wrapper:
 
-Session names follow `ai-<repo-name>` by default. Provide `--prefix sprint` to spawn `ai-<repo-name>-sprint`. You can also export `SESSION_PREFIX` to change the base prefix (e.g., `export SESSION_PREFIX=research`).
+```bash
+maw install          # Run setup.sh (provision worktrees)
+maw start <profile>  # Launch tmux session
+maw attach           # Attach to running session
+maw agents <cmd>     # Manage worktrees (list, create, remove)
+maw send "<cmd>"     # Broadcast command to all panes
+maw kill             # Terminate session
+maw remove <agent>   # Delete agent worktree
+maw uninstall        # Remove toolkit from repo
+maw warp <target>    # Navigate to agent worktree or root
+```
 
-> Tip: Allow direnv (`direnv allow`) to expose a `maw` helper so you can run `maw install`, `maw start`, `maw attach`, `maw remove`, and `maw uninstall` without remembering the underlying scripts. The legacy `maw-*` aliases remain available for muscle memory.
+**Examples:**
+```bash
+# Start with custom prefix
+maw start profile1 --prefix hackathon
 
-> _Brand new repo?_ The `init` command now offers to create an empty `Initial commit` if Git history is missing, or run `git commit --allow-empty -m "Initial commit"` yourself before provisioning agents.
+# Navigate to agent worktree
+maw warp 2-agent
 
-> _Ignoring `.agents/`?_ The installer adds `.agents/` to `.gitignore` and skips auto-committing the toolkit; remove that entry and `git add -f .agents` if you prefer to track it.
+# Return to main
+maw warp root
+
+# Uninstall (dry run first)
+maw uninstall --dry-run
+maw uninstall
+```
+
+## Claude Slash Commands
+
+When working in Claude Code, use these custom commands:
+
+### `/maw-sync`
+Sync current worktree with main branch (context-aware).
+
+### `/maw-codex` (if configured)
+Send prompt to codex agent pane in tmux.
+
+Example: `/maw-codex explain the authentication flow`
+
+## Advanced Usage
+
+### Using as a Template
+
+```bash
+# Create new project from template
+gh repo create my-project --template laris-co/multi-agent-workflow-kit --private --clone
+cd my-project
+maw install
+```
+
+### Adding as a Submodule
+
+```bash
+git submodule add https://github.com/laris-co/multi-agent-workflow-kit.git .agents-toolkit
+cp .agents-toolkit/.agents .
+cp .agents-toolkit/.envrc .
+direnv allow
+```
+
+### Custom Profiles
+
+Create `.agents/profiles/custom.sh`:
+
+```bash
+#!/bin/bash
+PROFILE_NAME="custom"
+
+layout_custom() {
+    local session=$1
+    local window=$2
+
+    # Your custom tmux layout commands here
+    tmux split-window -v -t "$session:$window"
+    tmux select-layout -t "$session:$window" even-horizontal
+}
+```
+
+Then: `maw start custom`
+
+### Integration with CI/CD
+
+Ensure agent branches fast-forward to main before merging:
+
+```yaml
+# .github/workflows/check-merge.yml
+name: Check Agent Merges
+on: [pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Verify fast-forward merge
+        run: |
+          git merge-base --is-ancestor ${{ github.event.pull_request.base.sha }} ${{ github.sha }}
+```
+
+## Troubleshooting
+
+### Session Already Exists
+
+```bash
+# List sessions
+tmux list-sessions
+
+# Kill specific session
+maw kill --prefix <suffix>
+
+# Or kill all matching sessions
+tmux kill-session -t ai-repo-name
+```
+
+### Worktree Creation Fails
+
+```bash
+# Check for existing worktrees
+git worktree list
+
+# Remove stale worktree
+git worktree remove agents/1-agent --force
+
+# Prune stale references
+git worktree prune
+
+# Re-run setup
+maw install
+```
+
+### Direnv Not Loading
+
+```bash
+# Allow in main repo
+direnv allow
+
+# Allow in each agent worktree
+cd agents/1-agent && direnv allow
+cd agents/2-agent && direnv allow
+
+# Check if direnv is working
+direnv status
+```
+
+### `maw` Command Not Found
+
+```bash
+# Ensure direnv is allowed
+direnv allow
+
+# Manual load (bash)
+source .envrc
+
+# Manual load (zsh)
+. .envrc
+
+# Or use scripts directly
+.agents/scripts/start-agents.sh profile0
+```
+
+### Merge Conflicts in Agent Worktrees
+
+```bash
+cd agents/1-agent
+
+# Sync with main
+git fetch origin main:main  # update local main
+git merge main              # merge into agent branch
+
+# Resolve conflicts
+git status
+# ... resolve files ...
+git add .
+git commit
+```
+
+### TPM Plugins Not Loading
+
+```bash
+# Install TPM
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+# Inside tmux, press: prefix + I (capital i)
+# Default prefix is Ctrl+a (configured in tmux.conf)
+```
 
 ## Documentation
-- `docs/architecture.md` — architecture, strengths, risks, and integration ideas.
-- `docs/operations-checklist.md` — launch/teardown guardrails for reliable runs.
-- `docs/testing.md` — smoke-test routine before shipping updates or releases.
-- `docs/branching-strategy.md` — RRR (Route, Release, Repair) cheat sheet for
-  keeping work flowing through `development` before it reaches `main`.
 
-## Extending the Kit
-- Pair the toolkit with your governance/constitution doc so agents share common rules.
-- Build CI checks that ensure agent branches fast-forward to `main` before merging.
-- Add health monitors (tmux resurrect, notifications) to alert when panes exit unexpectedly.
+Deep dives and operational guides:
 
-Contributions welcome—open an issue/PR in this repo with enhancements that make multi-agent collaboration smoother.
+- **[Architecture](docs/architecture.md)**: Design principles, strengths, risks, integrations
+- **[Operations Checklist](docs/operations-checklist.md)**: Launch/teardown procedures
+- **[Testing Guide](docs/testing.md)**: Smoke tests before releases
+- **[Branching Strategy](docs/branching-strategy.md)**: RRR workflow (Route, Release, Repair)
+- **[AGENTS.md](AGENTS.md)**: Conventions for human+AI collaboration
 
+## Contributing
 
-<img width="2202" height="1132" alt="image" src="https://github.com/user-attachments/assets/6c422b36-fdcf-46db-937d-f6ec8e995ec9" />
+Contributions welcome! Open an issue or PR for:
+- New tmux profiles
+- Improved agent coordination scripts
+- CI/CD integration examples
+- Bug fixes or documentation improvements
+
+**Before submitting:**
+1. Test with `docs/testing.md` smoke tests
+2. Update relevant documentation
+3. Follow existing code style
+
+## License
+
+[Add your license here]
+
+---
+
+**Pro Tips:**
+- Use `maw warp` to quickly jump between worktrees
+- Configure agent-specific `.envrc` files for custom env vars
+- Leverage `maw send` for coordinated git operations across agents
+- Create custom slash commands in `.claude/commands/` for your workflow
+- Export conversation logs from `.codex/` to review agent decision-making
+
+<img width="2202" height="1132" alt="Multi-agent tmux session with split panes" src="https://github.com/user-attachments/assets/6c422b36-fdcf-46db-937d-f6ec8e995ec9" />
