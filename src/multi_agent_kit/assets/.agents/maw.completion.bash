@@ -5,7 +5,7 @@ _maw_complete() {
   local cur prev words cword
   _init_completion || return
 
-  local subcommands="attach agents help hey install kill remove send setup start uninstall warp"
+  local subcommands="attach agents direnv help hey install kill remove send setup start uninstall warp"
 
   if [[ $cword -eq 1 ]]; then
     # Complete main subcommands

@@ -9,6 +9,7 @@ _maw() {
   subcommands=(
     'attach:Attach to the running tmux session'
     'agents:Run agents.sh to manage worktrees manually'
+    'direnv:Send Ctrl+C and direnv allow to all panes'
     'help:Show help message'
     'hey:Send a message to a specific agent'
     'install:Run setup.sh to provision or refresh agent worktrees'
