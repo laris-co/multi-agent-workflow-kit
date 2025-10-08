@@ -74,7 +74,7 @@ Pre-configured **profiles** organize agent panes:
 ├──────────────────────────────┤
 │       Agent 2 (middle)       │
 ├──────────────────────────────┤
-│     Agent 3/Root (bottom)    │
+│        Root (bottom)         │
 └──────────────────────────────┘
 ```
 
