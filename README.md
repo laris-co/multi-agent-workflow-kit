@@ -342,6 +342,7 @@ maw attach           # Attach to running session
 maw agents <cmd>     # Manage worktrees (list, create, remove)
 maw send "<cmd>"     # Broadcast command to all panes
 maw hey <agent> <msg> # Send message to specific agent
+maw direnv           # Send Ctrl+C and 'direnv allow .' to all panes
 maw kill             # Terminate session
 maw remove <agent>   # Delete agent worktree
 maw uninstall        # Remove toolkit from repo
@@ -360,6 +361,9 @@ maw warp 2
 maw hey 1 "analyse this codebase"
 maw hey 2 "create a plan for feature X"
 maw hey root "git status"
+
+# Allow direnv in all panes (useful after init or changes to .envrc)
+maw direnv
 
 # Return to main
 maw warp root
