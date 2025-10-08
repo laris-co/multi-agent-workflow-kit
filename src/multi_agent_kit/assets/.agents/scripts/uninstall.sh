@@ -64,11 +64,13 @@ TARGET_FILES=(
     ".envrc"
 )
 CLAUDE_FILES=(
-    ".claude/commands/maw-agents-create.md"
-    ".claude/commands/maw-codex.md"
-    ".claude/commands/maw-codex.sh"
-    ".claude/commands/maw-sync.md"
-    ".claude/commands/maw-sync.sh"
+    ".claude/commands/maw.agents-create.md"
+    ".claude/commands/maw.codex.md"
+    ".claude/commands/maw.codex.sh"
+    ".claude/commands/maw.hey.md"
+    ".claude/commands/maw.hey.sh"
+    ".claude/commands/maw.sync.md"
+    ".claude/commands/maw.sync.sh"
 )
 
 SELF_PATH=".agents/scripts/uninstall.sh"
@@ -149,12 +151,12 @@ fi
 REMOVE_SCRIPT="$AGENT_ROOT/scripts/remove.sh"
 if [ -f "$REMOVE_SCRIPT" ] && [ -d "$REPO_ROOT/.agents" ]; then
     if [ "$DRY_RUN" = true ]; then
-        log "Dry run: would execute maw-remove --force to clean up agent worktrees and branches."
+        log "Dry run: would execute maw remove --force to clean up agent worktrees and branches."
     else
         if command -v yq >/dev/null 2>&1; then
-            log "Running maw-remove --force to remove agent worktrees and branches..."
+            log "Running maw remove --force to remove agent worktrees and branches..."
             if ! "$REMOVE_SCRIPT" --force; then
-                warn "maw-remove --force exited with an error; check agent branches manually."
+                warn "maw remove --force exited with an error; check agent branches manually."
             fi
         else
             warn "Skipping agent clean-up because 'yq' is not available; remove agent branches manually if needed."

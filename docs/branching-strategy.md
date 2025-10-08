@@ -31,7 +31,7 @@ When using the Multi-Agent Workflow Kit, agent branches follow a parallel patter
 **Integration Points:**
 - If using RRR: agents sync with `development` and PR into `development`
 - If direct to main: agents sync with `main` and PR into `main` (requires fast-forward merge)
-- Use `/maw-sync` slash command or `maw sync` to keep agent worktrees current
+- Use `/maw.sync` slash command or `maw sync` to keep agent worktrees current
 
 **Best Practice:**
 - Keep agent branches scoped to a single feature or task

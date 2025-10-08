@@ -2,7 +2,7 @@
 description: Sync the current worktree with main-aware rules
 argument-hint: (no args)
 allowed-tools:
-  - Bash(.claude/commands/maw-sync.sh:*)
+  - Bash(.claude/commands/maw.sync.sh:*)
 ---
 
 Goal: Keep local worktrees aligned with `main` without relying on remote fetches inside agent directories.
@@ -19,12 +19,12 @@ Behavior:
 Shell template:
 
 ```bash
-.claude/commands/maw-sync.sh "$@"
+.claude/commands/maw.sync.sh "$@"
 ```
 
 Usage examples:
-- `/maw-sync` (from the main worktree)
-- `/maw-sync` (from an agent worktree such as `agents/1-agent`)
+- `/maw.sync` (from the main worktree)
+- `/maw.sync` (from an agent worktree such as `agents/1-agent`)
 
 Notes:
 - Requires a clean working tree. Commit, stash, or discard changes before rerunning.

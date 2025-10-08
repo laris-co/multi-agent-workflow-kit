@@ -10,8 +10,8 @@ allowed-tools:
 Goal: Create/list agents by calling the local shell script. Uses git worktrees directly at `agents/<name>`.
 
 Usage examples:
-- `/maw-agents-create create codex2 -m codex --branch agents/codex2`
-- `/maw-agents-create list`
+- `/maw.agents-create create codex2 -m codex --branch agents/codex2`
+- `/maw.agents-create list`
 
 Behavior (MVP):
 - If `create <name>` and the agent is missing, propose a YAML patch like (for `.agents/agents.yaml`):

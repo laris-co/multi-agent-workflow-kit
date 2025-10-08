@@ -27,12 +27,12 @@ Verify the following filesystem state inside the temporary repo:
 - `.envrc` exists and contains the helper sourcing block.
 - `.codex/README.md` exists and `CODEX_HOME` is set to that directory when
   `direnv` loads.
-- `.codex/prompts/README.md` exists; generated files (`maw-*.md`, `analysis.md`,
+- `.codex/prompts/README.md` exists; generated files (`maw.*.md`, `analysis.md`,
   `handoff.md`) are excluded by `.codex/.gitignore`.
-- `.claude/commands/` contains `maw-agents-create.md`, `maw-codex.md`, `maw-codex.sh`,
-  `maw-sync.md`, and `maw-sync.sh`.
+- `.claude/commands/` contains `maw.agents-create.md`, `maw.codex.md`, `maw.codex.sh`,
+  `maw.sync.md`, and `maw.sync.sh`.
 - `.gitignore` includes the injected Multi-Agent Kit section (excluding `agents/`,
-  `.claude/commands/maw-*`, etc.) and preserves existing Claude overrides.
+  `.claude/commands/maw.*`, etc.) and preserves existing Claude overrides.
 
 Cleanup the temporary directory afterwards:
 ```bash

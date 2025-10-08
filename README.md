@@ -199,7 +199,7 @@ maw sync  # merges main into current agent branch
 
 ### Syncing Worktrees
 
-The `maw sync` command (or `/maw-sync` slash command in Claude) intelligently syncs:
+The `maw sync` command (or `/maw.sync` slash command in Claude) intelligently syncs:
 - **On main branch**: Runs `git pull --ff-only origin main`
 - **On agents/* branch**: Runs `git merge main` (fast-forward from local main)
 
@@ -360,18 +360,18 @@ maw uninstall
 
 When working in Claude Code, use these custom commands:
 
-### `/maw-sync`
+### `/maw.sync`
 Sync current worktree with main branch (context-aware).
 
-### `/maw-hey`
+### `/maw.hey`
 Send a message to a specific agent in the tmux session.
 
 **Examples:**
 ```bash
-/maw-hey 1 analyse this repository structure
-/maw-hey 2 create a plan for the auth feature
-/maw-hey root git status
-/maw-hey all git pull  # broadcast to all agents
+/maw.hey 1 analyse this repository structure
+/maw.hey 2 create a plan for the auth feature
+/maw.hey root git status
+/maw.hey all git pull  # broadcast to all agents
 ```
 
 **Special targets:**
@@ -379,8 +379,8 @@ Send a message to a specific agent in the tmux session.
 - `all` - Broadcast to all agent panes
 - Agent names: `1`, `2`, `backend-api`, etc.
 
-### `/maw-codex` (legacy)
-Send prompt to agent in pane 1. **Note:** Use `/maw-hey 1 <message>` for more flexibility.
+### `/maw.codex` (legacy)
+Send prompt to agent in pane 1. **Note:** Use `/maw.hey 1 <message>` for more flexibility.
 
 ## Advanced Usage
 

@@ -5,9 +5,9 @@
 !README.md
 !config/
 !config/tmux.conf
-!maw-env.sh
-!maw-completion.bash
-!maw-completion.zsh
+!maw.env.sh
+!maw.completion.bash
+!maw.completion.zsh
 !profiles/
 !profiles/*.sh
 !scripts/

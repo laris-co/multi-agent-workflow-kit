@@ -182,17 +182,17 @@ alias maw-hey='maw hey'
 # Load shell completion if available
 if [[ -n "${ZSH_VERSION:-}" ]]; then
   # Zsh completion - add to fpath and load completion
-  if [[ -d "$toolkit_dir" ]] && [[ -f "$toolkit_dir/maw-completion.zsh" ]]; then
+  if [[ -d "$toolkit_dir" ]] && [[ -f "$toolkit_dir/maw.completion.zsh" ]]; then
     fpath=("$toolkit_dir" $fpath)
     autoload -Uz compinit
     compinit -C
     # Source the completion file directly to register _maw function
-    source "$toolkit_dir/maw-completion.zsh"
+    source "$toolkit_dir/maw.completion.zsh"
     compdef _maw maw
   fi
 elif [[ -n "${BASH_VERSION:-}" ]]; then
   # Bash completion
-  completion_file="$toolkit_dir/maw-completion.bash"
+  completion_file="$toolkit_dir/maw.completion.bash"
   if [[ -f "$completion_file" ]]; then
     # shellcheck disable=SC1090
     source "$completion_file"

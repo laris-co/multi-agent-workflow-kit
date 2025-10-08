@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-# Wrapper script for Claude slash command /maw-hey
+# Wrapper script for Claude slash command /maw.hey
 # Calls the core hey.sh implementation
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)

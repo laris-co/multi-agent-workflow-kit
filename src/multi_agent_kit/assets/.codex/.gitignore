@@ -3,6 +3,6 @@
 !README.md
 !prompts/
 !prompts/**
-prompts/maw-*.md
+prompts/maw*.md
 prompts/handoff.md
 prompts/analysis.md

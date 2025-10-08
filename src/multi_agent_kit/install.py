@@ -89,8 +89,8 @@ class AssetInstaller:
 
         # Additional ignore patterns for toolkit-generated files
         toolkit_generated = [
-            ".claude/commands/maw-*",
-            ".codex/prompts/maw-*.md",
+            ".claude/commands/maw.*",
+            ".codex/prompts/maw*.md",
             ".codex/prompts/handoff.md",
             ".codex/prompts/analysis.md",
         ]

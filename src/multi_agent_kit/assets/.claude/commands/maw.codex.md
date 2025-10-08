@@ -2,7 +2,7 @@
 description: Sends a prompt to codex running in tmux pane 1
 argument-hint: <prompt>
 allowed-tools:
-  - Bash(.claude/commands/maw-codex.sh:*)
+  - Bash(.claude/commands/maw.codex.sh:*)
 ---
 
 Goal: Send a prompt to codex agent running in tmux pane 1 (worktree pane).
@@ -17,13 +17,13 @@ Behavior:
 Shell template:
 
 ```bash
-.claude/commands/maw-codex.sh "$*"
+.claude/commands/maw.codex.sh "$*"
 ```
 
 Usage examples:
-- `/maw-codex explain this function`
-- `/maw-codex refactor the authentication logic`
-- `/maw-codex what are the performance implications?`
+- `/maw.codex explain this function`
+- `/maw.codex refactor the authentication logic`
+- `/maw.codex what are the performance implications?`
 
 Notes:
 - Requires tmux session to be running (use .agents/start-agents.sh to create it).

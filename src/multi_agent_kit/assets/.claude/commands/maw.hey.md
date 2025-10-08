@@ -2,7 +2,7 @@
 description: Send a message to a specific agent in the tmux session
 argument-hint: <agent> <message>
 allowed-tools:
-  - Bash(.claude/commands/maw-hey.sh:*)
+  - Bash(.claude/commands/maw.hey.sh:*)
 ---
 
 Goal: Send a prompt to a specific agent running in a tmux pane.
@@ -19,23 +19,23 @@ Behavior:
 Shell template:
 
 ```bash
-.claude/commands/maw-hey.sh "$@"
+.claude/commands/maw.hey.sh "$@"
 ```
 
 Usage examples:
-- `/maw-hey 1 analyse this repository structure`
-- `/maw-hey 2 create a plan for the auth feature`
-- `/maw-hey backend-api review the database schema`
-- `/maw-hey root git status`
-- `/maw-hey all git pull`
+- `/maw.hey 1 analyse this repository structure`
+- `/maw.hey 2 create a plan for the auth feature`
+- `/maw.hey backend-api review the database schema`
+- `/maw.hey root git status`
+- `/maw.hey all git pull`
 
 Special targets:
 - **root** - Send to main worktree pane
 - **all** - Broadcast to all agent panes (excludes root)
 
 List agents:
-- `/maw-hey --list` - Show available agents
-- `/maw-hey --map` - Show agent to pane mapping
+- `/maw.hey --list` - Show available agents
+- `/maw.hey --map` - Show agent to pane mapping
 
 Notes:
 - Requires tmux session to be running (use `maw start` to create it).

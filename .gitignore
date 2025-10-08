@@ -24,7 +24,7 @@ __pycache__/
 
 # Local IDE/tool overrides
 settings.local.json
-.claude/commands/maw-*
-.codex/prompts/maw-*.md
+.claude/commands/maw.*
+.codex/prompts/maw*.md
 .codex/prompts/handoff.md
 .codex/prompts/analysis.md
