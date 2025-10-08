@@ -117,11 +117,13 @@ def ensure_git_repo(root: Path) -> Path:
     return toplevel
 
 
-def prompt_yes_no(message: str) -> bool:
+def prompt_yes_no(message: str, default: bool = False) -> bool:
     try:
         answer = input(message).strip().lower()
     except EOFError:
-        return False
+        return default
+    if not answer:
+        return default
     return answer in {"y", "yes"}
 
 
@@ -199,7 +201,7 @@ def ensure_initial_commit(root: Path) -> None:
         return
 
     print("⚠️  Repository has no commits yet.")
-    if not prompt_yes_no("Create an empty initial commit now? [y/N] "):
+    if not prompt_yes_no("Create an empty initial commit now? [Y/n] ", default=True):
         raise BootstrapError(
             "Repository must have at least one commit before provisioning agents. "
             "Run 'git commit --allow-empty -m \"Initial commit\"' and retry."
