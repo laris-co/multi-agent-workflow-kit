@@ -125,16 +125,23 @@ uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.g
 # - Copy toolkit assets (.agents/, .envrc, etc.)
 # - Prompt you to commit them
 # - Create worktrees from agents.yaml
-# - Launch tmux session
-# - Offer to attach
+# - Launch tmux session in background
+# - Show you how to attach
 ```
 
 **Init Options:**
 - `--prefix <name>`: Session name becomes `ai-<repo>-<name>`
-- `--detach`: Launch session in background (no auto-attach)
 - `--skip-setup`: Only launch tmux (skip worktree creation)
 - `--setup-only`: Only create worktrees (don't launch tmux)
 - `--force-assets`: Overwrite existing toolkit files
+
+**Attaching to Session:**
+```bash
+# After init, attach with:
+tmux attach-session -t ai-<repo-name>
+# Or use the helper:
+maw attach
+```
 
 ### Option 2: Manual Installation
 

@@ -274,22 +274,26 @@ def handle_init(args: argparse.Namespace) -> None:
 
     run_script(start_script, *start_args)
 
-    if args.detach:
-        return
-
-    attach_script = start_script.parent / "attach.sh"
-    if not attach_script.exists():
-        print("⚠️  attach.sh not found; attach manually with tmux.", file=sys.stderr)
-        return
-
-    if not prompt_yes_no("Attach to session now? [y/N] "):
-        return
-
-    attach_args: list[str] = []
+    # Calculate session name using same logic as start-agents.sh
+    session_prefix = "ai"
+    session_name = f"{session_prefix}-{root.name}"
     if args.prefix:
-        attach_args.extend(["--prefix", args.prefix])
+        session_name += f"-{args.prefix}"
 
-    run_script(attach_script, *attach_args)
+    print(f"\n✅ Session started: {session_name}")
+    print(f"\n💡 Quick start:")
+    print(f"   \033[1;36m→ source .envrc\033[0m   # Load maw commands")
+    print(f"   \033[1;36m→ maw attach\033[0m      # Enter session")
+    print(f"\n📖 Available commands:")
+    print(f"   maw attach")
+    print(f"   maw agents <tab>")
+    print(f"   maw hey <agent> <message>")
+    print(f"   maw kill")
+    print(f"   maw remove <agent>")
+    print(f"   maw send <command>")
+    print(f"   maw sync")
+    print(f"   maw uninstall")
+    print(f"   \033[1;36mmaw warp <agent|root>\033[0m  # Navigate to worktree")
 
 
 def main(argv: list[str] | None = None) -> None:

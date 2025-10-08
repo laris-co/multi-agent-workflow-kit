@@ -20,8 +20,8 @@ uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@BRANCH m
 ```
 - Replace `BRANCH` with the branch under test (e.g., `main`, `release/v0.1.9`).
 - Expect a prompt to commit the installed assets; decline for the smoke test.
-- Expect a prompt to create an empty `Initial commit` if the repository is brand
-  new. The installer should exit gracefully after printing instructions.
+- Expect a prompt to create an empty `Initial commit` if the repository is brand new.
+- The command will complete non-interactively, showing session name and attach instructions.
 
 Verify the following filesystem state inside the temporary repo:
 - `.envrc` exists and contains the helper sourcing block.
