@@ -72,6 +72,10 @@ CLAUDE_FILES=(
     ".claude/commands/maw.sync.md"
     ".claude/commands/maw.sync.sh"
 )
+CODEX_FILES=(
+    ".codex/prompts/analysis.md"
+    ".codex/prompts/handoff.md"
+)
 
 SELF_PATH=".agents/scripts/uninstall.sh"
 
@@ -125,7 +129,7 @@ kill_agent_sessions() {
 
 kill_agent_sessions
 
-PREVIEW=("${TARGET_DIRS[@]}" "${TARGET_FILES[@]}" "${CLAUDE_FILES[@]}" "$SELF_PATH")
+PREVIEW=("${TARGET_DIRS[@]}" "${TARGET_FILES[@]}" "${CLAUDE_FILES[@]}" "${CODEX_FILES[@]}" ".codex/prompts/maw*.md" "$SELF_PATH")
 
 if [ "$DRY_RUN" = true ]; then
     log "Dry run: the following paths would be removed:"
@@ -199,6 +203,21 @@ for claude_file in "${CLAUDE_FILES[@]}"; do
     remove_path "$claude_file"
 done
 
+for codex_file in "${CODEX_FILES[@]}"; do
+    remove_path "$codex_file"
+done
+
+# Remove maw*.md files from .codex/prompts/
+CODEX_PROMPTS_DIR="$REPO_ROOT/.codex/prompts"
+if [ -d "$CODEX_PROMPTS_DIR" ]; then
+    for maw_prompt in "$CODEX_PROMPTS_DIR"/maw*.md; do
+        if [ -f "$maw_prompt" ]; then
+            rel_path=".codex/prompts/$(basename "$maw_prompt")"
+            remove_path "$rel_path"
+        fi
+    done
+fi
+
 cleanup_dir_if_empty() {
     local rel=$1
     local abs="$REPO_ROOT/$rel"
@@ -217,6 +236,8 @@ cleanup_dir_if_empty() {
 if [ "$DRY_RUN" = false ]; then
     cleanup_dir_if_empty ".claude/commands"
     cleanup_dir_if_empty ".claude"
+    cleanup_dir_if_empty ".codex/prompts"
+    cleanup_dir_if_empty ".codex"
 fi
 
 if [ "$DRY_RUN" = true ]; then
