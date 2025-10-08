@@ -97,8 +97,6 @@ class AssetInstaller:
         toolkit_generated = [
             ".claude/commands/maw.*",
             ".codex/prompts/maw*.md",
-            ".codex/prompts/handoff.md",
-            ".codex/prompts/analysis.md",
         ]
         ignore_lines.extend(toolkit_generated)
 

@@ -72,10 +72,7 @@ CLAUDE_FILES=(
     ".claude/commands/maw.sync.md"
     ".claude/commands/maw.sync.sh"
 )
-CODEX_FILES=(
-    ".codex/prompts/analysis.md"
-    ".codex/prompts/handoff.md"
-)
+CODEX_FILES=()
 
 SELF_PATH=".agents/scripts/uninstall.sh"
 
