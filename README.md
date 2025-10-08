@@ -18,13 +18,13 @@ This toolkit solves the coordination problem of running multiple AI coding agent
 
 ```bash
 # Bootstrap everything in one command (installs toolkit, creates worktrees, launches tmux)
+# Using latest stable release:
 uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --prefix demo
 
-# You'll be prompted to:
-# 1. Create an initial commit (if repo is empty)
-# 2. Commit the installed toolkit assets
-# 3. Attach to the tmux session
+# Or using alpha release (v0.1.9-alpha):
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.1.9-alpha \
+  multi-agent-kit init --prefix demo
 
 # Configure your agents
 $EDITOR .agents/agents.yaml
@@ -118,12 +118,16 @@ agents:
 cd your-project
 
 # Run init with custom prefix
+# Using main (stable):
 uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
+  multi-agent-kit init --prefix sprint
+
+# Or using v0.1.9-alpha (latest features):
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.1.9-alpha \
   multi-agent-kit init --prefix sprint
 
 # This will:
 # - Copy toolkit assets (.agents/, .envrc, etc.)
-# - Prompt you to commit them
 # - Create worktrees from agents.yaml
 # - Launch tmux session in background
 # - Show you how to attach
