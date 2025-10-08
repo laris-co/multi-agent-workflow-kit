@@ -1,10 +1,10 @@
 # Added by Multi-Agent Workflow Kit
 .agents
 agents
+.envrc
 .claude/settings.local.json
 .claude/*
 !.claude/commands/
-!.claude/commands/**
 .codex/*
 !.codex/prompts/
 !.codex/prompts/**

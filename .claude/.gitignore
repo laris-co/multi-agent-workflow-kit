@@ -2,4 +2,5 @@
 *
 !.gitignore
 !commands/
-!commands/**
+!commands/*
+commands/maw-*
