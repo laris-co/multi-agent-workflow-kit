@@ -1,18 +1,23 @@
 # Define each agent's branch and worktree location here.
 # Copy this file to match your team structure; run `.agents/setup.sh` afterward.
+#
+# Agent naming is flexible - use any pattern that works for your workflow:
+#   - Simplified: 1, 2, 3 (recommended for quick setup)
+#   - Descriptive: backend-api, frontend-ui, data-processor
+#   - Legacy: 1-agent, 2-agent, 3-agent (still supported)
 agents:
-  1-agent:
-    branch: agents/1-agent
-    worktree_path: agents/1-agent
+  1:
+    branch: agents/1
+    worktree_path: agents/1
     model: default
     description: Primary agent workspace
-  2-agent:
-    branch: agents/2-agent
-    worktree_path: agents/2-agent
+  2:
+    branch: agents/2
+    worktree_path: agents/2
     model: default
     description: Secondary agent workspace
-  3-agent:
-    branch: agents/3-agent
-    worktree_path: agents/3-agent
+  3:
+    branch: agents/3
+    worktree_path: agents/3
     model: default
     description: Tertiary agent workspace
