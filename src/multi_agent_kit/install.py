@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import os
 import shutil
+import stat
 from importlib import resources as importlib_resources
 from importlib.abc import Traversable
 from pathlib import Path
@@ -70,6 +72,10 @@ class AssetInstaller:
 
         with importlib_resources.as_file(source) as src_path:
             shutil.copy2(src_path, destination)
+            # Ensure .sh files are executable
+            if destination.suffix == ".sh":
+                current_mode = os.stat(destination).st_mode
+                os.chmod(destination, current_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
         written.append(destination)
 
     def _ensure_root_gitignore(self, written: list[Path]) -> None:
