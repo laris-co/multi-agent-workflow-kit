@@ -25,6 +25,7 @@ src/multi_agent_kit/assets/.agents/profiles/profile3.sh
 src/multi_agent_kit/assets/.agents/profiles/profile4.sh
 src/multi_agent_kit/assets/.agents/profiles/profile5.sh
 src/multi_agent_kit/assets/.agents/scripts/agents.sh
+src/multi_agent_kit/assets/.agents/scripts/attach.sh
 src/multi_agent_kit/assets/.agents/scripts/kill-all.sh
 src/multi_agent_kit/assets/.agents/scripts/remove.sh
 src/multi_agent_kit/assets/.agents/scripts/send-commands.sh
@@ -38,7 +39,4 @@ src/multi_agent_kit/assets/.claude/commands/maw-sync.md
 src/multi_agent_kit/assets/.claude/commands/maw-sync.sh
 src/multi_agent_kit/assets/.codex/.gitignore
 src/multi_agent_kit/assets/.codex/README.md
-src/multi_agent_kit/assets/.codex/prompts/README.md
-src/multi_agent_kit/assets/.codex/prompts/analysis.md
-src/multi_agent_kit/assets/.codex/prompts/handoff.md
 tests/test_install.py

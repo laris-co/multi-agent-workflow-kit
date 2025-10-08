@@ -1,6 +1,8 @@
-# Keep prompt templates tracked; ignore other Codex artifacts
 *
 !.gitignore
 !README.md
 !prompts/
 !prompts/**
+prompts/maw-*.md
+prompts/handoff.md
+prompts/analysis.md

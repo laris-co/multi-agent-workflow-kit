@@ -41,6 +41,7 @@ Usage: maw <command> [args]
 Commands:
   install | setup    Run setup.sh to provision or refresh agent worktrees
   start              Run start-agents.sh to launch the tmux session
+  attach             Run attach.sh to connect to an active tmux session
   agents             Run agents.sh to manage worktrees manually
   kill               Run kill-all.sh to terminate tmux sessions by prefix
   send               Run send-commands.sh to broadcast commands to panes
@@ -132,6 +133,9 @@ maw() {
     start)
       __maw_exec start-agents.sh "$@"
       ;;
+    attach)
+      __maw_exec attach.sh "$@"
+      ;;
     agents)
       __maw_exec agents.sh "$@"
       ;;
@@ -162,6 +166,7 @@ maw() {
 }
 
 alias maw-start='maw start'
+alias maw-attach='maw attach'
 alias maw-setup='maw install'
 alias maw-agents='maw agents'
 alias maw-kill='maw kill'

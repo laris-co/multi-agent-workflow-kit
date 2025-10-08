@@ -117,11 +117,13 @@ def ensure_git_repo(root: Path) -> Path:
     return toplevel
 
 
-def prompt_yes_no(message: str) -> bool:
+def prompt_yes_no(message: str, default: bool = False) -> bool:
     try:
         answer = input(message).strip().lower()
     except EOFError:
-        return False
+        return default
+    if not answer:
+        return default
     return answer in {"y", "yes"}
 
 
@@ -199,7 +201,7 @@ def ensure_initial_commit(root: Path) -> None:
         return
 
     print("⚠️  Repository has no commits yet.")
-    if not prompt_yes_no("Create an empty initial commit now? [y/N] "):
+    if not prompt_yes_no("Create an empty initial commit now? [Y/n] ", default=True):
         raise BootstrapError(
             "Repository must have at least one commit before provisioning agents. "
             "Run 'git commit --allow-empty -m \"Initial commit\"' and retry."
@@ -268,10 +270,26 @@ def handle_init(args: argparse.Namespace) -> None:
     start_args: list[str] = [args.profile]
     if args.prefix:
         start_args.extend(["--prefix", args.prefix])
-    if args.detach:
-        start_args.append("--detach")
+    start_args.append("--detach")
 
     run_script(start_script, *start_args)
+
+    if args.detach:
+        return
+
+    attach_script = start_script.parent / "attach.sh"
+    if not attach_script.exists():
+        print("⚠️  attach.sh not found; attach manually with tmux.", file=sys.stderr)
+        return
+
+    if not prompt_yes_no("Attach to session now? [y/N] "):
+        return
+
+    attach_args: list[str] = []
+    if args.prefix:
+        attach_args.extend(["--prefix", args.prefix])
+
+    run_script(attach_script, *attach_args)
 
 
 def main(argv: list[str] | None = None) -> None:
