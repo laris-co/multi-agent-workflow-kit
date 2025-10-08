@@ -76,17 +76,25 @@ class AssetInstaller:
         gitignore_path = self.target / ".gitignore"
         marker = "# Added by Multi-Agent Workflow Kit"
         ignore_lines = [
-            ".agents",
-            "agents",
+            "/.agents",
+            "/agents",
+            "/.envrc",
+            ".claude/settings.local.json",
             ".claude/*",
             "!.claude/commands/",
-            ".claude/commands/maw-*",
             ".codex/*",
             "!.codex/prompts/",
+            "!.codex/prompts/**",
+        ]
+
+        # Additional ignore patterns for toolkit-generated files
+        toolkit_generated = [
+            ".claude/commands/maw-*",
             ".codex/prompts/maw-*.md",
             ".codex/prompts/handoff.md",
             ".codex/prompts/analysis.md",
         ]
+        ignore_lines.extend(toolkit_generated)
 
         try:
             existing = gitignore_path.read_text()
