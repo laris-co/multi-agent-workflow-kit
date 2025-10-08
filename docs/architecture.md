@@ -26,9 +26,12 @@ Main repository (.git)
 | Worktree manager | `.agents/scripts/agents.sh` | Creates/list/removes worktrees using the registry |
 | Bootstrapper | `.agents/scripts/setup.sh` | Installs TPM, provisions worktrees from registry |
 | Tmux launcher | `.agents/scripts/start-agents.sh` | Spins up layouts, naming sessions consistently |
+| Session connector | `.agents/scripts/attach.sh` | Attaches to existing tmux sessions by name or prefix |
 | Layout profiles | `.agents/profiles/*.sh` | Parameterized pane geometries |
 | Broadcast helper | `.agents/scripts/send-commands.sh` | Sends commands to each pane |
 | Cleanup utility | `.agents/scripts/kill-all.sh` | Kills tmux sessions with shared prefix |
+| Worktree remover | `.agents/scripts/remove.sh` | Deletes agent worktrees and cleans up branches |
+| Toolkit uninstaller | `.agents/scripts/uninstall.sh` | Removes toolkit assets from repository |
 | Shared config | `.agents/config/tmux.conf` | Mouse support, theming, plugin config |
 
 ## Workflow
@@ -58,7 +61,12 @@ Main repository (.git)
 - Combine with automated planners or task generators that output into dedicated panes to keep reasoning visible.
 - For larger teams, consider a dashboard that reads `tmux list-clients` / `git status` across panes to surface stalled agents.
 
-## Next Improvements
-- Script to bootstrap new repositories (copy toolkit assets + `.agents/config/tmux.conf`).
-- Optional CI workflow verifying agent branches fast-forward to `main` before merging.
-- Health monitor service that alerts when an agent pane exits unexpectedly.
+## Future Enhancements
+- ✅ ~~Script to bootstrap new repositories~~ (completed via `uvx multi-agent-kit init`)
+- ✅ ~~Session attach helper~~ (completed via `attach.sh` and `maw attach`)
+- Health monitor service that alerts when an agent pane exits unexpectedly
+- Optional CI workflow verifying agent branches fast-forward to `main` before merging (see README Advanced Usage)
+- Agent handoff protocol: structured message passing between panes for coordination
+- Metrics dashboard: track agent activity, commit frequency, and pane health
+- Auto-recovery: restart crashed panes with last known command context
+- Multi-repo support: coordinate agents across related repositories

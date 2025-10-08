@@ -18,7 +18,7 @@ pushd "$tmpdir"
 git init -q
 uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@BRANCH multi-agent-kit init
 ```
-- Replace `BRANCH` with the branch under test (e.g., `release/v0.1.8`).
+- Replace `BRANCH` with the branch under test (e.g., `main`, `release/v0.1.9`).
 - Expect a prompt to commit the installed assets; decline for the smoke test.
 - Expect a prompt to create an empty `Initial commit` if the repository is brand
   new. The installer should exit gracefully after printing instructions.
@@ -27,11 +27,12 @@ Verify the following filesystem state inside the temporary repo:
 - `.envrc` exists and contains the helper sourcing block.
 - `.codex/README.md` exists and `CODEX_HOME` is set to that directory when
   `direnv` loads.
-- `.codex/prompts/` contains the tracked prompt templates (`README.md`,
-  `analysis.md`, `handoff.md`) while `.claude` only includes the command
-  definitions.
-- `.gitignore` includes the injected Multi-Agent Kit section and preserves
-  Claude overrides.
+- `.codex/prompts/README.md` exists; generated files (`maw-*.md`, `analysis.md`,
+  `handoff.md`) are excluded by `.codex/.gitignore`.
+- `.claude/commands/` contains `maw-agents-create.md`, `maw-codex.md`, `maw-codex.sh`,
+  `maw-sync.md`, and `maw-sync.sh`.
+- `.gitignore` includes the injected Multi-Agent Kit section (excluding `agents/`,
+  `.claude/commands/maw-*`, etc.) and preserves existing Claude overrides.
 
 Cleanup the temporary directory afterwards:
 ```bash
@@ -39,17 +40,32 @@ popd
 rm -rf "$tmpdir"
 ```
 
-## 3. Direnv Reload (optional)
+## 3. Direnv Reload & Command Availability
 If you changed `.envrc` logic, run:
 ```bash
 direnv reload
 ```
 or re-enter the repo to confirm variables/aliases update without errors.
 
+Verify `maw` command is available:
+```bash
+direnv allow
+maw --help  # Should show usage with all subcommands
+```
+
+Test key commands:
+```bash
+maw agents list  # Should list configured agents from agents.yaml
+type maw-start   # Should resolve to alias
+type maw-attach  # Should resolve to alias
+```
+
 ## 4. Regression Tests
 - Run targeted scripts if your change touched them (e.g.,
   `.agents/scripts/setup.sh --help`).
 - For Python logic, add or run unit tests under `tests/` when available.
+- Test worktree creation: `maw install` (requires at least one commit).
+- Test session lifecycle: `maw start profile0 --detach`, `maw attach`, `maw kill`.
 
 Document the outcome of these steps in your PR description so reviewers know the
 kit installs cleanly from the branch you're proposing.
