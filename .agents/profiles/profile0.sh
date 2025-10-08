@@ -2,14 +2,14 @@
 # Profile 0: Three horizontal panes stacked vertically
 # Top: Agent 1
 # Middle: Agent 2
-# Bottom: Agent 3 or Root
+# Bottom: Root (always, for supervision)
 #
 # ┌──────────────────────────────┐
 # │         Agent 1 (top)        │
 # ├──────────────────────────────┤
 # │       Agent 2 (middle)       │
 # ├──────────────────────────────┤
-# │     Agent 3/Root (bottom)    │
+# │        Root (bottom)         │
 # └──────────────────────────────┘
 
 # Layout configuration

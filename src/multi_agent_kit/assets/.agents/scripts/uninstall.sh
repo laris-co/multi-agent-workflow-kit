@@ -126,7 +126,7 @@ kill_agent_sessions() {
 
 kill_agent_sessions
 
-PREVIEW=("${TARGET_DIRS[@]}" "${TARGET_FILES[@]}" "${CLAUDE_FILES[@]}" "${CODEX_FILES[@]}" ".codex/prompts/maw*.md" "$SELF_PATH")
+PREVIEW=("${TARGET_DIRS[@]}" "${TARGET_FILES[@]}" "${CLAUDE_FILES[@]}" ${CODEX_FILES[@]+"${CODEX_FILES[@]}"} ".codex/prompts/maw*.md" "$SELF_PATH")
 
 if [ "$DRY_RUN" = true ]; then
     log "Dry run: the following paths would be removed:"
@@ -200,9 +200,11 @@ for claude_file in "${CLAUDE_FILES[@]}"; do
     remove_path "$claude_file"
 done
 
-for codex_file in "${CODEX_FILES[@]}"; do
-    remove_path "$codex_file"
-done
+if [ ${#CODEX_FILES[@]} -gt 0 ]; then
+    for codex_file in "${CODEX_FILES[@]}"; do
+        remove_path "$codex_file"
+    done
+fi
 
 # Remove maw*.md files from .codex/prompts/
 CODEX_PROMPTS_DIR="$REPO_ROOT/.codex/prompts"
