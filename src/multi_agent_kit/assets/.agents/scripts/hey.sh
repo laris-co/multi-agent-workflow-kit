@@ -145,6 +145,14 @@ if [[ "$AGENT_TARGET" == "all" ]]; then
     echo "📢 Broadcasting to all agents: $MESSAGE"
     PANE_COUNT=$(tmux list-panes -t "$SESSION_NAME:$WINDOW_INDEX" -F "#{pane_index}" | wc -l)
 
+    ENTER_KEYS=(
+        Enter   # standard Enter key name recognised by tmux
+        C-m     # carriage return (Enter)
+        C-j     # line feed
+        $'\r'   # raw carriage return byte
+        $'\n'   # raw newline byte
+    )
+
     for ((i=0; i<PANE_COUNT; i++)); do
         PANE_INDEX=$((PANE_BASE + i))
         TARGET_PANE="$SESSION_NAME:$WINDOW_INDEX.$PANE_INDEX"
@@ -155,7 +163,11 @@ if [[ "$AGENT_TARGET" == "all" ]]; then
             continue
         fi
 
-        tmux send-keys -t "$TARGET_PANE" "$MESSAGE" Enter
+        tmux send-keys -t "$TARGET_PANE" "$MESSAGE"
+        for enter_key in "${ENTER_KEYS[@]}"; do
+            tmux send-keys -t "$TARGET_PANE" "$enter_key"
+            sleep 0.05
+        done
     done
 
     echo "✅ Broadcasted to all agent panes"
@@ -173,8 +185,23 @@ if [[ "$AGENT_TARGET" == "root" ]] || [[ "$AGENT_TARGET" == "main" ]]; then
     fi
 
     TARGET_PANE="$SESSION_NAME:$WINDOW_INDEX.$ROOT_PANE"
+
+    ENTER_KEYS=(
+        Enter   # standard Enter key name recognised by tmux
+        C-m     # carriage return (Enter)
+        C-j     # line feed
+        $'\r'   # raw carriage return byte
+        $'\n'   # raw newline byte
+    )
+
     echo "📤 Sending to root pane: $MESSAGE"
-    tmux send-keys -t "$TARGET_PANE" "$MESSAGE" Enter
+    tmux send-keys -t "$TARGET_PANE" "$MESSAGE"
+
+    for enter_key in "${ENTER_KEYS[@]}"; do
+        tmux send-keys -t "$TARGET_PANE" "$enter_key"
+        sleep 0.05
+    done
+
     echo "✅ Sent successfully"
     exit 0
 fi
@@ -211,6 +238,20 @@ fi
 
 TARGET_PANE="$SESSION_NAME:$WINDOW_INDEX.$PANE_INDEX"
 
+ENTER_KEYS=(
+    Enter   # standard Enter key name recognised by tmux
+    C-m     # carriage return (Enter)
+    C-j     # line feed
+    $'\r'   # raw carriage return byte
+    $'\n'   # raw newline byte
+)
+
 echo "📤 Sending to agent '$AGENT_TARGET' (pane $PANE_INDEX): $MESSAGE"
-tmux send-keys -t "$TARGET_PANE" "$MESSAGE" Enter
+tmux send-keys -t "$TARGET_PANE" "$MESSAGE"
+
+for enter_key in "${ENTER_KEYS[@]}"; do
+    tmux send-keys -t "$TARGET_PANE" "$enter_key"
+    sleep 0.05
+done
+
 echo "✅ Sent successfully"
