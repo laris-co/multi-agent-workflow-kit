@@ -16,6 +16,7 @@ _maw() {
     'remove:Run remove.sh to delete agent worktrees'
     'uninstall:Run uninstall.sh to remove toolkit assets'
     'warp:Navigate to agent worktree or root'
+    'hey:Send a message to a specific agent'
     'help:Show help message'
   )
 
@@ -29,6 +30,25 @@ _maw() {
       ;;
     args)
       case "${words[1]}" in
+        hey)
+          if [[ $CURRENT -eq 3 ]]; then
+            # Complete agent names and special targets
+            local agents_dir="${MAW_REPO_ROOT:-$PWD}/agents"
+            local -a targets
+            targets=('root:Main worktree pane' 'all:Broadcast to all agents')
+
+            if [[ -d "$agents_dir" ]]; then
+              local dir
+              for dir in "$agents_dir"/*(N/); do
+                local basename="${dir:t}"
+                [[ "$basename" == .* ]] && continue
+                targets+=("$basename:Agent worktree")
+              done
+            fi
+
+            _describe -t targets 'agent' targets
+          fi
+          ;;
         warp)
           local agents_dir="${MAW_REPO_ROOT:-$PWD}/agents"
           local -a agent_dirs

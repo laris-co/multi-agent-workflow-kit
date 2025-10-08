@@ -328,6 +328,7 @@ maw start <profile>  # Launch tmux session
 maw attach           # Attach to running session
 maw agents <cmd>     # Manage worktrees (list, create, remove)
 maw send "<cmd>"     # Broadcast command to all panes
+maw hey <agent> <msg> # Send message to specific agent
 maw kill             # Terminate session
 maw remove <agent>   # Delete agent worktree
 maw uninstall        # Remove toolkit from repo
@@ -341,6 +342,11 @@ maw start profile1 --prefix hackathon
 
 # Navigate to agent worktree
 maw warp 2
+
+# Send message to specific agent
+maw hey 1 "analyse this codebase"
+maw hey 2 "create a plan for feature X"
+maw hey root "git status"
 
 # Return to main
 maw warp root
@@ -357,10 +363,24 @@ When working in Claude Code, use these custom commands:
 ### `/maw-sync`
 Sync current worktree with main branch (context-aware).
 
-### `/maw-codex` (if configured)
-Send prompt to codex agent pane in tmux.
+### `/maw-hey`
+Send a message to a specific agent in the tmux session.
 
-Example: `/maw-codex explain the authentication flow`
+**Examples:**
+```bash
+/maw-hey 1 analyse this repository structure
+/maw-hey 2 create a plan for the auth feature
+/maw-hey root git status
+/maw-hey all git pull  # broadcast to all agents
+```
+
+**Special targets:**
+- `root` - Main worktree pane
+- `all` - Broadcast to all agent panes
+- Agent names: `1`, `2`, `backend-api`, etc.
+
+### `/maw-codex` (legacy)
+Send prompt to agent in pane 1. **Note:** Use `/maw-hey 1 <message>` for more flexibility.
 
 ## Advanced Usage
 
