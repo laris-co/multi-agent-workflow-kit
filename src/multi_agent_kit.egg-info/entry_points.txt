@@ -1,2 +1,0 @@
-[console_scripts]
-multi-agent-kit = multi_agent_kit.cli:main
