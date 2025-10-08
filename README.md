@@ -22,8 +22,8 @@ This toolkit solves the coordination problem of running multiple AI coding agent
 uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --prefix demo
 
-# Or using alpha release (v0.1.9-alpha):
-uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.1.9-alpha \
+# Or using alpha release (v0.1.10-alpha):
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.1.10-alpha \
   multi-agent-kit init --prefix demo
 
 # Configure your agents
@@ -122,8 +122,8 @@ cd your-project
 uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init --prefix sprint
 
-# Or using v0.1.9-alpha (latest features):
-uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.1.9-alpha \
+# Or using v0.1.10-alpha (latest features):
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.1.10-alpha \
   multi-agent-kit init --prefix sprint
 
 # This will:
