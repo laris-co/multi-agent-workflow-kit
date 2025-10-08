@@ -298,6 +298,10 @@ reload_tmux_conf_across_panes() {
     done < <(tmux list-panes -s -t "$SESSION_NAME" -F "#{pane_id}" 2>/dev/null || true)
 }
 
+# Give shells time to initialize before sending commands
+# Prevents escape sequences from appearing literally in the last pane
+sleep 0.5
+
 reload_tmux_conf_across_panes
 direnv_broadcast
 
