@@ -5,7 +5,7 @@ _maw_complete() {
   local cur prev words cword
   _init_completion || return
 
-  local subcommands="install setup start agents kill send remove uninstall warp help"
+  local subcommands="install setup start agents kill send remove uninstall warp hey help"
 
   if [[ $cword -eq 1 ]]; then
     # Complete main subcommands
@@ -16,6 +16,20 @@ _maw_complete() {
   local subcommand="${words[1]}"
 
   case "$subcommand" in
+    hey)
+      # Complete agent names + special targets
+      if [[ $cword -eq 2 ]]; then
+        local agents_dir="${MAW_REPO_ROOT:-$PWD}/agents"
+        local targets="root all"
+        if [[ -d "$agents_dir" ]]; then
+          local agent_dirs
+          agent_dirs=$(ls -1 "$agents_dir" 2>/dev/null | grep -v '^\.')
+          targets="$targets $agent_dirs"
+        fi
+        COMPREPLY=($(compgen -W "$targets" -- "$cur"))
+      fi
+      return 0
+      ;;
     warp)
       # Complete agent names + "root"
       local agents_dir="${MAW_REPO_ROOT:-$PWD}/agents"

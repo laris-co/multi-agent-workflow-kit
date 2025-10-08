@@ -47,7 +47,8 @@ Commands:
   send               Run send-commands.sh to broadcast commands to panes
   remove             Run remove.sh to delete agent worktrees
   uninstall          Run uninstall.sh to remove toolkit assets
-  warp <target>      Navigate to agent worktree or root (e.g., warp 1-agent, warp root)
+  warp <target>      Navigate to agent worktree or root (e.g., warp 1, warp root)
+  hey <agent> <msg>  Send a message to a specific agent (e.g., hey 1 analyse repo)
 USAGE
 }
 
@@ -154,6 +155,9 @@ maw() {
     warp)
       __maw_warp "$@"
       ;;
+    hey)
+      __maw_exec hey.sh "$@"
+      ;;
     help|-h|--help)
       __maw_usage
       ;;
@@ -173,6 +177,7 @@ alias maw-kill='maw kill'
 alias maw-send='maw send'
 alias maw-remove='maw remove'
 alias maw-uninstall='maw uninstall'
+alias maw-hey='maw hey'
 
 # Load shell completion if available
 if [[ -n "${ZSH_VERSION:-}" ]]; then
