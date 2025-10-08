@@ -67,13 +67,15 @@ agents/
 ### Tmux Layouts
 Pre-configured **profiles** organize agent panes:
 
-**Profile 0** (default): Top pane + split bottom
+**Profile 0** (default): Three horizontal panes stacked
 ```
 ┌──────────────────────────────┐
 │         Agent 1 (top)        │
-├──────────────┬───────────────┤
-│   Agent 2    │  Agent 3/Root │
-└──────────────┴───────────────┘
+├──────────────────────────────┤
+│       Agent 2 (middle)       │
+├──────────────────────────────┤
+│     Agent 3/Root (bottom)    │
+└──────────────────────────────┘
 ```
 
 **Profile 1**: Left column + stacked right

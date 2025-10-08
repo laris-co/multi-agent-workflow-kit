@@ -154,7 +154,26 @@ pane_ref() {
 }
 tmux select-window -t "$SESSION_NAME":"$WINDOW_INDEX"
 
-if [ "$LAYOUT_TYPE" = "two-pane" ]; then
+if [ "$LAYOUT_TYPE" = "three-horizontal" ]; then
+    # Profile 0: Three horizontal panes stacked vertically
+    # Pane 0 (top): Agent 1
+    # Pane 1 (middle): Agent 2
+    # Pane 2 (bottom): Agent 3 or Root
+    if [ $TOTAL -ge 2 ]; then
+        echo "Adding pane 1 (middle) for ${AGENTS_ARRAY[1]}..."
+        tmux split-window -v -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "${MIDDLE_HEIGHT:-33}"
+    fi
+    if [ $TOTAL -ge 3 ]; then
+        echo "Adding pane 2 (bottom) for ${AGENTS_ARRAY[2]}..."
+        tmux select-pane -t "$(pane_ref 1)"
+        tmux split-window -v -t "$(pane_ref 1)" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "${BOTTOM_HEIGHT:-50}"
+    else
+        # If only 2 agents, add root pane at bottom
+        echo "Adding pane 2 (bottom) for root..."
+        tmux select-pane -t "$(pane_ref 1)"
+        tmux split-window -v -t "$(pane_ref 1)" -c "$REPO_ROOT" -p "${BOTTOM_HEIGHT:-50}"
+    fi
+elif [ "$LAYOUT_TYPE" = "two-pane" ]; then
     if [ $TOTAL -ge 2 ]; then
         echo "Adding bottom pane for ${AGENTS_ARRAY[1]}..."
         tmux split-window -v -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "${BOTTOM_HEIGHT:-50}"
