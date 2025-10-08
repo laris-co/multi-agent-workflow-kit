@@ -59,9 +59,9 @@ Each agent operates in a **worktree**—a separate directory linked to a unique 
 ```
 repo/                  ← main worktree (branch: main)
 agents/
-  ├── 1-agent/        ← worktree (branch: agents/1-agent)
-  ├── 2-agent/        ← worktree (branch: agents/2-agent)
-  └── 3-agent/        ← worktree (branch: agents/3-agent)
+  ├── 1/              ← worktree (branch: agents/1)
+  ├── 2/              ← worktree (branch: agents/2)
+  └── 3/              ← worktree (branch: agents/3)
 ```
 
 ### Tmux Layouts
@@ -94,15 +94,15 @@ Edit `.agents/agents.yaml` to define agents:
 
 ```yaml
 agents:
-  1-agent:
-    branch: agents/1-agent
-    worktree_path: agents/1-agent
+  1:
+    branch: agents/1
+    worktree_path: agents/1
     model: sonnet
     description: "Backend API development"
 
-  2-agent:
-    branch: agents/2-agent
-    worktree_path: agents/2-agent
+  2:
+    branch: agents/2
+    worktree_path: agents/2
     model: opus
     description: "Frontend React components"
 ```
@@ -159,8 +159,8 @@ maw start profile0
 direnv allow
 
 # In each agent worktree
-cd agents/1-agent && direnv allow
-cd agents/2-agent && direnv allow
+cd agents/1 && direnv allow
+cd agents/2 && direnv allow
 ```
 
 This activates the `maw` command wrapper and sets `CODEX_HOME` for shared state.
@@ -184,10 +184,10 @@ maw kill
 
 ```bash
 # Navigate to agent worktree
-cd agents/1-agent
+cd agents/1
 
 # Check agent's branch
-git branch --show-current  # → agents/1-agent
+git branch --show-current  # → agents/1
 
 # Make changes, commit
 git add .
@@ -209,7 +209,7 @@ cd /path/to/main
 maw sync  # pulls from origin
 
 # From agent worktree
-cd agents/1-agent
+cd agents/1
 maw sync  # merges local main
 ```
 
@@ -231,10 +231,10 @@ maw send "git pull"
 maw agents list
 
 # Create new agent
-maw agents create 4-agent -m claude-opus
+maw agents create 4 -m claude-opus
 
 # Remove agent worktree
-maw remove 3-agent
+maw remove 3
 ```
 
 ## Configuration
@@ -243,9 +243,9 @@ maw remove 3-agent
 
 ```yaml
 agents:
-  1-agent:
-    branch: agents/1-agent          # Git branch name
-    worktree_path: agents/1-agent   # Directory under agents/
+  1:
+    branch: agents/1                # Git branch name
+    worktree_path: agents/1         # Directory under agents/
     model: claude-sonnet-4          # Model identifier (informational)
     description: "Core backend"     # Purpose (optional)
 ```
@@ -303,9 +303,9 @@ maw start profile0  # → research-<repo-name>
 
 agents/                      # Agent worktrees (gitignored)
 ├── .gitignore               # Ignores all contents
-├── 1-agent/                 # Worktree for agent 1
-├── 2-agent/                 # Worktree for agent 2
-└── 3-agent/                 # Worktree for agent 3
+├── 1/                       # Worktree for agent 1
+├── 2/                       # Worktree for agent 2
+└── 3/                       # Worktree for agent 3
 
 .envrc                       # Direnv config (maw helpers, CODEX_HOME)
 .codex/                      # Codex CLI workspace (shared across worktrees)
@@ -340,7 +340,7 @@ maw warp <target>    # Navigate to agent worktree or root
 maw start profile1 --prefix hackathon
 
 # Navigate to agent worktree
-maw warp 2-agent
+maw warp 2
 
 # Return to main
 maw warp root
@@ -444,7 +444,7 @@ tmux kill-session -t ai-repo-name
 git worktree list
 
 # Remove stale worktree
-git worktree remove agents/1-agent --force
+git worktree remove agents/1 --force
 
 # Prune stale references
 git worktree prune
@@ -460,8 +460,8 @@ maw install
 direnv allow
 
 # Allow in each agent worktree
-cd agents/1-agent && direnv allow
-cd agents/2-agent && direnv allow
+cd agents/1 && direnv allow
+cd agents/2 && direnv allow
 
 # Check if direnv is working
 direnv status
@@ -486,7 +486,7 @@ source .envrc
 ### Merge Conflicts in Agent Worktrees
 
 ```bash
-cd agents/1-agent
+cd agents/1
 
 # Sync with main
 git fetch origin main:main  # update local main
