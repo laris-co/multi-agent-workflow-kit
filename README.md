@@ -8,7 +8,11 @@ Run multiple AI coding agents simultaneously without chaos. Each agent gets its 
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/laris-co/multi-agent-worktree-kit)](https://github.com/laris-co/multi-agent-worktree-kit/pulls)
 [![GitHub discussions](https://img.shields.io/github/discussions/laris-co/multi-agent-worktree-kit)](https://github.com/laris-co/multi-agent-worktree-kit/discussions)
 
-> **⚠️ Early Development**: This is a proof of concept exploring multi-agent workflows. PRs, issues, and discussions welcome!
+> **⚠️ Proof of Concept - Early Development Stage**
+>
+> This project is currently a **proof of concept** exploring multi-agent workflows with AI coding assistants. It's actively evolving and may have rough edges. We're experimenting with patterns for coordinating multiple AI agents on the same codebase.
+>
+> **We welcome your help!** PRs, issues, and discussions are highly encouraged. If you have ideas for improving agent coordination, workflow patterns, or have encountered interesting use cases, please share them.
 
 ## Quick Start
 
