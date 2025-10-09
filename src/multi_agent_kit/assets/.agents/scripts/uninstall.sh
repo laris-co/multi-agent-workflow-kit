@@ -77,8 +77,13 @@ CLAUDE_FILES=(
     ".claude/commands/maw.zoom.sh"
     ".claude/commands/maw.issue.md"
     ".claude/commands/maw.issue.sh"
+    ".claude/.gitignore"
 )
-CODEX_FILES=()
+CODEX_FILES=(
+    ".codex/prompts/README.md"
+    ".codex/.gitignore"
+    ".codex/README.md"
+)
 
 SELF_PATH=".agents/scripts/uninstall.sh"
 
