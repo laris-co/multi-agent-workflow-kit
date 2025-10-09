@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Wrapper script for Claude slash command /maw.zoom
-# Calls the core zoom.sh implementation
+# Calls the core zoom.sh implementation (fire and forget)
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 AGENT_ROOT="$SCRIPT_DIR/../../.agents"
@@ -13,4 +13,6 @@ if [[ ! -f "$ZOOM_SCRIPT" ]]; then
     exit 1
 fi
 
-exec "$ZOOM_SCRIPT" "$@"
+# Fire and forget - run in background and exit immediately
+"$ZOOM_SCRIPT" "$@" >/dev/null 2>&1 &
+echo "🔍 Zooming pane..."
