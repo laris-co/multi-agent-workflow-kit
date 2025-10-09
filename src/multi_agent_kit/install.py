@@ -16,9 +16,11 @@ ITEM_MAP = (
     ("agents", "agents"),      # Gitignore-only directory for worktrees
     (".claude", ".claude"),    # Claude commands and configuration
     (".codex", ".codex"),      # Codex CLI prompts and cache scaffolding
-    (".envrc", ".envrc"),  # direnv hook for tmux config
     ("AGENTS.md", "AGENTS.md"),  # Guide for human/AI collaborators
 )
+
+ENVRC_BEGIN_MARKER = "# === BEGIN Multi-Agent Worktree Kit ==="
+ENVRC_END_MARKER = "# === END Multi-Agent Worktree Kit ==="
 
 
 @dataclass(frozen=True)
@@ -48,6 +50,9 @@ class AssetInstaller:
                 source = self._asset_root().joinpath(source_name)
                 destination = self.target / dest_name
                 self._copy(source, destination, written)
+
+        # Handle .envrc separately with smart merge
+        self._ensure_envrc(written)
         self._ensure_root_gitignore(written)
         return written
 
@@ -77,6 +82,47 @@ class AssetInstaller:
                 current_mode = os.stat(destination).st_mode
                 os.chmod(destination, current_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
         written.append(destination)
+
+    def _ensure_envrc(self, written: list[Path]) -> None:
+        """Smart merge .envrc with existing content, using marked sections."""
+        envrc_path = self.target / ".envrc"
+        source = self._asset_root().joinpath(".envrc")
+
+        # Read toolkit config
+        with importlib_resources.as_file(source) as src_path:
+            toolkit_config = src_path.read_text()
+
+        # Wrap toolkit config in markers
+        wrapped_config = f"{ENVRC_BEGIN_MARKER}\n{toolkit_config.rstrip()}\n{ENVRC_END_MARKER}\n"
+
+        if not envrc_path.exists():
+            # No existing .envrc, write wrapped config
+            envrc_path.write_text(wrapped_config)
+            written.append(envrc_path)
+            return
+
+        # Read existing .envrc
+        existing_content = envrc_path.read_text()
+
+        # Check if toolkit section already exists
+        if ENVRC_BEGIN_MARKER in existing_content and ENVRC_END_MARKER in existing_content:
+            if self.force:
+                # Replace existing toolkit section
+                import re
+                pattern = rf"{re.escape(ENVRC_BEGIN_MARKER)}.*?{re.escape(ENVRC_END_MARKER)}\n?"
+                new_content = re.sub(pattern, wrapped_config, existing_content, flags=re.DOTALL)
+                envrc_path.write_text(new_content)
+                written.append(envrc_path)
+            # else: toolkit section exists, nothing to do
+            return
+
+        # Append toolkit config to existing .envrc
+        if not existing_content.endswith("\n"):
+            existing_content += "\n"
+
+        merged_content = existing_content + "\n" + wrapped_config
+        envrc_path.write_text(merged_content)
+        written.append(envrc_path)
 
     def _ensure_root_gitignore(self, written: list[Path]) -> None:
         gitignore_path = self.target / ".gitignore"
