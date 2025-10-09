@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "multi-agent-kit"
-version = "0.2.4-alpha"
+version = "0.2.5-alpha"
 description = "uvx entry point for bootstrapping the Multi-Agent Worktree Kit."
 readme = "README.md"
 authors = [{ name = "Multi-Agent Worktree Kit Maintainers" }]
@@ -27,3 +27,10 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 "multi_agent_kit" = ["assets/**", "assets/.*", "assets/.agents/**", "assets/.claude/**", "assets/.codex/**"]
+
+[tool.uv]
+# UV-specific configuration
+dev-dependencies = []
+
+[tool.uv.sources]
+# Package sources configuration (if needed)

@@ -326,8 +326,8 @@ auto_warp_panes() {
 
         if [ -d "$agent_dir" ]; then
             echo "  📍 Pane $pane_index → Agent $agent_name (index=$agent_index)"
-            echo "     Sending to $target_pane: source .envrc && maw warp \"$agent_name\""
-            tmux send-keys -t "$target_pane" "source .envrc && maw warp \"$agent_name\"" C-m
+            echo "     Sending to $target_pane: ORIG_PWD=\"\$PWD\" && cd \"$REPO_ROOT\" && source .envrc && cd \"\$ORIG_PWD\" && maw warp \"$agent_name\""
+            tmux send-keys -t "$target_pane" "ORIG_PWD=\"\$PWD\" && cd \"$REPO_ROOT\" && source .envrc && cd \"\$ORIG_PWD\" && maw warp \"$agent_name\"" C-m
         else
             echo "  ⚠️ Directory not found: $agent_dir"
         fi
