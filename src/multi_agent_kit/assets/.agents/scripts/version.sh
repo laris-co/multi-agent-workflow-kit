@@ -25,7 +25,7 @@ if [ -z "$VERSION" ]; then
     VERSION="unknown"
 fi
 
-echo "Multi-Agent Worktree Kit"
+echo "Multi-Agent Workflow Kit"
 echo "Version: $VERSION"
 echo ""
 echo "Repository: https://github.com/laris-co/multi-agent-worktree-kit"

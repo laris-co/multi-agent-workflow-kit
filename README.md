@@ -1,4 +1,4 @@
-# Multi-Agent Worktree Kit
+# Multi-Agent Workflow Kit
 
 **Orchestrate parallel AI agents in isolated git worktrees with shared tmux visibility.**
 

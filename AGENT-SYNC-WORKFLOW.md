@@ -138,7 +138,7 @@ git branch --show-current  # agents/3
 
 ## GitHub Flow: Branch, Push, PR
 
-### For Agent Worktrees (agents/1, agents/2, etc.)
+### For Agent Workflows (agents/1, agents/2, etc.)
 
 After making changes and syncing, follow GitHub flow:
 

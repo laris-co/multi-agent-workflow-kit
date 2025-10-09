@@ -19,8 +19,8 @@ ITEM_MAP = (
     ("AGENTS.md", "AGENTS.md"),  # Guide for human/AI collaborators
 )
 
-ENVRC_BEGIN_MARKER = "# === BEGIN Multi-Agent Worktree Kit ==="
-ENVRC_END_MARKER = "# === END Multi-Agent Worktree Kit ==="
+ENVRC_BEGIN_MARKER = "# === BEGIN Multi-Agent Workflow Kit ==="
+ENVRC_END_MARKER = "# === END Multi-Agent Workflow Kit ==="
 
 
 @dataclass(frozen=True)
@@ -126,7 +126,7 @@ class AssetInstaller:
 
     def _ensure_root_gitignore(self, written: list[Path]) -> None:
         gitignore_path = self.target / ".gitignore"
-        marker = "# Added by Multi-Agent Worktree Kit"
+        marker = "# Added by Multi-Agent Workflow Kit"
         ignore_lines = [
             "/.agents",
             "/agents",
