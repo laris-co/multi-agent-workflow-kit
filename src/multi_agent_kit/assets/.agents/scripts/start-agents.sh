@@ -153,9 +153,13 @@ tmux new-session -d -s "$SESSION_NAME" -c "$REPO_ROOT"
 
 WINDOW_INDEX=$(tmux list-windows -t "$SESSION_NAME" -F "#{window_index}" | head -1)
 # Get pane-base-index from the window (falls back to global default)
-PANE_BASE=$(tmux show-window-options -t "$SESSION_NAME":"$WINDOW_INDEX" -v pane-base-index 2>/dev/null \
-    || tmux show-window-options -gv pane-base-index 2>/dev/null \
-    || echo 0)
+PANE_BASE=$(tmux show-window-options -t "$SESSION_NAME":"$WINDOW_INDEX" -v pane-base-index 2>/dev/null)
+if [ -z "$PANE_BASE" ]; then
+    PANE_BASE=$(tmux show-window-options -gv pane-base-index 2>/dev/null)
+fi
+if [ -z "$PANE_BASE" ]; then
+    PANE_BASE=0
+fi
 pane_ref() {
     local offset=$1
     local pane_index=$((PANE_BASE + offset))
