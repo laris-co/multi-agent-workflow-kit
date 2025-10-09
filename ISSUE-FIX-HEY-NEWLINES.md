@@ -76,12 +76,28 @@ for enter_key in "${ENTER_KEYS[@]}"; do
 done
 ```
 
+### Why not the simpler hey-codex.sh approach?
+
+The `hey-codex.sh` script uses a simpler approach:
+```bash
+tmux send-keys -t "$pane" "$text"
+sleep 0.05
+tmux send-keys -t "$pane" Enter
+```
+
+This works great when Codex is in a **normal ready state**, but **FAILS after Ctrl+C**:
+- After Ctrl+C clears input, `Enter` exits Codex instead of submitting the message
+- The 5-key loop works in BOTH cases (normal state AND after Ctrl+C)
+
+Since we can't detect if Ctrl+C was just pressed, we must use the 5-key loop.
+
 ### Trade-off
 This approach creates extra blank lines in the interface, but it's the ONLY method that reliably submits messages to both:
-- ✅ Codex (gpt-5-codex)
-- ✅ Claude Code (Sonnet 4.5)
+- ✅ Codex (gpt-5-codex) - works in all states
+- ✅ Claude Code (Sonnet 4.5) - works in all states
+- ✅ After Ctrl+C interrupt - still works
 
-The blank lines are an acceptable trade-off for reliable cross-client compatibility.
+The blank lines are an acceptable trade-off for guaranteed cross-state reliability.
 
 ### Solution 2: Client Detection (Advanced)
 Detect the client type and use appropriate Enter key:
