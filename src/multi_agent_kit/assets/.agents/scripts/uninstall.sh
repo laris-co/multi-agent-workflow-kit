@@ -69,10 +69,14 @@ CLAUDE_FILES=(
     ".claude/commands/maw.codex.sh"
     ".claude/commands/maw.hey.md"
     ".claude/commands/maw.hey.sh"
+    ".claude/commands/maw-issue.md"
+    ".claude/commands/maw-issue.sh"
     ".claude/commands/maw.sync.md"
     ".claude/commands/maw.sync.sh"
     ".claude/commands/maw.zoom.md"
     ".claude/commands/maw.zoom.sh"
+    ".claude/commands/maw.issue.md"
+    ".claude/commands/maw.issue.sh"
 )
 CODEX_FILES=()
 

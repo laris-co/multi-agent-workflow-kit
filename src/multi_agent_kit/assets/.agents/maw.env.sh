@@ -46,6 +46,7 @@ Commands:
   kill               Run kill-all.sh to terminate tmux sessions by prefix
   send               Run send-commands.sh to broadcast commands to panes
   remove             Run remove.sh to delete agent worktrees
+  issue              Run issue.sh to open a GitHub issue via gh CLI
   uninstall          Run uninstall.sh to remove toolkit assets
   warp <target>      Navigate to agent worktree or root (e.g., warp 1, warp root)
   hey <agent> <msg>  Send a message to a specific agent (e.g., hey 1 analyse repo)
@@ -152,6 +153,9 @@ maw() {
     remove)
       __maw_exec remove.sh "$@"
       ;;
+    issue)
+      __maw_exec issue.sh "$@"
+      ;;
     uninstall)
       __maw_exec uninstall.sh "$@"
       ;;
@@ -190,6 +194,7 @@ alias maw-send='maw send'
 alias maw-remove='maw remove'
 alias maw-uninstall='maw uninstall'
 alias maw-hey='maw hey'
+alias maw-issue='maw issue'
 
 # Load shell completion if available
 if [[ -n "${ZSH_VERSION:-}" ]]; then
