@@ -24,7 +24,7 @@ Examples:
   zoom.sh 1       # Toggle back to unzoom
 
 Note:
-  Sends tmux prefix (C-b) + z to toggle zoom state
+  Uses tmux resize-pane -Z to toggle zoom state
 USAGE
 }
 
@@ -120,8 +120,7 @@ if [[ "$AGENT_TARGET" == "root" ]] || [[ "$AGENT_TARGET" == "main" ]]; then
     TARGET_PANE="$SESSION_NAME:$WINDOW_INDEX.$ROOT_PANE"
 
     echo "🔍 Toggling zoom for root pane"
-    tmux select-pane -t "$TARGET_PANE"
-    tmux send-keys -t "$TARGET_PANE" C-b z
+    tmux resize-pane -Z -t "$TARGET_PANE"
 
     echo "✅ Zoom toggled"
     exit 0
@@ -160,7 +159,6 @@ fi
 TARGET_PANE="$SESSION_NAME:$WINDOW_INDEX.$PANE_INDEX"
 
 echo "🔍 Toggling zoom for agent '$AGENT_TARGET' (pane $PANE_INDEX)"
-tmux select-pane -t "$TARGET_PANE"
-tmux send-keys -t "$TARGET_PANE" C-b z
+tmux resize-pane -Z -t "$TARGET_PANE"
 
 echo "✅ Zoom toggled"

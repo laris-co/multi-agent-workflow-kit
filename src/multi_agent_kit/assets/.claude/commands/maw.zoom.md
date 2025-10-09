@@ -13,7 +13,7 @@ Inputs:
 Behavior:
 1) Discover available agents from agents/ directory
 2) Map agent name to correct tmux pane
-3) Select the pane and send C-b z to toggle zoom state
+3) Use tmux resize-pane -Z to toggle zoom state
 
 Shell template:
 
