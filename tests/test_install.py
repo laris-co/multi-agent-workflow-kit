@@ -14,7 +14,7 @@ def test_installer_creates_assets(tmp_path: Path) -> None:
     written = installer.ensure_assets()
     assert (tmp_path / ".agents").is_dir()
     assert (tmp_path / "agents").is_dir()
-    assert (tmp_path / "agents" / ".gitignore").is_file()
+    assert not (tmp_path / "agents" / ".gitignore").exists()
     assert (tmp_path / ".tmux.conf").is_file()
     assert written  # some files were copied
 
@@ -39,3 +39,15 @@ def test_force_overwrites(tmp_path: Path) -> None:
 
     # ensure missing_assets still empty
     assert list(missing_assets(tmp_path)) == []
+
+
+def test_agents_gitignore_opt_in(tmp_path: Path) -> None:
+    create_installer = AssetInstaller(tmp_path, create_agents_gitignore=True)
+    create_installer.ensure_assets()
+    gitignore_path = tmp_path / "agents" / ".gitignore"
+    assert gitignore_path.is_file()
+
+    # Running again without the option should remove the file (for backwards compatibility)
+    default_installer = AssetInstaller(tmp_path)
+    default_installer.ensure_assets()
+    assert not gitignore_path.exists()
