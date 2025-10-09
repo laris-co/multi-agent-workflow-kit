@@ -165,21 +165,22 @@ pane_ref() {
 tmux select-window -t "$SESSION_NAME":"$WINDOW_INDEX"
 
 if [ "$LAYOUT_TYPE" = "three-horizontal" ]; then
-    # Profile 0: Three horizontal panes stacked vertically
+    # Profile 0: Three horizontal panes stacked vertically (all agents, no root)
     # Pane 0 (top): Agent 1
     # Pane 1 (middle): Agent 2
-    # Pane 2 (bottom): Root (always for supervision)
+    # Pane 2 (bottom): Agent 3
     if [ $TOTAL -ge 2 ]; then
         echo "Adding pane 1 (middle) for ${AGENTS_ARRAY[1]}..."
         tmux split-window -v -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "${MIDDLE_HEIGHT:-33}"
     fi
-    # Always add root pane at bottom for supervision
-    echo "Adding pane 2 (bottom) for root..."
-    tmux select-pane -t "$(pane_ref 1)"
-    tmux split-window -v -t "$(pane_ref 1)" -c "$REPO_ROOT" -p "${BOTTOM_HEIGHT:-50}"
+    if [ $TOTAL -ge 3 ]; then
+        echo "Adding pane 2 (bottom) for ${AGENTS_ARRAY[2]}..."
+        tmux select-pane -t "$(pane_ref 1)"
+        tmux split-window -v -t "$(pane_ref 1)" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "${BOTTOM_HEIGHT:-50}"
+    fi
 
-    if [ $TOTAL -gt 2 ]; then
-        echo "⚠️  profile0 shows only 2 agent panes + root. Additional agents will not open panes: ${AGENTS_ARRAY[@]:2}" >&2
+    if [ $TOTAL -gt 3 ]; then
+        echo "⚠️  profile0 shows only 3 agent panes. Additional agents will not open panes: ${AGENTS_ARRAY[@]:3}" >&2
     fi
 elif [ "$LAYOUT_TYPE" = "two-pane" ]; then
     if [ $TOTAL -ge 2 ]; then

@@ -1,20 +1,20 @@
 #!/bin/bash
-# Profile 0: Three horizontal panes stacked vertically
+# Profile 0: Three horizontal panes stacked vertically (all agents, no root)
 # Top: Agent 1
 # Middle: Agent 2
-# Bottom: Root (always, for supervision)
+# Bottom: Agent 3
 #
 # ┌──────────────────────────────┐
-# │         Agent 1 (top)        │
+# │         Agent 1              │
 # ├──────────────────────────────┤
-# │       Agent 2 (middle)       │
+# │         Agent 2              │
 # ├──────────────────────────────┤
-# │        Root (bottom)         │
+# │         Agent 3              │
 # └──────────────────────────────┘
 
 # Layout configuration
-MIDDLE_HEIGHT=33          # Middle pane height percentage (33% each)
-BOTTOM_HEIGHT=50          # Bottom pane height percentage (50% of remaining)
+MIDDLE_HEIGHT=33          # Middle pane height (33% each)
+BOTTOM_HEIGHT=50          # Bottom pane height (50% of remaining)
 
 # Special layout flag
 LAYOUT_TYPE="three-horizontal"   # Three panes stacked vertically
