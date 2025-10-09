@@ -147,7 +147,8 @@ maw warp <target>    # Navigate to worktree (agent number or 'root')
 
 # Utilities
 maw sync             # Smart git sync (context-aware)
-maw catlab           # Download CLAUDE.md guidelines
+maw issue --title "Add /maw-issue helper" --body "Plan outline" --dry-run
+maw catlab           # Download CLAUDE.md pointer (read AGENTS.md for rules)
 maw version          # Show toolkit version
 maw uninstall        # Remove toolkit from repo
 ```
@@ -159,6 +160,7 @@ In Claude Code, use these commands:
 - `/maw.sync` - Sync current worktree with main
 - `/maw.hey <agent> <message>` - Send message to specific agent
 - `/maw.zoom <agent>` - Toggle zoom for agent pane
+- `/maw.issue` (alias `/maw-issue`) - Create a GitHub issue via `gh` after verifying authentication
 
 ## Tmux Profiles
 

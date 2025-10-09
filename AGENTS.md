@@ -7,6 +7,14 @@ its own directory and branch. The assignments are defined in
 - a branch named `agents/<agent-name>`
 - a working directory under `agents/<agent-name>/`
 
+## Single Source of Truth
+
+`AGENTS.md` is the canonical source of operating instructions for this
+repository. If any other document (including `CLAUDE.md`, legacy handbooks, or
+tooling defaults) appears to conflict with the guidance here, **follow this
+file**. `CLAUDE.md` has been reduced to a compatibility shim that simply points
+back to this document so that all agents share one set of rules.
+
 Use `git worktree list` to inspect the current setup. Do **not** switch an agent
 worktree back to `main`; only the repository root should operate on the `main`
 branch.

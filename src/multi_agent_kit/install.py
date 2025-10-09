@@ -156,6 +156,7 @@ class AssetInstaller:
         # Additional ignore patterns for toolkit-generated files
         toolkit_generated = [
             ".claude/commands/maw.*",
+            ".claude/commands/maw-*",
             ".codex/prompts/maw*.md",
         ]
         ignore_lines.extend(toolkit_generated)
