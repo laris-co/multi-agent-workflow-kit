@@ -295,6 +295,7 @@ def handle_init(args: argparse.Namespace) -> None:
     print(f"\n💡 Next steps:")
     print(f"   \033[1;36msource .envrc\033[0m")
     print(f"   \033[1;36mmaw attach\033[0m")
+    print(f"\n{'─' * 60}")
 
 
 def main(argv: list[str] | None = None) -> None:
