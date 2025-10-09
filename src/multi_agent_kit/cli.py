@@ -294,6 +294,7 @@ def handle_init(args: argparse.Namespace) -> None:
     print(f"   maw sync")
     print(f"   maw uninstall")
     print(f"   \033[1;36mmaw warp <agent|root>\033[0m  # Navigate to worktree")
+    print(f"\n🎉 Happy coding!")
 
 
 def main(argv: list[str] | None = None) -> None:
