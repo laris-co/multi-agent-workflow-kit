@@ -27,3 +27,10 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 "multi_agent_kit" = ["assets/**", "assets/.*", "assets/.agents/**", "assets/.claude/**", "assets/.codex/**"]
+
+[tool.uv]
+# UV-specific configuration
+dev-dependencies = []
+
+[tool.uv.sources]
+# Package sources configuration (if needed)

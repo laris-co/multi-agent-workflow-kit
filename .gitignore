@@ -13,6 +13,7 @@
 .tmux/resurrect/
 .tmux/plugins/
 .context/
+.tmp/
 
 # Python build artifacts
 build/
@@ -21,6 +22,10 @@ dist/
 __pycache__/
 *.pyc
 *.pyo
+
+# UV cache
+.uv-cache/
+uv.lock
 
 # Local IDE/tool overrides
 settings.local.json
