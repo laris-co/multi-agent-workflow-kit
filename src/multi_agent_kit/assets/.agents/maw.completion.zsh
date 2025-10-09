@@ -20,6 +20,7 @@ _maw() {
     'setup:Alias for install'
     'start:Run start-agents.sh to launch the tmux session'
     'uninstall:Run uninstall.sh to remove toolkit assets'
+    'version:Show toolkit version information'
     'warp:Navigate to agent worktree or root'
   )
 

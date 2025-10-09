@@ -51,6 +51,7 @@ Commands:
   hey <agent> <msg>  Send a message to a specific agent (e.g., hey 1 analyse repo)
   direnv             Send Ctrl+C and 'direnv allow .' to all panes
   catlab             Download CLAUDE.md guidelines from catlab gist
+  version            Show toolkit version information
 USAGE
 }
 
@@ -165,6 +166,9 @@ maw() {
       ;;
     catlab)
       __maw_exec catlab.sh "$@"
+      ;;
+    version)
+      __maw_exec version.sh "$@"
       ;;
     help|-h|--help)
       __maw_usage

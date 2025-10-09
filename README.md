@@ -344,6 +344,7 @@ maw send "<cmd>"     # Broadcast command to all panes
 maw hey <agent> <msg> # Send message to specific agent
 maw direnv           # Send Ctrl+C and 'direnv allow .' to all panes
 maw catlab           # Download CLAUDE.md guidelines from catlab gist
+maw version          # Show toolkit version information
 maw kill             # Terminate session
 maw remove <agent>   # Delete agent worktree
 maw uninstall        # Remove toolkit from repo
