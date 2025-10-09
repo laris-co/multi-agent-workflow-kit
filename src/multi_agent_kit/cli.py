@@ -281,8 +281,9 @@ def handle_init(args: argparse.Namespace) -> None:
         session_name += f"-{args.prefix}"
 
     print(f"\n✅ Session started: {session_name}")
-    print(f"\n💡 Next step - load maw commands:")
+    print(f"\n💡 Next steps:")
     print(f"   \033[1;36msource .envrc\033[0m")
+    print(f"   \033[1;36mmaw attach\033[0m")
     print(f"\n📖 Available commands:")
     print(f"   maw attach")
     print(f"   maw agents <tab>")
