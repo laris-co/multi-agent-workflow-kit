@@ -20,6 +20,21 @@ if command -v git >/dev/null 2>&1 && [ -d "$REPO_ROOT/.git" ]; then
     fi
 fi
 
+# Prefer package markers for packaged installs
+if [[ -z "$VERSION" || "$VERSION" == dev-* ]]; then
+    VERSION_FILE="$AGENT_ROOT/VERSION"
+    if [ -f "$VERSION_FILE" ]; then
+        VERSION=$(head -n1 "$VERSION_FILE" | tr -d '\r')
+    fi
+fi
+
+if [[ -z "$VERSION" || "$VERSION" == dev-* ]] && [ -f "$REPO_ROOT/pyproject.toml" ]; then
+    VERSION=$(grep -E '^[[:space:]]*version[[:space:]]*=' "$REPO_ROOT/pyproject.toml" \
+        | head -n1 \
+        | sed -E 's/^[^"]*"([^"]+)".*/\1/' \
+        || echo "")
+fi
+
 # Fallback version
 if [ -z "$VERSION" ]; then
     VERSION="unknown"

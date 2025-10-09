@@ -2,12 +2,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import os
+import re
 import shutil
 import stat
 from importlib import resources as importlib_resources
 from importlib.abc import Traversable
 from pathlib import Path
 from typing import Iterator
+from importlib.metadata import PackageNotFoundError, version as get_package_version
 
 ASSET_PACKAGE = "multi_agent_kit"
 ASSET_ROOT_NAME = "assets"
@@ -33,6 +35,7 @@ class AssetInstaller:
     def __init__(self, target: Path, force: bool = False) -> None:
         self.target = target
         self.force = force
+        self.package_version = self._detect_package_version()
 
     def ensure_assets(self) -> list[Path]:
         written: list[Path] = []
@@ -54,6 +57,7 @@ class AssetInstaller:
         # Handle .envrc separately with smart merge
         self._ensure_envrc(written)
         self._ensure_root_gitignore(written)
+        self._write_version_marker(written)
         return written
 
     def _asset_root(self) -> Traversable:
@@ -170,6 +174,51 @@ class AssetInstaller:
 
         gitignore_path.write_text(existing + append_text)
         written.append(gitignore_path)
+
+    def _write_version_marker(self, written: list[Path]) -> None:
+        if not self.package_version:
+            return
+
+        version_path = self.target / ".agents" / "VERSION"
+        version_path.parent.mkdir(parents=True, exist_ok=True)
+
+        if version_path.exists() and not self.force:
+            return
+
+        version_path.write_text(f"{self._format_display_version(self.package_version)}\n")
+        written.append(version_path)
+
+    @staticmethod
+    def _detect_package_version() -> str | None:
+        try:
+            return get_package_version("multi-agent-kit")
+        except PackageNotFoundError:
+            return None
+
+    @staticmethod
+    def _format_display_version(raw: str) -> str:
+        if not raw:
+            return raw
+
+        pattern = r"^(?P<base>\d+(?:\.\d+)*)(?:(?P<pre>a|b|rc)(?P<num>\d+))?$"
+        match = re.match(pattern, raw)
+        if not match:
+            return raw
+
+        base = match.group("base")
+        pre = match.group("pre")
+        if not pre:
+            return raw
+
+        num = match.group("num") or ""
+        label_map = {"a": "alpha", "b": "beta", "rc": "rc"}
+        label = label_map.get(pre, pre)
+
+        suffix = f"-{label}"
+        if num and num != "0":
+            suffix += f".{num}"
+
+        return base + suffix
 
 
 def missing_assets(target: Path) -> Iterator[str]:
