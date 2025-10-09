@@ -46,25 +46,42 @@ Both Codex and Claude Code work correctly with a single `Enter` key:
 - ❌ Multiple Enter variations cause extra blank lines
 
 ## Root Cause
-The initial fix attempt failed because tmux `send-keys` interprets `"$MESSAGE" Enter` as sending the literal text "message Enter" when used in a single command. The Enter key name must be sent as a separate command.
+After extensive testing, NO SINGLE Enter key variation works reliably:
+- `Enter` - does NOT submit to Codex
+- `C-m` - does NOT submit to Codex
+- `C-j` - does NOT submit
+- `$'\r'` - exits Codex when sent after Ctrl+C
+- `$'\n'` - does NOT submit
+- Paste-buffer approach - does NOT submit
 
-## Correct Fix Applied
+## Final Solution: 5-Key Loop (ONLY Working Approach)
 
-### Solution: Separate send-keys Commands
-Send the message and Enter key as two separate tmux commands:
+The ONLY solution that works with both Codex and Claude Code is sending ALL 5 Enter variations:
 
 ```bash
-# Correct fix - separate commands
+ENTER_KEYS=(
+    Enter   # standard Enter key name recognised by tmux
+    C-m     # carriage return (Enter)
+    C-j     # line feed
+    $'\r'   # raw carriage return byte
+    $'\n'   # raw newline byte
+)
+
 echo "📤 Sending to agent '$AGENT_TARGET' (pane $PANE_INDEX): $MESSAGE"
 tmux send-keys -t "$TARGET_PANE" "$MESSAGE"
-tmux send-keys -t "$TARGET_PANE" Enter
-echo "✅ Sent successfully"
+
+for enter_key in "${ENTER_KEYS[@]}"; do
+    tmux send-keys -t "$TARGET_PANE" "$enter_key"
+    sleep 0.05
+done
 ```
 
-This ensures:
-1. The message text is sent first
-2. Then the Enter key is sent to submit it
-3. Works correctly with both Codex and Claude Code
+### Trade-off
+This approach creates extra blank lines in the interface, but it's the ONLY method that reliably submits messages to both:
+- ✅ Codex (gpt-5-codex)
+- ✅ Claude Code (Sonnet 4.5)
+
+The blank lines are an acceptable trade-off for reliable cross-client compatibility.
 
 ### Solution 2: Client Detection (Advanced)
 Detect the client type and use appropriate Enter key:
