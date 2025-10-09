@@ -73,6 +73,16 @@ if ! git -C "$REPO_ROOT" rev-parse --verify HEAD >/dev/null 2>&1; then
     exit 1
 fi
 
+# Run direnv allow before creating tmux session
+if command -v direnv >/dev/null 2>&1 && [ "${SKIP_DIRENV_ALLOW:-}" != "1" ]; then
+    DIRENV_SCRIPT="$SCRIPT_DIR/direnv-allow.sh"
+    if [ -f "$DIRENV_SCRIPT" ]; then
+        echo "🔧 Configuring direnv in all worktrees..."
+        "$DIRENV_SCRIPT" || true
+        echo ""
+    fi
+fi
+
 direnv_broadcast() {
     if [ "${SKIP_DIRENV_ALLOW:-}" = "1" ]; then
         return
