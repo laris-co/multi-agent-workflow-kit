@@ -48,21 +48,20 @@ echo ""
 
 # Allow in main repo
 if [ -f "$REPO_ROOT/.envrc" ]; then
-    echo "📍 Repository root: $REPO_ROOT"
-    (cd "$REPO_ROOT" && direnv allow .)
+    echo "📍 Repository root"
+    direnv allow "$REPO_ROOT"
     echo "   ✅ direnv allowed"
 else
-    echo "📍 Repository root: $REPO_ROOT"
+    echo "📍 Repository root"
     echo "   ⚠️  No .envrc found (skipping)"
 fi
-
-echo ""
 
 # Get agents directory
 AGENTS_DIR="$REPO_ROOT/agents"
 
 if [ ! -d "$AGENTS_DIR" ]; then
-    echo "ℹ️  No agents directory found at: $AGENTS_DIR"
+    echo ""
+    echo "ℹ️  No agents directory found"
     echo "   Run 'maw install' to create agent worktrees"
     exit 0
 fi
@@ -81,7 +80,7 @@ for agent_dir in "$AGENTS_DIR"/*; do
         fi
 
         if [ -f "$agent_dir/.envrc" ]; then
-            (cd "$agent_dir" && direnv allow .)
+            direnv allow "$agent_dir"
             echo "   ✅ direnv allowed"
             AGENT_COUNT=$((AGENT_COUNT + 1))
         else
