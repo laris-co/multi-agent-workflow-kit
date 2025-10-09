@@ -20,7 +20,7 @@ while [[ $# -gt 0 ]]; do
             shift 2
             ;;
         *)
-            echo "Usage: $0 [--prefix <suffix>] [--session-prefix <base>]"
+            echo "Usage: $0 [--prefix <prefix>] [--session-prefix <base>]"
             exit 1
             ;;
     esac
@@ -30,7 +30,7 @@ BASE_PREFIX=${SESSION_PREFIX_OVERRIDE:-${SESSION_PREFIX:-ai}}
 DIR_NAME=$(basename "$REPO_ROOT")
 
 if [ -n "$CUSTOM_PREFIX" ]; then
-    SESSION_PATTERN="${BASE_PREFIX}-${DIR_NAME}-${CUSTOM_PREFIX}"
+    SESSION_PATTERN="${CUSTOM_PREFIX}-${BASE_PREFIX}-${DIR_NAME}"
 else
     SESSION_PATTERN="${BASE_PREFIX}-${DIR_NAME}"
 fi

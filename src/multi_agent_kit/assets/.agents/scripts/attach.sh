@@ -15,12 +15,12 @@ SESSION_OVERRIDE=""
 
 usage() {
     cat <<'USAGE'
-Usage: attach.sh [--prefix <suffix>] [--session <name>]
+Usage: attach.sh [--prefix <prefix>] [--session <name>]
 
 Attach to an existing tmux session created by the toolkit.
 
 Options:
-  --prefix <suffix>   Attach to session ai-<repo>-<suffix>
+  --prefix <prefix>   Attach to session <prefix>-ai-<repo>
   --session <name>    Attach to a specific tmux session name
 USAGE
 }

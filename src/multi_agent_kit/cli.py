@@ -36,7 +36,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     init_parser.add_argument(
         "--prefix",
         dest="prefix",
-        help="Optional session suffix passed to .agents/scripts/start-agents.sh.",
+        help="Optional session prefix (creates: <prefix>-ai-<repo-name>).",
     )
     init_parser.add_argument(
         "--detach",

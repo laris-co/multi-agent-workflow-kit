@@ -37,7 +37,7 @@ Main repository (.git)
 ## Workflow
 1. **Registry first** – define the agents, branches, and paths.
 2. **Provision** – `scripts/setup.sh` creates branches/worktrees and ensures tmux plugins.
-3. **Launch** – `scripts/start-agents.sh` reads the registry, builds a pane layout, and names the session `ai-<repo>-<suffix?>`.
+3. **Launch** – `scripts/start-agents.sh` reads the registry, builds a pane layout, and names the session `<prefix?>-ai-<repo>`.
 4. **Operate** – agents work in their panes; supervisors monitor output, broadcast commands, or open additional panes.
 5. **Tear down** – `scripts/kill-all.sh` or `git worktree remove` resets the environment when the effort completes.
 
@@ -54,7 +54,7 @@ Main repository (.git)
 | Disk usage from many worktrees | Prune inactive branches (`git worktree prune`) and archive old agents. |
 | Conflicting edits across agents | Pair the toolkit with a constitution that assigns ownership and requires communication. |
 | Secrets leaking into worktrees | Keep credentials in env vars or secret managers; never commit generated configs with secrets. |
-| Session naming collisions | Use `--prefix` or `SESSION_PREFIX` to namespace sessions per team or initiative. |
+| Session naming collisions | Use `--prefix` (creates: `<prefix>-ai-<repo>`) or `SESSION_PREFIX` to namespace sessions per team or initiative. |
 
 ## Integration Tips
 - Store shared docs (constitutions, safety rules, checklists) alongside the toolkit so every agent inherits them automatically.
