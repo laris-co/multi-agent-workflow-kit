@@ -5,34 +5,25 @@ SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 AGENT_ROOT=$(cd "$SCRIPT_DIR/.." && pwd)
 REPO_ROOT=$(cd "$AGENT_ROOT/.." && pwd)
 
-# Default session prefix
-SESSION_PREFIX="${SESSION_PREFIX:-ai}"
-REPO_NAME=$(basename "$REPO_ROOT")
-
 usage() {
     cat <<USAGE
 Usage: direnv-allow.sh [options]
 
-Send Ctrl+C and 'direnv allow .' to all agent panes in the tmux session.
+Run 'direnv allow' in repository root and all agent worktrees.
+This should be run before starting a tmux session to ensure direnv
+is properly configured in all directories.
 
 Options:
-  --prefix <name>    Custom session suffix (default: none, i.e., ai-<repo>)
   -h, --help         Show this help message
 
 Example:
+  maw direnv
   direnv-allow.sh
-  direnv-allow.sh --prefix sprint
 USAGE
 }
 
-CUSTOM_PREFIX=""
-
 while [ $# -gt 0 ]; do
     case "$1" in
-        --prefix)
-            CUSTOM_PREFIX="$2"
-            shift 2
-            ;;
         -h|--help)
             usage
             exit 0
@@ -45,39 +36,62 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-# Build session name
-if [ -n "$CUSTOM_PREFIX" ]; then
-    SESSION_NAME="${SESSION_PREFIX}-${REPO_NAME}-${CUSTOM_PREFIX}"
+# Check if direnv is available
+if ! command -v direnv >/dev/null 2>&1; then
+    echo "Error: direnv is not installed" >&2
+    echo "Install direnv first: https://direnv.net/docs/installation.html" >&2
+    exit 1
+fi
+
+echo "🔧 Configuring direnv in repository and agent worktrees..."
+echo ""
+
+# Allow in main repo
+if [ -f "$REPO_ROOT/.envrc" ]; then
+    echo "📍 Repository root: $REPO_ROOT"
+    (cd "$REPO_ROOT" && direnv allow .)
+    echo "   ✅ direnv allowed"
 else
-    SESSION_NAME="${SESSION_PREFIX}-${REPO_NAME}"
+    echo "📍 Repository root: $REPO_ROOT"
+    echo "   ⚠️  No .envrc found (skipping)"
 fi
 
-# Check if tmux session exists
-if ! tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
-    echo "Error: tmux session '$SESSION_NAME' not found" >&2
-    echo "Start a session first with: maw start" >&2
-    exit 1
+echo ""
+
+# Get agents directory
+AGENTS_DIR="$REPO_ROOT/agents"
+
+if [ ! -d "$AGENTS_DIR" ]; then
+    echo "ℹ️  No agents directory found at: $AGENTS_DIR"
+    echo "   Run 'maw install' to create agent worktrees"
+    exit 0
 fi
 
-# Get list of panes in the session
-PANES=$(tmux list-panes -t "$SESSION_NAME" -F '#{pane_index}')
+# Allow in each agent worktree
+AGENT_COUNT=0
+for agent_dir in "$AGENTS_DIR"/*; do
+    if [ -d "$agent_dir" ] && [ "$(basename "$agent_dir")" != ".*" ]; then
+        AGENT_NAME=$(basename "$agent_dir")
+        echo "📍 Agent worktree: agents/$AGENT_NAME"
 
-if [ -z "$PANES" ]; then
-    echo "No panes found in session '$SESSION_NAME'" >&2
-    exit 1
-fi
-
-echo "Sending Ctrl+C and 'direnv allow .' to all panes in session: $SESSION_NAME"
-
-# Send Ctrl+C followed by direnv allow to each pane
-for pane in $PANES; do
-    echo "  → Pane $pane"
-    # Send Ctrl+C
-    tmux send-keys -t "$SESSION_NAME:0.$pane" C-c
-    # Small delay to ensure Ctrl+C is processed
-    sleep 0.1
-    # Send direnv allow .
-    tmux send-keys -t "$SESSION_NAME:0.$pane" "direnv allow ." Enter
+        if [ -f "$agent_dir/.envrc" ]; then
+            (cd "$agent_dir" && direnv allow .)
+            echo "   ✅ direnv allowed"
+            AGENT_COUNT=$((AGENT_COUNT + 1))
+        else
+            echo "   ⚠️  No .envrc found (skipping)"
+        fi
+    fi
 done
 
-echo "✅ Sent direnv allow to all panes"
+echo ""
+if [ $AGENT_COUNT -gt 0 ]; then
+    echo "✅ Configured direnv in repository root + $AGENT_COUNT agent worktree(s)"
+else
+    echo "✅ Configured direnv in repository root (no agent worktrees found)"
+fi
+
+echo ""
+echo "💡 Next steps:"
+echo "   → maw start profile0    # Start tmux session"
+echo "   → maw attach            # Attach to session"

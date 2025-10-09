@@ -49,7 +49,7 @@ Commands:
   uninstall          Run uninstall.sh to remove toolkit assets
   warp <target>      Navigate to agent worktree or root (e.g., warp 1, warp root)
   hey <agent> <msg>  Send a message to a specific agent (e.g., hey 1 analyse repo)
-  direnv             Send Ctrl+C and 'direnv allow .' to all panes
+  direnv             Run 'direnv allow' in repo root and all agent worktrees
   catlab             Download CLAUDE.md guidelines from catlab gist
   version            Show toolkit version information
 USAGE

@@ -352,7 +352,7 @@ maw attach           # Attach to running session
 maw agents <cmd>     # Manage worktrees (list, create, remove)
 maw send "<cmd>"     # Broadcast command to all panes
 maw hey <agent> <msg> # Send message to specific agent
-maw direnv           # Send Ctrl+C and 'direnv allow .' to all panes
+maw direnv           # Run 'direnv allow' in repo root and all agent worktrees
 maw catlab           # Download CLAUDE.md guidelines from catlab gist
 maw version          # Show toolkit version information
 maw kill             # Terminate session
@@ -374,7 +374,7 @@ maw hey 1 "analyse this codebase"
 maw hey 2 "create a plan for feature X"
 maw hey root "git status"
 
-# Allow direnv in all panes (useful after init or changes to .envrc)
+# Configure direnv in all worktrees (run before starting tmux)
 maw direnv
 
 # Download CLAUDE.md guidelines
