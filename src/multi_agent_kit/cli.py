@@ -293,9 +293,6 @@ def handle_init(args: argparse.Namespace) -> None:
     print(f"   maw sync")
     print(f"   maw uninstall")
     print(f"   \033[1;36mmaw warp <agent|root>\033[0m  # Navigate to worktree")
-    print(f"   maw direnv              # Configure direnv in all worktrees")
-    print(f"   maw catlab              # Download CLAUDE.md guidelines")
-    print(f"   maw version             # Show toolkit version")
 
 
 def main(argv: list[str] | None = None) -> None:
