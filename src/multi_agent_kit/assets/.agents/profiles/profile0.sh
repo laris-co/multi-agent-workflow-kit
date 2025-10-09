@@ -15,9 +15,9 @@
 # │         Agent 3              │
 # └──────────────────────────────┘
 
-# Layout configuration
-MIDDLE_HEIGHT=33          # Middle pane height (33% each)
-BOTTOM_HEIGHT=50          # Bottom pane height (50% of remaining)
+# Layout configuration (creates 40-30-30 split)
+MIDDLE_HEIGHT=60          # First split: 40% top, 60% for middle+bottom
+BOTTOM_HEIGHT=50          # Second split: splits the 60% into two 30% panes
 
 # Special layout flag
 LAYOUT_TYPE="three-horizontal"   # Three panes stacked vertically
