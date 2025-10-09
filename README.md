@@ -147,8 +147,7 @@ maw warp <target>    # Navigate to worktree (agent number or 'root')
 
 # Utilities
 maw sync             # Smart git sync (context-aware)
-maw issue --title "Add /maw-issue helper" --body "Plan outline" --dry-run
-maw catlab           # Download CLAUDE.md pointer (read AGENTS.md for rules)
+maw catlab [gist-url] # Download CLAUDE.md guidelines (optionally from custom gist)
 maw version          # Show toolkit version
 maw uninstall        # Remove toolkit from repo
 ```
