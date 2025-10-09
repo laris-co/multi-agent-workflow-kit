@@ -50,6 +50,7 @@ Commands:
   uninstall          Run uninstall.sh to remove toolkit assets
   warp <target>      Navigate to agent worktree or root (e.g., warp 1, warp root)
   hey <agent> <msg>  Send a message to a specific agent (e.g., hey 1 analyse repo)
+  zoom <agent>       Toggle zoom (maximize/restore) for a specific agent pane
   direnv             Run 'direnv allow' in repo root and all agent worktrees
   catlab             Download CLAUDE.md guidelines from catlab gist
   version            Show toolkit version information
@@ -165,6 +166,9 @@ maw() {
     hey)
       __maw_exec hey.sh "$@"
       ;;
+    zoom)
+      __maw_exec zoom.sh "$@"
+      ;;
     direnv)
       __maw_exec direnv-allow.sh "$@"
       ;;
@@ -195,6 +199,7 @@ alias maw-remove='maw remove'
 alias maw-uninstall='maw uninstall'
 alias maw-hey='maw hey'
 alias maw-issue='maw issue'
+alias maw-zoom='maw zoom'
 
 # Load shell completion if available
 if [[ -n "${ZSH_VERSION:-}" ]]; then

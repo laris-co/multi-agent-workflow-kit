@@ -22,6 +22,7 @@ _maw() {
     'uninstall:Run uninstall.sh to remove toolkit assets'
     'version:Show toolkit version information'
     'warp:Navigate to agent worktree or root'
+    'zoom:Toggle zoom (maximize/restore) for a specific agent pane'
   )
 
   _arguments -C \
@@ -59,6 +60,29 @@ _maw() {
 
           # Add root option
           _wanted targets expl 'warp target' compadd -d '(Repository root directory)' root
+
+          # Add agent directories if they exist
+          if [[ -d "$agents_dir" ]]; then
+            agent_dirs=()
+            local dir
+            for dir in "$agents_dir"/*(N/); do
+              local basename="${dir:t}"
+              [[ "$basename" == .* ]] && continue
+              agent_dirs+=("$basename")
+            done
+
+            if [[ ${#agent_dirs[@]} -gt 0 ]]; then
+              _wanted agents expl 'agent worktree' compadd -a agent_dirs
+            fi
+          fi
+          ;;
+        zoom)
+          local agents_dir="${MAW_REPO_ROOT:-$PWD}/agents"
+          local -a agent_dirs
+
+          # Add special options
+          _wanted targets expl 'zoom target' compadd -d '(Repository root directory)' root
+          _wanted options expl 'zoom options' compadd --list
 
           # Add agent directories if they exist
           if [[ -d "$agents_dir" ]]; then
