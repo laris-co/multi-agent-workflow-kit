@@ -343,6 +343,7 @@ maw agents <cmd>     # Manage worktrees (list, create, remove)
 maw send "<cmd>"     # Broadcast command to all panes
 maw hey <agent> <msg> # Send message to specific agent
 maw direnv           # Send Ctrl+C and 'direnv allow .' to all panes
+maw catlab           # Download CLAUDE.md guidelines from catlab gist
 maw kill             # Terminate session
 maw remove <agent>   # Delete agent worktree
 maw uninstall        # Remove toolkit from repo
@@ -364,6 +365,10 @@ maw hey root "git status"
 
 # Allow direnv in all panes (useful after init or changes to .envrc)
 maw direnv
+
+# Download CLAUDE.md guidelines
+maw catlab
+maw catlab --force  # Overwrite existing file
 
 # Return to main
 maw warp root
