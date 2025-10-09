@@ -14,19 +14,6 @@ branch.
 Coordinate through normal GitHub pull requests: merge work from
 `agents/<agent-name>` into `main` only after explicit review/approval.
 
-## Worktree Expectations
-- Keep the repository root worktree on the `main` branch (`pwd` ends at the repo root, `git branch --show-current` prints `main`).
-- Each agent directory (`agents/<agent-name>/`) must stay on its matching branch `agents/<agent-name>`.
-- Use `/maw.sync` (slash command) or `maw sync` in the terminal to keep both the root worktree and each agent worktree current; see `docs/agent-sync-workflow.md` for the full playbook.
-- Never re-point an agent worktree at `main`; land changes by merging the agent branch into `main` through a reviewed pull request.
-
-## Sync Workflow Cheatsheet
-1. Confirm where you are with `pwd` and `git branch --show-current`.
-2. From the root worktree on `main`, run `/maw.sync` to fast-forward from `origin/main` and broadcast sync instructions.
-3. From an agent worktree, `/maw.sync` merges the freshly updated local `main` into your agent branch; resolve conflicts, add, and commit if needed.
-4. Repeat `/maw.sync` before pushing so your PR builds on the latest `main`, then `git push origin $(git branch --show-current)` and open a PR (`gh pr create --base main --head $(git branch --show-current)`).
-5. After your PR merges, run `/maw.sync` in the root again, then `/maw.sync` in each agent directory to absorb the merged changes.
-
 **Scratch Space**
 - Use the repository-level `.tmp/` directory for throwaway builds and test artifacts; it is pre-created and listed in `.gitignore`, so anything placed there stays out of version control.
 - This repo already contains the toolkit assets under `.agents/` and `agents/`; do not edit or depend on those directories directly. Instead, spin up test installs inside `.tmp/` when you need to validate changes.
