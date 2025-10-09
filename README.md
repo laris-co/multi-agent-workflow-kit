@@ -1,5 +1,15 @@
 # Multi-Agent Workflow Kit
 
+> **⚠️ Proof of Concept - Early Development Stage**
+>
+> This project is currently a **proof of concept** exploring multi-agent workflows with AI coding assistants. It's actively evolving and may have rough edges. We're experimenting with patterns for coordinating multiple AI agents on the same codebase.
+>
+> **We welcome your help!** PRs, issues, and discussions are highly encouraged. If you have ideas for improving agent coordination, workflow patterns, or have encountered interesting use cases, please share them.
+>
+> [![GitHub issues](https://img.shields.io/github/issues/laris-co/multi-agent-workflow-kit)](https://github.com/laris-co/multi-agent-workflow-kit/issues)
+> [![GitHub pull requests](https://img.shields.io/github/issues-pr/laris-co/multi-agent-workflow-kit)](https://github.com/laris-co/multi-agent-workflow-kit/pulls)
+> [![GitHub discussions](https://img.shields.io/github/discussions/laris-co/multi-agent-workflow-kit)](https://github.com/laris-co/multi-agent-workflow-kit/discussions)
+
 **Orchestrate parallel AI agents in isolated git worktrees with shared tmux visibility.**
 
 This toolkit solves the coordination problem of running multiple AI coding agents simultaneously: each agent gets its own git branch and workspace (via `git worktree`), while you supervise all of them in a single tmux session with curated layouts.
