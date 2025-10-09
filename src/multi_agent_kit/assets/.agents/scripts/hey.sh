@@ -156,7 +156,7 @@ if [[ "$AGENT_TARGET" == "all" ]]; then
         fi
 
         tmux send-keys -t "$TARGET_PANE" "$MESSAGE"
-        tmux send-keys -t "$TARGET_PANE" Enter
+        tmux send-keys -t "$TARGET_PANE" C-m
     done
 
     echo "✅ Broadcasted to all agent panes"
@@ -177,7 +177,7 @@ if [[ "$AGENT_TARGET" == "root" ]] || [[ "$AGENT_TARGET" == "main" ]]; then
 
     echo "📤 Sending to root pane: $MESSAGE"
     tmux send-keys -t "$TARGET_PANE" "$MESSAGE"
-    tmux send-keys -t "$TARGET_PANE" Enter
+    tmux send-keys -t "$TARGET_PANE" C-m
 
     echo "✅ Sent successfully"
     exit 0
@@ -217,6 +217,6 @@ TARGET_PANE="$SESSION_NAME:$WINDOW_INDEX.$PANE_INDEX"
 
 echo "📤 Sending to agent '$AGENT_TARGET' (pane $PANE_INDEX): $MESSAGE"
 tmux send-keys -t "$TARGET_PANE" "$MESSAGE"
-tmux send-keys -t "$TARGET_PANE" Enter
+tmux send-keys -t "$TARGET_PANE" C-m
 
 echo "✅ Sent successfully"
