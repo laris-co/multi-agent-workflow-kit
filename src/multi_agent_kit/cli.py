@@ -291,10 +291,10 @@ def handle_init(args: argparse.Namespace) -> None:
     print(f"   maw sync")
     print(f"   maw uninstall")
     print(f"   \033[1;36mmaw warp <agent|root>\033[0m  # Navigate to worktree")
+    print(f"\n🎉 \033[1;32mHappy coding!\033[0m")
     print(f"\n💡 Next steps:")
     print(f"   \033[1;36msource .envrc\033[0m")
     print(f"   \033[1;36mmaw attach\033[0m")
-    print(f"\n🎉 \033[1;32mHappy coding!\033[0m")
 
 
 def main(argv: list[str] | None = None) -> None:
