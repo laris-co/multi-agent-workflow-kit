@@ -74,6 +74,12 @@ for agent_dir in "$AGENTS_DIR"/*; do
         AGENT_NAME=$(basename "$agent_dir")
         echo "📍 Agent worktree: agents/$AGENT_NAME"
 
+        # Copy .envrc from repo root if it doesn't exist
+        if [ ! -f "$agent_dir/.envrc" ] && [ -f "$REPO_ROOT/.envrc" ]; then
+            cp "$REPO_ROOT/.envrc" "$agent_dir/.envrc"
+            echo "   📄 Copied .envrc from repo root"
+        fi
+
         if [ -f "$agent_dir/.envrc" ]; then
             (cd "$agent_dir" && direnv allow .)
             echo "   ✅ direnv allowed"
