@@ -3,7 +3,6 @@
 !commands/
 !commands/*
 commands/maw.*
+commands/maw-*
 !commands/maw.issue.md
 !commands/maw.issue.sh
-!commands/maw-issue.md
-!commands/maw-issue.sh
