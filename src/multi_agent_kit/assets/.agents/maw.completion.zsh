@@ -9,6 +9,8 @@ _maw() {
   subcommands=(
     'attach:Attach to the running tmux session'
     'agents:Run agents.sh to manage worktrees manually'
+    'catlab:Download CLAUDE.md guidelines from catlab gist'
+    'direnv:Run direnv allow in repo root and all agent worktrees'
     'help:Show help message'
     'hey:Send a message to a specific agent'
     'install:Run setup.sh to provision or refresh agent worktrees'
@@ -18,6 +20,7 @@ _maw() {
     'setup:Alias for install'
     'start:Run start-agents.sh to launch the tmux session'
     'uninstall:Run uninstall.sh to remove toolkit assets'
+    'version:Show toolkit version information'
     'warp:Navigate to agent worktree or root'
   )
 

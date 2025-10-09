@@ -49,6 +49,9 @@ Commands:
   uninstall          Run uninstall.sh to remove toolkit assets
   warp <target>      Navigate to agent worktree or root (e.g., warp 1, warp root)
   hey <agent> <msg>  Send a message to a specific agent (e.g., hey 1 analyse repo)
+  direnv             Run 'direnv allow' in repo root and all agent worktrees
+  catlab             Download CLAUDE.md guidelines from catlab gist
+  version            Show toolkit version information
 USAGE
 }
 
@@ -157,6 +160,15 @@ maw() {
       ;;
     hey)
       __maw_exec hey.sh "$@"
+      ;;
+    direnv)
+      __maw_exec direnv-allow.sh "$@"
+      ;;
+    catlab)
+      __maw_exec catlab.sh "$@"
+      ;;
+    version)
+      __maw_exec version.sh "$@"
       ;;
     help|-h|--help)
       __maw_usage

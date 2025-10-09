@@ -1,4 +1,14 @@
-# Multi-Agent Workflow Kit
+# Multi-Agent Worktree Kit
+
+> **⚠️ Proof of Concept - Early Development Stage**
+>
+> This project is currently a **proof of concept** exploring multi-agent workflows with AI coding assistants. It's actively evolving and may have rough edges. We're experimenting with patterns for coordinating multiple AI agents on the same codebase.
+>
+> **We welcome your help!** PRs, issues, and discussions are highly encouraged. If you have ideas for improving agent coordination, workflow patterns, or have encountered interesting use cases, please share them.
+>
+> [![GitHub issues](https://img.shields.io/github/issues/laris-co/multi-agent-worktree-kit)](https://github.com/laris-co/multi-agent-worktree-kit/issues)
+> [![GitHub pull requests](https://img.shields.io/github/issues-pr/laris-co/multi-agent-worktree-kit)](https://github.com/laris-co/multi-agent-worktree-kit/pulls)
+> [![GitHub discussions](https://img.shields.io/github/discussions/laris-co/multi-agent-worktree-kit)](https://github.com/laris-co/multi-agent-worktree-kit/discussions)
 
 **Orchestrate parallel AI agents in isolated git worktrees with shared tmux visibility.**
 
@@ -19,11 +29,11 @@ This toolkit solves the coordination problem of running multiple AI coding agent
 ```bash
 # Bootstrap everything in one command (installs toolkit, creates worktrees, launches tmux)
 # Using latest stable release:
-uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-worktree-kit.git@main \
   multi-agent-kit init --prefix demo
 
-# Or using alpha release (v0.1.9-alpha):
-uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.1.9-alpha \
+# Or using alpha release (v0.2.0-alpha):
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-worktree-kit.git@v0.2.0-alpha \
   multi-agent-kit init --prefix demo
 
 # Configure your agents
@@ -119,11 +129,11 @@ cd your-project
 
 # Run init with custom prefix
 # Using main (stable):
-uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-worktree-kit.git@main \
   multi-agent-kit init --prefix sprint
 
-# Or using v0.1.9-alpha (latest features):
-uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.1.9-alpha \
+# Or using v0.2.0-alpha (latest features):
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-worktree-kit.git@v0.2.0-alpha \
   multi-agent-kit init --prefix sprint
 
 # This will:
@@ -342,6 +352,9 @@ maw attach           # Attach to running session
 maw agents <cmd>     # Manage worktrees (list, create, remove)
 maw send "<cmd>"     # Broadcast command to all panes
 maw hey <agent> <msg> # Send message to specific agent
+maw direnv           # Run 'direnv allow' in repo root and all agent worktrees
+maw catlab           # Download CLAUDE.md guidelines from catlab gist
+maw version          # Show toolkit version information
 maw kill             # Terminate session
 maw remove <agent>   # Delete agent worktree
 maw uninstall        # Remove toolkit from repo
@@ -360,6 +373,13 @@ maw warp 2
 maw hey 1 "analyse this codebase"
 maw hey 2 "create a plan for feature X"
 maw hey root "git status"
+
+# Configure direnv in all worktrees (run before starting tmux)
+maw direnv
+
+# Download CLAUDE.md guidelines
+maw catlab
+maw catlab --force  # Overwrite existing file
 
 # Return to main
 maw warp root
@@ -401,7 +421,7 @@ Send prompt to agent in pane 1. **Note:** Use `/maw.hey 1 <message>` for more fl
 
 ```bash
 # Create new project from template
-gh repo create my-project --template laris-co/multi-agent-workflow-kit --private --clone
+gh repo create my-project --template laris-co/multi-agent-worktree-kit --private --clone
 cd my-project
 maw install
 ```
@@ -409,7 +429,7 @@ maw install
 ### Adding as a Submodule
 
 ```bash
-git submodule add https://github.com/laris-co/multi-agent-workflow-kit.git .agents-toolkit
+git submodule add https://github.com/laris-co/multi-agent-worktree-kit.git .agents-toolkit
 cp .agents-toolkit/.agents .
 cp .agents-toolkit/.envrc .
 direnv allow

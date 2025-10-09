@@ -18,7 +18,7 @@ class BootstrapError(RuntimeError):
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="multi-agent-kit",
-        description="Bootstrap the Multi-Agent Workflow Kit using uvx.",
+        description="Bootstrap the Multi-Agent Worktree Kit using uvx.",
     )
 
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -281,9 +281,6 @@ def handle_init(args: argparse.Namespace) -> None:
         session_name += f"-{args.prefix}"
 
     print(f"\n✅ Session started: {session_name}")
-    print(f"\n💡 Quick start:")
-    print(f"   \033[1;36m→ source .envrc\033[0m   # Load maw commands")
-    print(f"   \033[1;36m→ maw attach\033[0m      # Enter session")
     print(f"\n📖 Available commands:")
     print(f"   maw attach")
     print(f"   maw agents <tab>")
@@ -294,6 +291,12 @@ def handle_init(args: argparse.Namespace) -> None:
     print(f"   maw sync")
     print(f"   maw uninstall")
     print(f"   \033[1;36mmaw warp <agent|root>\033[0m  # Navigate to worktree")
+    print(f"\n🎉 \033[1;32mHappy coding!\033[0m")
+    print(f"\n{'─' * 60}")
+    print(f"\n💡 Next steps:")
+    print(f"   \033[1;33msource .envrc\033[0m")
+    print(f"   \033[1;36mmaw attach\033[0m")
+    print(f"\n{'─' * 60}")
 
 
 def main(argv: list[str] | None = None) -> None:
