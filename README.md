@@ -159,6 +159,7 @@ In Claude Code, use these commands:
 
 - `/maw.sync` - Sync current worktree with main
 - `/maw.hey <agent> <message>` - Send message to specific agent
+- `/maw.zoom <agent>` - Toggle zoom for agent pane
 
 ## Tmux Profiles
 
