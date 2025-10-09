@@ -1,6 +1,6 @@
 ---
 description: Sync the current worktree with main-aware rules
-argument-hint: (no args)
+argument-hint: [agent]
 allowed-tools:
   - Bash(.claude/commands/maw.sync.sh:*)
 ---
@@ -25,17 +25,24 @@ git branch --show-current  # Your current branch
 
 ### If You Are Main Agent (root worktree, on `main` branch):
 
-**Your job:** Pull latest changes from remote repository
-
+**Option 1: Sync main AND broadcast to all agents**
 ```bash
 /maw.sync
-# Runs: git pull --ff-only origin main
+# Runs:
+#   1. git pull --ff-only origin main (sync self)
+#   2. /maw.hey all "/maw.sync" (tell all agents to sync)
+```
+
+**Option 2: Tell specific agent to sync**
+```bash
+/maw.sync 1
+# Runs: /maw.hey 1 "/maw.sync"
 ```
 
 **What happens:**
-- Pulls from `origin/main` (remote)
-- Updates local `main` branch
-- Fast-forward only (safe merge)
+- Main agent pulls from `origin/main` (remote)
+- Then broadcasts `/maw.sync` to all agent panes
+- All agents automatically sync with main
 
 ### If You Are Agent 1, 2, 3, etc. (in `agents/*` worktree):
 
@@ -53,16 +60,27 @@ git branch --show-current  # Your current branch
 
 ## Complete Multi-Agent Sync Flow
 
-**Step 1: Main Agent syncs first**
+**Simple: Just one command from main agent**
 ```bash
 # In root worktree (main branch)
 /maw.sync
 # ✅ main is up to date with origin/main
+# ✅ All agents automatically synced
 ```
 
-**Step 2: All other agents sync**
+**Manual: Sync specific agent**
 ```bash
-# In each agent worktree (agents/* branch)
+# From main agent
+/maw.sync 1
+# ✅ Agent 1 syncs with main
+
+/maw.sync 2
+# ✅ Agent 2 syncs with main
+```
+
+**From agent pane: Agent syncs itself**
+```bash
+# In agent worktree (agents/* branch)
 /maw.sync
 # ✅ Agent branch now includes latest local main
 ```
