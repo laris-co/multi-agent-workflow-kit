@@ -1,5 +1,8 @@
 #!/bin/bash
 # Profile 0: Three horizontal panes stacked vertically (all agents, no root)
+# All panes start in root directory, then auto-warp to agent directories using 'maw warp'
+# Agents can navigate between directories with: maw warp <agent> or maw warp root
+#
 # Top: Agent 1
 # Middle: Agent 2
 # Bottom: Agent 3

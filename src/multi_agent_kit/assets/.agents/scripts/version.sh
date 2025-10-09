@@ -26,7 +26,8 @@ if [ -z "$VERSION" ]; then
 fi
 
 echo "Multi-Agent Workflow Kit"
-echo "Version: $VERSION"
 echo ""
-echo "Repository: https://github.com/laris-co/multi-agent-worktree-kit"
+echo "Repository: https://github.com/laris-co/multi-agent-workflow-kit"
 echo "Gist: https://gist.github.com/nazt/3f9188eb0a5114fffa5d8cb4f14fe5a4"
+echo ""
+echo "Version: $VERSION"

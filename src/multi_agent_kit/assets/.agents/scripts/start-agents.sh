@@ -59,7 +59,7 @@ elif [ -f "$REPO_ROOT/.tmux.conf" ]; then
     tmux source-file "$REPO_ROOT/.tmux.conf" 2>/dev/null || true
 fi
 
-AGENTS=$(cd "$AGENTS_DIR" && ls -d */ 2>/dev/null | sed 's#/##' | tr '\n' ' ')
+AGENTS=$(cd "$AGENTS_DIR" && /bin/ls -d */ 2>/dev/null | sed 's#/##' | tr '\n' ' ')
 if [ -z "$AGENTS" ]; then
     echo "⚠️  No agent worktrees detected in $AGENTS_DIR"
     echo "Run .agents/scripts/setup.sh or .agents/scripts/agents.sh create <name> first."
@@ -147,16 +147,13 @@ tmux kill-session -t "$SESSION_NAME" 2>/dev/null || true
 AGENTS_ARRAY=($AGENTS)
 TOTAL=${#AGENTS_ARRAY[@]}
 
-if [ "$LAYOUT_TYPE" = "six-pane" ]; then
-    echo "Starting session in root directory..."
-    tmux new-session -d -s "$SESSION_NAME" -c "$REPO_ROOT"
-else
-    echo "Starting session with ${AGENTS_ARRAY[0]}..."
-    tmux new-session -d -s "$SESSION_NAME" -c "$AGENTS_DIR/${AGENTS_ARRAY[0]}"
-fi
+# Always start all panes in root directory
+echo "Starting session in root directory..."
+tmux new-session -d -s "$SESSION_NAME" -c "$REPO_ROOT"
 
 WINDOW_INDEX=$(tmux list-windows -t "$SESSION_NAME" -F "#{window_index}" | head -1)
-PANE_BASE=$(tmux show-options -gv pane-base-index 2>/dev/null || echo 0)
+# Get pane-base-index from the session (not global)
+PANE_BASE=$(tmux show-options -t "$SESSION_NAME" -v pane-base-index 2>/dev/null || tmux show-options -gv pane-base-index 2>/dev/null || echo 0)
 pane_ref() {
     local offset=$1
     local pane_index=$((PANE_BASE + offset))
@@ -170,124 +167,167 @@ if [ "$LAYOUT_TYPE" = "three-horizontal" ]; then
     # Pane 1 (middle): Agent 2
     # Pane 2 (bottom): Agent 3
     if [ $TOTAL -ge 2 ]; then
-        echo "Adding pane 1 (middle) for ${AGENTS_ARRAY[1]}..."
-        tmux split-window -v -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "${MIDDLE_HEIGHT:-33}"
+        echo "Adding pane 1 (middle)..."
+        tmux split-window -v -t "$(pane_ref 0)" -c "$REPO_ROOT" -p "${MIDDLE_HEIGHT:-33}"
     fi
     if [ $TOTAL -ge 3 ]; then
-        echo "Adding pane 2 (bottom) for ${AGENTS_ARRAY[2]}..."
+        echo "Adding pane 2 (bottom)..."
         tmux select-pane -t "$(pane_ref 1)"
-        tmux split-window -v -t "$(pane_ref 1)" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "${BOTTOM_HEIGHT:-50}"
+        tmux split-window -v -t "$(pane_ref 1)" -c "$REPO_ROOT" -p "${BOTTOM_HEIGHT:-50}"
     fi
 
     if [ $TOTAL -gt 3 ]; then
         echo "⚠️  profile0 shows only 3 agent panes. Additional agents will not open panes: ${AGENTS_ARRAY[@]:3}" >&2
     fi
 elif [ "$LAYOUT_TYPE" = "two-pane" ]; then
-    if [ $TOTAL -ge 2 ]; then
-        echo "Adding bottom pane for ${AGENTS_ARRAY[1]}..."
-        tmux split-window -v -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "${BOTTOM_HEIGHT:-50}"
-    else
-        echo "Adding bottom pane (repo root)..."
-        tmux split-window -v -t "$(pane_ref 0)" -c "$REPO_ROOT" -p "${BOTTOM_HEIGHT:-50}"
-    fi
+    echo "Adding bottom pane..."
+    tmux split-window -v -t "$(pane_ref 0)" -c "$REPO_ROOT" -p "${BOTTOM_HEIGHT:-50}"
 
     if [ $TOTAL -gt 2 ]; then
         echo "⚠️  two-pane layout shows only two panes. Additional agents will not open panes: ${AGENTS_ARRAY[@]:2}" >&2
     fi
 elif [ "$LAYOUT_TYPE" = "two-pane-bottom-right" ]; then
-    if [ $TOTAL -ge 2 ]; then
-        echo "Adding bottom-left pane for ${AGENTS_ARRAY[1]}..."
-        tmux split-window -v -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "${BOTTOM_HEIGHT:-50}"
-    else
-        echo "Adding bottom-left pane (repo root)..."
-        tmux split-window -v -t "$(pane_ref 0)" -c "$REPO_ROOT" -p "${BOTTOM_HEIGHT:-50}"
-    fi
+    echo "Adding bottom-left pane..."
+    tmux split-window -v -t "$(pane_ref 0)" -c "$REPO_ROOT" -p "${BOTTOM_HEIGHT:-50}"
 
     tmux select-pane -t "$(pane_ref 1)"
-    if [ $TOTAL -ge 3 ]; then
-        echo "Adding bottom-right pane for ${AGENTS_ARRAY[2]}..."
-        tmux split-window -h -t "$(pane_ref 1)" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "${BOTTOM_RIGHT_WIDTH:-50}"
-    else
-        echo "Adding bottom-right pane (repo root)..."
-        tmux split-window -h -t "$(pane_ref 1)" -c "$REPO_ROOT" -p "${BOTTOM_RIGHT_WIDTH:-50}"
-    fi
+    echo "Adding bottom-right pane..."
+    tmux split-window -h -t "$(pane_ref 1)" -c "$REPO_ROOT" -p "${BOTTOM_RIGHT_WIDTH:-50}"
 
     if [ $TOTAL -gt 3 ]; then
         echo "⚠️  profile0 shows only three panes. Additional agents will not open panes: ${AGENTS_ARRAY[@]:3}" >&2
     fi
 elif [ "$LAYOUT_TYPE" = "three-pane" ]; then
     if [ $TOTAL -ge 2 ]; then
-        echo "Adding pane for ${AGENTS_ARRAY[1]}..."
-        tmux split-window -h -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "$RIGHT_WIDTH"
+        echo "Adding right pane..."
+        tmux split-window -h -t "$(pane_ref 0)" -c "$REPO_ROOT" -p "$RIGHT_WIDTH"
     fi
     if [ $TOTAL -ge 3 ]; then
-        echo "Adding pane for ${AGENTS_ARRAY[2]}..."
+        echo "Adding bottom-left pane..."
         tmux select-pane -t "$(pane_ref 0)"
-        tmux split-window -v -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "${BOTTOM_HEIGHT:-30}"
+        tmux split-window -v -t "$(pane_ref 0)" -c "$REPO_ROOT" -p "${BOTTOM_HEIGHT:-30}"
     fi
 elif [ "$LAYOUT_TYPE" = "top-full" ]; then
     if [ $TOTAL -ge 2 ]; then
-        echo "Adding pane for ${AGENTS_ARRAY[1]}..."
-        tmux split-window -v -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "${BOTTOM_HEIGHT:-30}"
+        echo "Adding bottom-left pane..."
+        tmux split-window -v -t "$(pane_ref 0)" -c "$REPO_ROOT" -p "${BOTTOM_HEIGHT:-30}"
     fi
     if [ $TOTAL -ge 3 ]; then
-        echo "Adding pane for ${AGENTS_ARRAY[2]}..."
-        tmux split-window -h -t "$(pane_ref 1)" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "${BOTTOM_RIGHT_WIDTH:-50}"
+        echo "Adding bottom-right pane..."
+        tmux split-window -h -t "$(pane_ref 1)" -c "$REPO_ROOT" -p "${BOTTOM_RIGHT_WIDTH:-50}"
     fi
 elif [ "$LAYOUT_TYPE" = "full-left" ]; then
     echo "Adding pane 2 (top-right)..."
-    if [ $TOTAL -ge 2 ]; then
-        tmux split-window -h -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "$RIGHT_WIDTH"
-    else
-        tmux split-window -h -t "$(pane_ref 0)" -p "$RIGHT_WIDTH"
-    fi
+    tmux split-window -h -t "$(pane_ref 0)" -c "$REPO_ROOT" -p "$RIGHT_WIDTH"
 
     echo "Adding pane 3 (middle-right)..."
     tmux select-pane -t "$(pane_ref 1)"
-    if [ $TOTAL -ge 3 ]; then
-        tmux split-window -v -t "$(pane_ref 1)" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "$TOP_RIGHT_HEIGHT"
-    else
-        tmux split-window -v -t "$(pane_ref 1)" -p "$TOP_RIGHT_HEIGHT"
-    fi
-
-    #echo "Adding pane 4 (bottom-right)..."
-    #if [ $TOTAL -ge 4 ]; then
-    #    tmux split-window -v -t "$(pane_ref 2)" -c "$AGENTS_DIR/${AGENTS_ARRAY[3]}" -p "${MIDDLE_RIGHT_HEIGHT:-50}"
-    #else
-    #    tmux split-window -v -t "$(pane_ref 2)" -p "${MIDDLE_RIGHT_HEIGHT:-50}"
-    #fi
+    tmux split-window -v -t "$(pane_ref 1)" -c "$REPO_ROOT" -p "$TOP_RIGHT_HEIGHT"
 elif [ "$LAYOUT_TYPE" = "six-pane" ]; then
     if [ $TOTAL -ge 1 ]; then
-        echo "Adding pane 2 for ${AGENTS_ARRAY[0]}..."
-        tmux split-window -h -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[0]}" -p "$RIGHT_WIDTH"
+        echo "Adding pane 2..."
+        tmux split-window -h -t "$(pane_ref 0)" -c "$REPO_ROOT" -p "$RIGHT_WIDTH"
     fi
     if [ $TOTAL -ge 2 ]; then
-        echo "Adding pane 3 for ${AGENTS_ARRAY[1]}..."
+        echo "Adding pane 3..."
         tmux select-pane -t "$(pane_ref 0)"
-        tmux split-window -v -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p "$TOP_RIGHT_HEIGHT"
+        tmux split-window -v -t "$(pane_ref 0)" -c "$REPO_ROOT" -p "$TOP_RIGHT_HEIGHT"
     fi
     if [ $TOTAL -ge 3 ]; then
-        echo "Adding pane 4 for ${AGENTS_ARRAY[2]}..."
+        echo "Adding pane 4..."
         tmux select-pane -t "$(pane_ref 1)"
-        tmux split-window -v -t "$(pane_ref 1)" -c "$AGENTS_DIR/${AGENTS_ARRAY[2]}" -p "$TOP_RIGHT_HEIGHT"
+        tmux split-window -v -t "$(pane_ref 1)" -c "$REPO_ROOT" -p "$TOP_RIGHT_HEIGHT"
     fi
     if [ $TOTAL -ge 4 ]; then
-        echo "Adding pane 5 for ${AGENTS_ARRAY[3]}..."
+        echo "Adding pane 5..."
         tmux select-pane -t "$(pane_ref 2)"
-        tmux split-window -v -t "$(pane_ref 2)" -c "$AGENTS_DIR/${AGENTS_ARRAY[3]}"
+        tmux split-window -v -t "$(pane_ref 2)" -c "$REPO_ROOT"
     fi
-    echo "Adding pane 6 (root)..."
+    echo "Adding pane 6..."
     tmux select-pane -t "$(pane_ref 3)"
     tmux split-window -v -t "$(pane_ref 3)" -c "$REPO_ROOT"
 else
-    echo "Adding pane (repo root)..."
+    echo "Adding bottom pane..."
     tmux split-window -v -t "$(pane_ref 0)" -c "$REPO_ROOT" -p "${BOTTOM_HEIGHT:-30}"
     if [ $TOTAL -ge 2 ]; then
-        echo "Adding pane for ${AGENTS_ARRAY[1]}..."
+        echo "Adding right pane..."
         tmux select-pane -t "$(pane_ref 0)"
-        tmux split-window -h -t "$(pane_ref 0)" -c "$AGENTS_DIR/${AGENTS_ARRAY[1]}" -p 50
+        tmux split-window -h -t "$(pane_ref 0)" -c "$REPO_ROOT" -p 50
     fi
 fi
+
+auto_warp_panes() {
+    echo "🚀 Auto-warping panes to agent directories..."
+    echo "   AGENTS_ARRAY: ${AGENTS_ARRAY[@]}"
+
+    local pane_index=0
+    local agent_index=0
+
+    # Get list of pane IDs
+    local panes
+    panes=$(tmux list-panes -s -t "$SESSION_NAME" -F "#{pane_index}" 2>/dev/null || echo "")
+
+    # Detect actual PANE_BASE from the first pane index
+    local first_pane=$(echo "$panes" | head -1)
+    if [ -n "$first_pane" ]; then
+        PANE_BASE="$first_pane"
+    else
+        PANE_BASE=0
+    fi
+    echo "   PANE_BASE detected: $PANE_BASE"
+
+    if [ -z "$panes" ]; then
+        echo "⚠️  No panes found to warp"
+        return
+    fi
+
+    # Warp each pane to its corresponding agent directory using pushd
+    for pane_index in $panes; do
+        local target_pane
+        # Use pane_index directly since it's already the actual tmux pane index
+        target_pane="${SESSION_NAME}:${WINDOW_INDEX}.${pane_index}"
+
+        # Determine which agent this pane corresponds to
+        if [ "$LAYOUT_TYPE" = "six-pane" ]; then
+            # six-pane: pane 0 is root, panes 1-4 are agents 0-3, pane 5 is root
+            if [ "$pane_index" -eq 0 ] || [ "$pane_index" -eq 5 ]; then
+                # Keep root panes in root
+                continue
+            else
+                # Panes 1-4 map to agents 0-3
+                agent_index=$((pane_index - 1))
+            fi
+        elif [ "$LAYOUT_TYPE" = "two-pane" ] && [ "$TOTAL" -lt 2 ]; then
+            # two-pane with only 1 agent: pane 0 is agent, pane 1 is root
+            if [ "$pane_index" -eq 0 ]; then
+                agent_index=0
+            else
+                continue
+            fi
+        else
+            # Most layouts including three-horizontal: pane N corresponds to agent (N - PANE_BASE)
+            agent_index=$((pane_index - PANE_BASE))
+        fi
+
+        # Check if we have an agent for this index
+        if [ "$agent_index" -ge "$TOTAL" ]; then
+            continue
+        fi
+
+        local agent_name="${AGENTS_ARRAY[$agent_index]}"
+        local agent_dir="$AGENTS_DIR/$agent_name"
+
+        if [ -d "$agent_dir" ]; then
+            echo "  📍 Pane $pane_index → Agent $agent_name (index=$agent_index)"
+            echo "     Sending to $target_pane: source .envrc; maw warp \"$agent_name\""
+            tmux send-keys -t "$target_pane" "source .envrc; maw warp \"$agent_name\"" C-m
+        else
+            echo "  ⚠️ Directory not found: $agent_dir"
+        fi
+    done
+
+    echo "✅ Auto-warp complete"
+}
 
 reload_tmux_conf_across_panes() {
     local conf_path
@@ -315,6 +355,11 @@ sleep 0.5
 
 reload_tmux_conf_across_panes
 direnv_broadcast
+
+# Wait for direnv_broadcast commands to complete before warping
+sleep 1
+
+auto_warp_panes
 
 echo ""
 echo "✅ Started $TOTAL agents in tmux session: $SESSION_NAME"

@@ -4,9 +4,9 @@
 
 Run multiple AI coding agents simultaneously without chaos. Each agent gets its own git branch and workspace (via `git worktree`), while you supervise all of them in a single tmux session.
 
-[![GitHub issues](https://img.shields.io/github/issues/laris-co/multi-agent-worktree-kit)](https://github.com/laris-co/multi-agent-worktree-kit/issues)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/laris-co/multi-agent-worktree-kit)](https://github.com/laris-co/multi-agent-worktree-kit/pulls)
-[![GitHub discussions](https://img.shields.io/github/discussions/laris-co/multi-agent-worktree-kit)](https://github.com/laris-co/multi-agent-worktree-kit/discussions)
+[![GitHub issues](https://img.shields.io/github/issues/laris-co/multi-agent-workflow-kit)](https://github.com/laris-co/multi-agent-workflow-kit/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/laris-co/multi-agent-workflow-kit)](https://github.com/laris-co/multi-agent-workflow-kit/pulls)
+[![GitHub discussions](https://img.shields.io/github/discussions/laris-co/multi-agent-workflow-kit)](https://github.com/laris-co/multi-agent-workflow-kit/discussions)
 
 > **⚠️ Proof of Concept - Early Development Stage**
 >
@@ -23,7 +23,7 @@ Run multiple AI coding agents simultaneously without chaos. Each agent gets its 
 cd your-project
 
 # Bootstrap everything in one command
-uvx --no-cache --from git+https://github.com/laris-co/multi-agent-worktree-kit.git@main \
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main \
   multi-agent-kit init
 
 # Activate the environment
@@ -185,11 +185,11 @@ Use: `maw start profile1`
 
 ```bash
 # Use v0.2.0-alpha (latest features)
-uvx --no-cache --from git+https://github.com/laris-co/multi-agent-worktree-kit.git@v0.2.0-alpha \
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.2.0-alpha \
   multi-agent-kit init
 
 # Or with custom prefix (creates: demo-ai-<repo-name>)
-uvx --no-cache --from git+https://github.com/laris-co/multi-agent-worktree-kit.git@v0.2.0-alpha \
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.2.0-alpha \
   multi-agent-kit init --prefix demo
 ```
 
@@ -209,7 +209,7 @@ maw start profile0
 ### Using as Template
 
 ```bash
-gh repo create my-project --template laris-co/multi-agent-worktree-kit --private --clone
+gh repo create my-project --template laris-co/multi-agent-workflow-kit --private --clone
 cd my-project
 maw install
 ```

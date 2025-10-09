@@ -183,4 +183,4 @@ For comprehensive examples including:
 - Merge conflict resolution strategies
 - Best practices and troubleshooting
 
-**See: [docs/agent-sync-workflow.md](https://github.com/laris-co/multi-agent-worktree-kit/blob/main/docs/agent-sync-workflow.md)**
+**See: [docs/agent-sync-workflow.md](https://github.com/laris-co/multi-agent-workflow-kit/blob/main/docs/agent-sync-workflow.md)**
