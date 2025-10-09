@@ -184,12 +184,12 @@ Use: `maw start profile1`
 ### Using Specific Version
 
 ```bash
-# Use v0.2.0-alpha (latest features)
-uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.2.0-alpha \
+# Use v0.2.1-alpha (latest features)
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.2.1-alpha \
   multi-agent-kit init
 
 # Or with custom prefix (creates: demo-ai-<repo-name>)
-uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.2.0-alpha \
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.2.1-alpha \
   multi-agent-kit init --prefix demo
 ```
 
