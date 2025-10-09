@@ -15,12 +15,12 @@ SESSION_OVERRIDE=""
 
 usage() {
     cat <<'USAGE'
-Usage: attach.sh [--prefix <suffix>] [--session <name>]
+Usage: attach.sh [--prefix <prefix>] [--session <name>]
 
 Attach to an existing tmux session created by the toolkit.
 
 Options:
-  --prefix <suffix>   Attach to session ai-<repo>-<suffix>
+  --prefix <prefix>   Attach to session <prefix>-ai-<repo>
   --session <name>    Attach to a specific tmux session name
 USAGE
 }
@@ -47,9 +47,10 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-SESSION_NAME="$BASE_PREFIX-$DIR_NAME"
 if [[ -n "$CUSTOM_PREFIX" ]]; then
-    SESSION_NAME="$SESSION_NAME-$CUSTOM_PREFIX"
+    SESSION_NAME="$CUSTOM_PREFIX-$BASE_PREFIX-$DIR_NAME"
+else
+    SESSION_NAME="$BASE_PREFIX-$DIR_NAME"
 fi
 
 if [[ -n "$SESSION_OVERRIDE" ]]; then

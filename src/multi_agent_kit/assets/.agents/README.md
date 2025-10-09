@@ -75,7 +75,7 @@ To add new layouts, copy an existing profile and adjust the environment variable
 
 ## Session Naming Convention
 - Default session name: `ai-<repo-name>`
-- Provide `--prefix <suffix>` to run multiple sessions side-by-side: `ai-<repo-name>-<suffix>`
+- Provide `--prefix <prefix>` to run multiple sessions side-by-side: `<prefix>-ai-<repo-name>`
 - Environment variable override: set `SESSION_PREFIX=research` before running the scripts to change the base prefix (e.g., `research-<repo-name>`).
 
 ## Cleanup & Maintenance

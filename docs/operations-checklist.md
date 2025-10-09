@@ -14,7 +14,7 @@ Repeat these steps when launching or retiring a multi-agent tmux session.
 
 ## Launch Sequence
 1. `maw install` or `.agents/scripts/setup.sh` (first run or whenever `agents.yaml` changes).
-2. `maw start profile0 --prefix <suffix?>` or `.agents/scripts/start-agents.sh profile0 --prefix <suffix?>` (swap the profile as needed).
+2. `maw start profile0 --prefix <prefix?>` or `.agents/scripts/start-agents.sh profile0 --prefix <prefix?>` (swap the profile as needed).
 3. `maw attach` to connect to the session (or skip with `--detach` flag in step 2).
 4. In each pane, run the agent-specific bootstrap (install deps, load env vars, etc.).
 5. Capture a quick note or screenshot of the layout for later retrospectives (optional).
@@ -27,7 +27,7 @@ Repeat these steps when launching or retiring a multi-agent tmux session.
 - [ ] Commit early and often; coordinate pushes through review/automation.
 
 ## Wrap-Up
-- [ ] `maw kill --prefix <suffix?>` or `.agents/scripts/kill-all.sh --prefix <suffix?>` to close active sessions.
+- [ ] `maw kill --prefix <prefix?>` or `.agents/scripts/kill-all.sh --prefix <prefix?>` to close active sessions.
 - [ ] `git worktree prune` and remove unused agent definitions from `agents.yaml`.
 - [ ] Run `maw remove <agent> --dry-run` (or `.agents/scripts/remove.sh --dry-run`) to tear down agent worktrees as needed.
 - [ ] Run `maw uninstall --dry-run` before removing toolkit assets, then `maw uninstall` if the repo no longer needs them.

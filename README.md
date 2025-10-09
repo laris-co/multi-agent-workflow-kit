@@ -24,7 +24,7 @@ cd your-project
 
 # Bootstrap everything in one command
 uvx --no-cache --from git+https://github.com/laris-co/multi-agent-worktree-kit.git@main \
-  multi-agent-kit init --prefix demo
+  multi-agent-kit init
 
 # Activate the environment
 source .envrc
@@ -180,6 +180,10 @@ Use: `maw start profile1`
 ```bash
 # Use v0.2.0-alpha (latest features)
 uvx --no-cache --from git+https://github.com/laris-co/multi-agent-worktree-kit.git@v0.2.0-alpha \
+  multi-agent-kit init
+
+# Or with custom prefix (creates: demo-ai-<repo-name>)
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-worktree-kit.git@v0.2.0-alpha \
   multi-agent-kit init --prefix demo
 ```
 
@@ -235,7 +239,7 @@ Use: `maw start custom`
 # Default: ai-<repo-name>
 maw start profile0
 
-# Custom: ai-<repo-name>-sprint
+# Custom prefix: sprint-ai-<repo-name>
 maw start profile0 --prefix sprint
 
 # Change base prefix
@@ -252,7 +256,7 @@ maw start profile0  # → research-<repo-name>
 
 ```bash
 tmux list-sessions
-maw kill --prefix <suffix>
+maw kill --prefix <prefix>
 ```
 
 </details>
