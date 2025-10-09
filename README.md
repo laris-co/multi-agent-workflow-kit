@@ -23,7 +23,7 @@ Run multiple AI coding agents simultaneously without chaos. Each agent gets its 
 cd your-project
 
 # Bootstrap everything in one command
-uvx --no-cache --from git+https://github.com/Soul-Brews-Studio/multi-agent-workflow-kit.git@v0.2.6-alpha multi-agent-kit init
+uvx --no-cache --from git+https://github.com/Soul-Brews-Studio/multi-agent-workflow-kit.git@main multi-agent-kit init
 
 # Activate the environment
 source .envrc
@@ -184,14 +184,14 @@ Use: `maw start profile1`
 ### Using Specific Version
 
 ```bash
-# Use v0.2.6-alpha (latest features)
-uvx --no-cache --from git+https://github.com/Soul-Brews-Studio/multi-agent-workflow-kit.git@v0.2.6-alpha multi-agent-kit init
+# Use main branch (latest features)
+uvx --no-cache --from git+https://github.com/Soul-Brews-Studio/multi-agent-workflow-kit.git@main multi-agent-kit init
 
 # Or with custom prefix (creates: demo-ai-<repo-name>)
-uvx --no-cache --from git+https://github.com/Soul-Brews-Studio/multi-agent-workflow-kit.git@v0.2.6-alpha multi-agent-kit init --prefix demo
+uvx --no-cache --from git+https://github.com/Soul-Brews-Studio/multi-agent-workflow-kit.git@main multi-agent-kit init --prefix demo
 
 # Opt in to agents/.gitignore (defaults to not creating it)
-uvx --no-cache --from git+https://github.com/Soul-Brews-Studio/multi-agent-workflow-kit.git@v0.2.6-alpha multi-agent-kit init --agents-gitignore
+uvx --no-cache --from git+https://github.com/Soul-Brews-Studio/multi-agent-workflow-kit.git@main multi-agent-kit init --agents-gitignore
 ```
 
 ### Manual Installation
