@@ -58,6 +58,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Overwrite bundled toolkit files when installing into the target repo.",
     )
+    init_parser.add_argument(
+        "--agents-gitignore",
+        action="store_true",
+        help="Create agents/.gitignore to ignore all worktrees inside the agents directory.",
+    )
 
     return parser.parse_args(argv)
 
@@ -238,9 +243,16 @@ def handle_init(args: argparse.Namespace) -> None:
     ensure_git_repo(root)
 
     missing = list(missing_assets(root))
-    installer = AssetInstaller(root, force=args.force_assets)
+    installer = AssetInstaller(
+        root,
+        force=args.force_assets,
+        create_agents_gitignore=args.agents_gitignore,
+    )
+    needs_agents_cleanup = (
+        not args.agents_gitignore and (root / "agents" / ".gitignore").exists()
+    )
     written: list[Path] = []
-    if missing or args.force_assets:
+    if missing or args.force_assets or needs_agents_cleanup:
         written = installer.ensure_assets()
         if written:
             print("📦 Installed toolkit assets:")

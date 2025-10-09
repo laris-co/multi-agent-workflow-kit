@@ -32,9 +32,15 @@ class CopyPlan:
 
 
 class AssetInstaller:
-    def __init__(self, target: Path, force: bool = False) -> None:
+    def __init__(
+        self,
+        target: Path,
+        force: bool = False,
+        create_agents_gitignore: bool = False,
+    ) -> None:
         self.target = target
         self.force = force
+        self.create_agents_gitignore = create_agents_gitignore
         self.package_version = self._detect_package_version()
 
     def ensure_assets(self) -> list[Path]:
@@ -46,13 +52,17 @@ class AssetInstaller:
                 destination = self.target / dest_name
                 destination.mkdir(parents=True, exist_ok=True)
                 gitignore = destination / ".gitignore"
-                if not gitignore.exists() or self.force:
-                    gitignore.write_text("# Ignore all agent worktrees\n*\n!.gitignore\n")
-                    written.append(gitignore)
-            else:
-                source = self._asset_root().joinpath(source_name)
-                destination = self.target / dest_name
-                self._copy(source, destination, written)
+                if self.create_agents_gitignore:
+                    if not gitignore.exists() or self.force:
+                        gitignore.write_text("# Ignore all agent worktrees\n*\n!.gitignore\n")
+                        written.append(gitignore)
+                elif gitignore.exists():
+                    gitignore.unlink()
+                continue
+
+            source = self._asset_root().joinpath(source_name)
+            destination = self.target / dest_name
+            self._copy(source, destination, written)
 
         # Handle .envrc separately with smart merge
         self._ensure_envrc(written)

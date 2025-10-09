@@ -188,6 +188,9 @@ uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.g
 
 # Or with custom prefix (creates: demo-ai-<repo-name>)
 uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.2.5-alpha multi-agent-kit init --prefix demo
+
+# Opt in to agents/.gitignore (defaults to not creating it)
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.2.5-alpha multi-agent-kit init --agents-gitignore
 ```
 
 ### Manual Installation
