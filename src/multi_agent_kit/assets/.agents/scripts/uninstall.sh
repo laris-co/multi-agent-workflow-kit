@@ -71,6 +71,8 @@ CLAUDE_FILES=(
     ".claude/commands/maw.hey.sh"
     ".claude/commands/maw.sync.md"
     ".claude/commands/maw.sync.sh"
+    ".claude/commands/maw.zoom.md"
+    ".claude/commands/maw.zoom.sh"
 )
 CODEX_FILES=()
 
