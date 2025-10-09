@@ -109,7 +109,7 @@ DIR_NAME=$(basename "$REPO_ROOT")
 SESSION_EXISTS=false
 
 if [ -n "$CUSTOM_PREFIX" ]; then
-    SESSION_NAME="${BASE_PREFIX}-${DIR_NAME}-${CUSTOM_PREFIX}"
+    SESSION_NAME="${CUSTOM_PREFIX}-${BASE_PREFIX}-${DIR_NAME}"
 else
     SESSION_NAME="${BASE_PREFIX}-${DIR_NAME}"
     if tmux has-session -t "$SESSION_NAME" 2>/dev/null; then

@@ -276,9 +276,10 @@ def handle_init(args: argparse.Namespace) -> None:
 
     # Calculate session name using same logic as start-agents.sh
     session_prefix = "ai"
-    session_name = f"{session_prefix}-{root.name}"
     if args.prefix:
-        session_name += f"-{args.prefix}"
+        session_name = f"{args.prefix}-{session_prefix}-{root.name}"
+    else:
+        session_name = f"{session_prefix}-{root.name}"
 
     print(f"\n✅ Session started: {session_name}")
     print(f"\n📖 Available commands:")

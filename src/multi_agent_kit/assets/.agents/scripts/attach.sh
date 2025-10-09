@@ -47,9 +47,10 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-SESSION_NAME="$BASE_PREFIX-$DIR_NAME"
 if [[ -n "$CUSTOM_PREFIX" ]]; then
-    SESSION_NAME="$SESSION_NAME-$CUSTOM_PREFIX"
+    SESSION_NAME="$CUSTOM_PREFIX-$BASE_PREFIX-$DIR_NAME"
+else
+    SESSION_NAME="$BASE_PREFIX-$DIR_NAME"
 fi
 
 if [[ -n "$SESSION_OVERRIDE" ]]; then

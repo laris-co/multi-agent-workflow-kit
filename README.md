@@ -78,6 +78,10 @@ maw hey 1 "add user authentication"
 maw hey 2 "write tests for auth"
 maw send "git status"  # broadcast to all
 
+# Focus and zoom
+maw zoom 1          # Toggle zoom for agent 1
+maw zoom root       # Toggle zoom for root pane
+
 # Sync with main branch
 maw sync            # smart sync (context-aware)
 
@@ -132,6 +136,7 @@ maw kill             # Terminate session
 # Agent communication
 maw hey <agent> <msg> # Send message to specific agent
 maw send "<cmd>"     # Broadcast command to all panes
+maw zoom <agent>     # Toggle zoom for agent pane
 
 # Agent management
 maw agents list      # List all agents
