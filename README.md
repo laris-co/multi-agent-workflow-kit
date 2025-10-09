@@ -1,4 +1,4 @@
-# Multi-Agent Workflow Kit
+# Multi-Agent Worktree Kit
 
 > **⚠️ Proof of Concept - Early Development Stage**
 >
