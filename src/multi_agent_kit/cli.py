@@ -18,7 +18,7 @@ class BootstrapError(RuntimeError):
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="multi-agent-kit",
-        description="Bootstrap the Multi-Agent Workflow Kit using uvx.",
+        description="Bootstrap the Multi-Agent Worktree Kit using uvx.",
     )
 
     subparsers = parser.add_subparsers(dest="command", required=True)

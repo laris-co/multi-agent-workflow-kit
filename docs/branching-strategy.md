@@ -20,7 +20,7 @@ Repair**—all of which orbit the `development` branch.
 
 ## Agent Branches (`agents/*`)
 
-When using the Multi-Agent Workflow Kit, agent branches follow a parallel pattern:
+When using the Multi-Agent Worktree Kit, agent branches follow a parallel pattern:
 
 **Agent Workflow:**
 - Agent branches (e.g., `agents/1-agent`, `agents/2-agent`) live in worktrees under `agents/`

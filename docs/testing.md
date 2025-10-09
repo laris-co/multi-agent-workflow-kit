@@ -1,6 +1,6 @@
 # Testing Checklist
 
-Follow this routine before shipping changes to the Multi-Agent Workflow Kit or
+Follow this routine before shipping changes to the Multi-Agent Worktree Kit or
 cutting a release branch. The goal is to confirm that the packaged assets work
 when installed through `uvx` and that the environment hooks behave as expected.
 

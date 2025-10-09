@@ -1,1 +1,1 @@
-"""Multi-Agent Workflow Kit uvx entry point package."""
+"""Multi-Agent Worktree Kit uvx entry point package."""
