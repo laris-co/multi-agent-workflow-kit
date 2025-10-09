@@ -62,6 +62,7 @@ TARGET_DIRS=(
 TARGET_FILES=(
     ".agents/config/tmux.conf"
     ".envrc"
+    "MAW-AGENTS.md"
 )
 CLAUDE_FILES=(
     ".claude/commands/maw.agents-create.md"

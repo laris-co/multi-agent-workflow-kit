@@ -18,7 +18,7 @@ ITEM_MAP = (
     ("agents", "agents"),      # Gitignore-only directory for worktrees
     (".claude", ".claude"),    # Claude commands and configuration
     (".codex", ".codex"),      # Codex CLI prompts and cache scaffolding
-    ("AGENTS.md", "AGENTS.md"),  # Guide for human/AI collaborators
+    ("MAW-AGENTS.md", "MAW-AGENTS.md"),  # Guide for human/AI collaborators
 )
 
 ENVRC_BEGIN_MARKER = "# === BEGIN Multi-Agent Workflow Kit ==="
@@ -145,6 +145,7 @@ class AssetInstaller:
             "/.agents",
             "/agents",
             "/.envrc",
+            "/MAW-*",
             ".claude/settings.local.json",
             ".claude/*",
             "!.claude/commands/",
