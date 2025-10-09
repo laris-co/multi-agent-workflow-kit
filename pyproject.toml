@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "multi-agent-kit"
-version = "0.2.5-alpha"
+version = "0.2.6-alpha"
 description = "uvx entry point for bootstrapping the Multi-Agent Worktree Kit."
 readme = "README.md"
 authors = [{ name = "Multi-Agent Worktree Kit Maintainers" }]
