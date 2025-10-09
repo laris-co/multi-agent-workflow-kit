@@ -281,7 +281,8 @@ auto_warp_panes() {
         return
     fi
 
-    # Warp each pane to its corresponding agent directory using pushd
+    # Warp each pane to its corresponding agent directory
+    # Note: maw command is available from root's .envrc (loaded via direnv_broadcast)
     for pane_index in $panes; do
         local target_pane
         # Use pane_index directly since it's already the actual tmux pane index
@@ -319,8 +320,8 @@ auto_warp_panes() {
 
         if [ -d "$agent_dir" ]; then
             echo "  📍 Pane $pane_index → Agent $agent_name (index=$agent_index)"
-            echo "     Sending to $target_pane: source .envrc; maw warp \"$agent_name\""
-            tmux send-keys -t "$target_pane" "source .envrc; maw warp \"$agent_name\"" C-m
+            echo "     Sending to $target_pane: source .envrc && maw warp \"$agent_name\""
+            tmux send-keys -t "$target_pane" "source .envrc && maw warp \"$agent_name\"" C-m
         else
             echo "  ⚠️ Directory not found: $agent_dir"
         fi
