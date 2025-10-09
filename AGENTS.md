@@ -47,10 +47,10 @@ uv build
 uvx --python 3.12 --from . multi-agent-kit init
 
 # Install from Git (for end users)
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main multi-agent-kit init
+uvx --from git+https://github.com/Soul-Brews-Studio/multi-agent-workflow-kit.git@main multi-agent-kit init
 
 # Install from specific version/tag
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.2.6-alpha multi-agent-kit init
+uvx --from git+https://github.com/Soul-Brews-Studio/multi-agent-workflow-kit.git@v0.2.6-alpha multi-agent-kit init
 ```
 
 ### UV Cache Management

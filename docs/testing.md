@@ -16,7 +16,7 @@ uvx --from . multi-agent-kit --help
 tmpdir=$(mktemp -d)
 pushd "$tmpdir"
 git init -q
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@BRANCH multi-agent-kit init
+uvx --from git+https://github.com/Soul-Brews-Studio/multi-agent-workflow-kit.git@BRANCH multi-agent-kit init
 ```
 - Replace `BRANCH` with the branch under test (e.g., `main`, `release/v0.1.9`).
 - Expect a prompt to commit the installed assets; decline for the smoke test.
