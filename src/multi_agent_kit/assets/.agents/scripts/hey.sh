@@ -34,7 +34,7 @@ list_agents() {
 
     echo "📋 Available agents:"
     if [[ -d "$agents_dir" ]]; then
-        local agents=($(cd "$agents_dir" && ls -d */ 2>/dev/null | sed 's#/##'))
+        local agents=($(cd "$agents_dir" && ls -d */ 2>/dev/null | sed 's#/##' | sort))
         if [[ ${#agents[@]} -gt 0 ]]; then
             for agent in "${agents[@]}"; do
                 echo "  - $agent"
@@ -53,7 +53,7 @@ list_agents() {
 
 show_map() {
     local agents_dir="$REPO_ROOT/agents"
-    local agents=($(cd "$agents_dir" && ls -d */ 2>/dev/null | sed 's#/##'))
+    local agents=($(cd "$agents_dir" && ls -d */ 2>/dev/null | sed 's#/##' | sort))
 
     echo "📊 Agent to pane mapping:"
     for i in "${!agents[@]}"; do
@@ -68,6 +68,15 @@ show_map() {
     else
         echo "  Root           → (session not detected)"
     fi
+}
+
+send_message() {
+    local pane=$1
+    local text=$2
+
+    tmux send-keys -t "$pane" "$text"
+    sleep 0.05
+    tmux send-keys -t "$pane" Enter
 }
 
 # Parse arguments
@@ -155,11 +164,7 @@ if [[ "$AGENT_TARGET" == "all" ]]; then
             continue
         fi
 
-        tmux send-keys -t "$TARGET_PANE" "$MESSAGE"
-        for enter_key in Enter C-m C-j $'\r' $'\n'; do
-            tmux send-keys -t "$TARGET_PANE" "$enter_key"
-            sleep 0.05
-        done
+        send_message "$TARGET_PANE" "$MESSAGE"
     done
 
     echo "✅ Broadcasted to all agent panes"
@@ -179,11 +184,7 @@ if [[ "$AGENT_TARGET" == "root" ]] || [[ "$AGENT_TARGET" == "main" ]]; then
     TARGET_PANE="$SESSION_NAME:$WINDOW_INDEX.$ROOT_PANE"
 
     echo "📤 Sending to root pane: $MESSAGE"
-    tmux send-keys -t "$TARGET_PANE" "$MESSAGE"
-    for enter_key in Enter C-m C-j $'\r' $'\n'; do
-        tmux send-keys -t "$TARGET_PANE" "$enter_key"
-        sleep 0.05
-    done
+    send_message "$TARGET_PANE" "$MESSAGE"
 
     echo "✅ Sent successfully"
     exit 0
@@ -196,7 +197,7 @@ if [[ ! -d "$AGENTS_DIR" ]]; then
     exit 1
 fi
 
-AGENTS=($(cd "$AGENTS_DIR" && ls -d */ 2>/dev/null | sed 's#/##'))
+AGENTS=($(cd "$AGENTS_DIR" && ls -d */ 2>/dev/null | sed 's#/##' | sort))
 
 # Find agent index
 PANE_INDEX=""
@@ -221,20 +222,7 @@ fi
 
 TARGET_PANE="$SESSION_NAME:$WINDOW_INDEX.$PANE_INDEX"
 
-ENTER_KEYS=(
-    Enter   # standard Enter key name recognised by tmux
-    C-m     # carriage return (Enter)
-    C-j     # line feed
-    $'\r'   # raw carriage return byte
-    $'\n'   # raw newline byte
-)
-
 echo "📤 Sending to agent '$AGENT_TARGET' (pane $PANE_INDEX): $MESSAGE"
-tmux send-keys -t "$TARGET_PANE" "$MESSAGE"
-
-for enter_key in "${ENTER_KEYS[@]}"; do
-    tmux send-keys -t "$TARGET_PANE" "$enter_key"
-    sleep 0.05
-done
+send_message "$TARGET_PANE" "$MESSAGE"
 
 echo "✅ Sent successfully"
