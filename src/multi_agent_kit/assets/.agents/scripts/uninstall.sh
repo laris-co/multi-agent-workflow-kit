@@ -249,6 +249,7 @@ if [ "$DRY_RUN" = false ]; then
     cleanup_dir_if_empty ".claude"
     cleanup_dir_if_empty ".codex/prompts"
     cleanup_dir_if_empty ".codex"
+    cleanup_dir_if_empty "agents"
 fi
 
 if [ "$DRY_RUN" = true ]; then
