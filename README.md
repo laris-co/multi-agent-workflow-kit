@@ -147,7 +147,7 @@ maw warp <target>    # Navigate to worktree (agent number or 'root')
 
 # Utilities
 maw sync             # Smart git sync (context-aware)
-maw catlab           # Download CLAUDE.md guidelines
+maw catlab [gist-url] # Download CLAUDE.md guidelines (optionally from custom gist)
 maw version          # Show toolkit version
 maw uninstall        # Remove toolkit from repo
 ```
