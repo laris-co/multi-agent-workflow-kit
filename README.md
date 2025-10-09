@@ -23,7 +23,7 @@ Run multiple AI coding agents simultaneously without chaos. Each agent gets its 
 cd your-project
 
 # Bootstrap everything in one command
-uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.2.3-alpha multi-agent-kit init
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.2.4-alpha multi-agent-kit init
 
 # Activate the environment
 source .envrc
@@ -183,11 +183,11 @@ Use: `maw start profile1`
 ### Using Specific Version
 
 ```bash
-# Use v0.2.3-alpha (latest features)
-uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.2.3-alpha multi-agent-kit init
+# Use v0.2.4-alpha (latest features)
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.2.4-alpha multi-agent-kit init
 
 # Or with custom prefix (creates: demo-ai-<repo-name>)
-uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.2.3-alpha multi-agent-kit init --prefix demo
+uvx --no-cache --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.2.4-alpha multi-agent-kit init --prefix demo
 ```
 
 ### Manual Installation
