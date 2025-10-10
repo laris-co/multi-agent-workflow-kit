@@ -11,11 +11,11 @@ This directory ships with everything required to spin up dedicated git worktrees
 ## Quick Start
 ```bash
 # Clone the toolkit
-gh repo clone laris-co/multi-agent-workflow-kit
+gh repo clone Soul-Brews-Studio/multi-agent-workflow-kit
 cd multi-agent-workflow-kit
 
 # Optional: run the uvx bootstrap (setup + tmux launch)
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main multi-agent-kit init
+uvx --from git+https://github.com/Soul-Brews-Studio/multi-agent-workflow-kit.git@main multi-agent-kit init
 
 # Customize agent registry
 cp .agents/agents.yaml .agents/agents.local.yaml   # optional snapshot

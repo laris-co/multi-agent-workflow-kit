@@ -1,12 +1,10 @@
 # UV Configuration for Multi-Agent Workflow Kit
 # https://docs.astral.sh/uv/
 
-[pip]
-# Use the system's Python installation
-python-preference = "managed"
-
-# Cache configuration
 cache-dir = ".uv-cache"
+
+[pip]
+# Use the default managed Python runtime (3.12 via .python-version)
 
 # Build options
 no-binary = []
@@ -14,10 +12,3 @@ only-binary = []
 
 # Index configuration
 index-url = "https://pypi.org/simple"
-
-[cache]
-# Enable caching for faster installations
-enabled = true
-
-# Cache directory (relative to project root)
-dir = ".uv-cache"

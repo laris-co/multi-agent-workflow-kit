@@ -62,6 +62,7 @@ TARGET_DIRS=(
 TARGET_FILES=(
     ".agents/config/tmux.conf"
     ".envrc"
+    "MAW-AGENTS.md"
 )
 CLAUDE_FILES=(
     ".claude/commands/maw.agents-create.md"
@@ -69,12 +70,21 @@ CLAUDE_FILES=(
     ".claude/commands/maw.codex.sh"
     ".claude/commands/maw.hey.md"
     ".claude/commands/maw.hey.sh"
+    ".claude/commands/maw-issue.md"
+    ".claude/commands/maw-issue.sh"
     ".claude/commands/maw.sync.md"
     ".claude/commands/maw.sync.sh"
     ".claude/commands/maw.zoom.md"
     ".claude/commands/maw.zoom.sh"
+    ".claude/commands/maw.issue.md"
+    ".claude/commands/maw.issue.sh"
+    ".claude/.gitignore"
 )
-CODEX_FILES=()
+CODEX_FILES=(
+    ".codex/prompts/README.md"
+    ".codex/.gitignore"
+    ".codex/README.md"
+)
 
 SELF_PATH=".agents/scripts/uninstall.sh"
 
@@ -239,6 +249,7 @@ if [ "$DRY_RUN" = false ]; then
     cleanup_dir_if_empty ".claude"
     cleanup_dir_if_empty ".codex/prompts"
     cleanup_dir_if_empty ".codex"
+    cleanup_dir_if_empty "agents"
 fi
 
 if [ "$DRY_RUN" = true ]; then

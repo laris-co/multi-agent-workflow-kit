@@ -7,6 +7,14 @@ its own directory and branch. The assignments are defined in
 - a branch named `agents/<agent-name>`
 - a working directory under `agents/<agent-name>/`
 
+## Single Source of Truth
+
+`AGENTS.md` is the canonical source of operating instructions for this
+repository. If any other document (including `CLAUDE.md`, legacy handbooks, or
+tooling defaults) appears to conflict with the guidance here, **follow this
+file**. `CLAUDE.md` has been reduced to a compatibility shim that simply points
+back to this document so that all agents share one set of rules.
+
 Use `git worktree list` to inspect the current setup. Do **not** switch an agent
 worktree back to `main`; only the repository root should operate on the `main`
 branch.
@@ -47,10 +55,10 @@ uv build
 uvx --python 3.12 --from . multi-agent-kit init
 
 # Install from Git (for end users)
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@main multi-agent-kit init
+uvx --from git+https://github.com/Soul-Brews-Studio/multi-agent-workflow-kit.git@main multi-agent-kit init
 
 # Install from specific version/tag
-uvx --from git+https://github.com/laris-co/multi-agent-workflow-kit.git@v0.2.6-alpha multi-agent-kit init
+uvx --from git+https://github.com/Soul-Brews-Studio/multi-agent-workflow-kit.git@v0.2.6-alpha multi-agent-kit init
 ```
 
 ### UV Cache Management

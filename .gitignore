@@ -33,3 +33,4 @@ settings.local.json
 .codex/prompts/maw*.md
 .codex/prompts/handoff.md
 .codex/prompts/analysis.md
+.claude/commands/maw-*

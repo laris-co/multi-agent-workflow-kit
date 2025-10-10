@@ -5,7 +5,7 @@ _maw_complete() {
   local cur prev words cword
   _init_completion || return
 
-  local subcommands="attach agents catlab direnv help hey install kill remove send setup start uninstall version warp"
+  local subcommands="attach agents catlab direnv help hey install kill remove send setup start uninstall version warp zoom"
 
   if [[ $cword -eq 1 ]]; then
     # Complete main subcommands
@@ -34,6 +34,18 @@ _maw_complete() {
       # Complete agent names + "root"
       local agents_dir="${MAW_REPO_ROOT:-$PWD}/agents"
       local targets="root"
+      if [[ -d "$agents_dir" ]]; then
+        local agent_dirs
+        agent_dirs=$(ls -1 "$agents_dir" 2>/dev/null | grep -v '^\.')
+        targets="$targets $agent_dirs"
+      fi
+      COMPREPLY=($(compgen -W "$targets" -- "$cur"))
+      return 0
+      ;;
+    zoom)
+      # Complete agent names + "root" for zoom command
+      local agents_dir="${MAW_REPO_ROOT:-$PWD}/agents"
+      local targets="root --list"
       if [[ -d "$agents_dir" ]]; then
         local agent_dirs
         agent_dirs=$(ls -1 "$agents_dir" 2>/dev/null | grep -v '^\.')
